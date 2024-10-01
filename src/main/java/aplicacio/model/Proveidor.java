@@ -14,6 +14,7 @@ import java.util.Date;
 public class Proveidor {
 
     private String nom;
+    private int id;
     private String CIF;
     private boolean actiu;
     private String motiuInactivitat;
@@ -97,6 +98,10 @@ public class Proveidor {
 
     public void setEspecialitat(String especialitat) {
         this.especialitat = especialitat;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }
