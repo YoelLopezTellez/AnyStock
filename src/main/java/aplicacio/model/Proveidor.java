@@ -19,17 +19,15 @@ public class Proveidor {
     private String motiuInactivitat;
     private Date dataAlta;
     private float valoracio;
-    private int id;
 
     // Constructor
-    public Proveidor(String nom, String CIF, boolean actiu, String motiuInactivitat, Date dataAlta, float valoracio, int id) {
+    public Proveidor(String nom, String CIF, boolean actiu, String motiuInactivitat, Date dataAlta, float valoracio) {
         this.nom = nom;
         this.CIF = CIF;
         this.actiu = actiu;
         this.motiuInactivitat = motiuInactivitat;
         this.dataAlta = dataAlta;
         this.valoracio = valoracio;
-        this.id = id;
     }
 
     // Getters y Setters
@@ -81,12 +79,5 @@ public class Proveidor {
         this.valoracio = valoracio;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }
 
