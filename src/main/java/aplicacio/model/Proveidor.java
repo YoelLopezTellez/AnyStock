@@ -19,15 +19,19 @@ public class Proveidor {
     private String motiuInactivitat;
     private Date dataAlta;
     private float valoracio;
+    private int minimUnitats;
+    private String especialitat;
 
     // Constructor
-    public Proveidor(String nom, String CIF, boolean actiu, String motiuInactivitat, Date dataAlta, float valoracio) {
+    public Proveidor(String nom, String CIF, boolean actiu, String motiuInactivitat, Date dataAlta, float valoracio, int minimUnitats, String especialitat) {
         this.nom = nom;
         this.CIF = CIF;
         this.actiu = actiu;
         this.motiuInactivitat = motiuInactivitat;
         this.dataAlta = dataAlta;
         this.valoracio = valoracio;
+        this.minimUnitats = minimUnitats;
+        this.especialitat = especialitat;
     }
 
     // Getters y Setters
@@ -77,6 +81,22 @@ public class Proveidor {
 
     public void setValoracio(float valoracio) {
         this.valoracio = valoracio;
+    }
+
+    public int getMinimUnitats() {
+        return minimUnitats;
+    }
+
+    public String getEspecialitat() {
+        return especialitat;
+    }
+
+    public void setMinimUnitats(int minimUnitats) {
+        this.minimUnitats = minimUnitats;
+    }
+
+    public void setEspecialitat(String especialitat) {
+        this.especialitat = especialitat;
     }
 
 }
