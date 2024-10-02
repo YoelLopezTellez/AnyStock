@@ -13,11 +13,15 @@ import java.util.List;
 public interface DAOInterface<T> {
     //Métodes per accedir a la base de dades
     //La T representa un tipus generic per poder ser utilitzat en qualsevol entitat com proveidor, familia o referencia
-    
+
     public void afegir(T entitat);
+
     public void modificar(T entitat);
+
     public void delete(int id);
+
     public List<T> LlistarTot();
+
     public T obtenir(int id);
-    
+
 }

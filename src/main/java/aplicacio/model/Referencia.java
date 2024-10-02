@@ -4,12 +4,15 @@
  */
 package aplicacio.model;
 
+import java.util.Date;
+
 /**
+ * Clase que representa una referencia de producto en el sistema. Contiene
+ * información relevante como nombre, unidad de medida, cantidad, familia,
+ * proveedor, fecha de alta y precio.
  *
  * @author Yoel
  */
-import java.util.Date;
-
 public class Referencia {
 
     private String nom;
@@ -21,7 +24,18 @@ public class Referencia {
     private float preu;
     private int id;
 
-    // Constructor
+    /**
+     * Constructor de la clase Referencia.
+     *
+     * @param nom Nombre de la referencia.
+     * @param uom Unidad de medida de la referencia.
+     * @param quantitat Cantidad disponible.
+     * @param familia Familia a la que pertenece.
+     * @param proveidor Proveedor de la referencia.
+     * @param dataAlta Fecha de alta de la referencia.
+     * @param preu Precio de la referencia.
+     * @param id Identificador único de la referencia.
+     */
     public Referencia(String nom, String uom, int quantitat, String familia, String proveidor, Date dataAlta, float preu, int id) {
         this.nom = nom;
         this.uom = uom;

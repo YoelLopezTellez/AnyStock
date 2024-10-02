@@ -4,22 +4,34 @@
  */
 package aplicacio.model;
 
+import java.util.Date;
+
 /**
+ * Clase que representa una familia de productos. Contiene información básica
+ * como nombre, descripción, fecha de alta, proveedor por defecto, observaciones
+ * e ID.
  *
  * @author Yoel
  */
-import java.util.Date;
-
 public class Familia {
 
     private String nom;
     private String descripcio;
     private Date dataAlta;
-    private String proveidorPerDefecte; // Proveïdor per defecte, opcional
+    private String proveidorPerDefecte; // Proveedor por defecto, opcional
     private String observacions;
     private int id;
 
-    // Constructor
+    /**
+     * Constructor de la clase Familia.
+     *
+     * @param nom Nombre de la familia.
+     * @param descripcio Descripción de la familia.
+     * @param dataAlta Fecha de alta de la familia.
+     * @param proveidorPerDefecte Proveedor por defecto.
+     * @param observacions Observaciones sobre la familia.
+     * @param id Identificador de la familia.
+     */
     public Familia(String nom, String descripcio, Date dataAlta, String proveidorPerDefecte, String observacions, int id) {
         this.nom = nom;
         this.descripcio = descripcio;
