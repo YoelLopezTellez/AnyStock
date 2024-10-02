@@ -28,13 +28,15 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
      */
     @Override
     public void afegir(Familia entitat) {
-        String sql = "INSERT INTO familia (nom, descripcio, dataAlta, proveidorPerDefecte, observacions) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO familia (id, dataAlta, observacions, nom, descripcio, proveidorPerDefecte) VALUES (id, ?, ?, ?, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, entitat.getNom());
-            stmt.setString(2, entitat.getDescripcio());
-            stmt.setDate(3, new Date(entitat.getDataAlta().getTime()));
-            stmt.setString(4, entitat.getProveidorPerDefecte());
-            stmt.setString(5, entitat.getObservacions());
+            
+            stmt.setDate(2, new Date(entitat.getDataAlta().getTime()));
+            stmt.setString(3, entitat.getObservacions());
+            stmt.setString(4, entitat.getNom());
+            stmt.setString(5, entitat.getDescripcio());
+            stmt.setString(6, entitat.getProveidorPerDefecte());
+            
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
