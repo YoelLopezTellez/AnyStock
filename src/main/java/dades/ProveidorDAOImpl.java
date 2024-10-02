@@ -40,9 +40,9 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         try (Connection conn =DataSource.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);){
             
-            setearPreparedStatement(pstm, p); //llama a el petode setearPreparedStatement() on estan tots els sets
+            setearPreparedStatement(pstm, p); //llama a el petode setearPreparedStatement() on estan tots els sets dels "?"
             
-            pstm.executeUpdate();
+            pstm.executeUpdate();//executa el prepared statement
         }catch(SQLException e){
             
         };
@@ -50,15 +50,15 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
     };
     
     @Override
-    public void modificar(Proveidor p){
+    public void modificar(Proveidor p){ //Modificar dades d'un proveidor
         
         String sql ="UPDATE proveidor SET  CIF = ?, dataAlta = ?, actiu = ?, motiuInactivitat = ?, nom = ?, valoracioMitjana = ?, minimUnitats = ?, especialitat = ? WHERE id = ?";
     
         try (Connection conn =DataSource.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);){
          
-            setearPreparedStatement(pstm, p);
-            pstm.setInt(9,p.getId());
+            setearPreparedStatement(pstm, p);//llama a el petode setearPreparedStatement() on estan tots els sets dels "?"
+            pstm.setInt(9,p.getId()); //posa el id a la posicio 9 
             
             pstm.executeUpdate();
         }catch(SQLException e){
@@ -68,13 +68,13 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
     };
     
     @Override
-    public void delete(int id){
+    public void delete(int id){ // elimina un proveidor a partir del seu id
         String sql ="DELETE FROM proveidor WHERE id= ?";
         
         try (Connection conn =DataSource.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);){
             
-            pstm.setInt(1,id);
+            pstm.setInt(1,id); //posa el id donat a la posicio 1
             pstm.executeUpdate();
             
         }catch(SQLException e){
@@ -83,17 +83,17 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
     };
     
     @Override
-    public List<Proveidor> LlistarTot(){
+    public List<Proveidor> LlistarTot(){ //llista tots els proveidors
         
         String sql="SELECT * FROM proveidor";
         
-        List<Proveidor> ret = new ArrayList<Proveidor>();
+        List<Proveidor> ret = new ArrayList<Proveidor>(); //crea una arraylist de proveidors
         
         try (Connection conn =DataSource.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);){
             
             try(ResultSet rs = pstm.executeQuery();){
-                while(rs.next()){
+                while(rs.next()){ //cada sortida o proveidor de la query guardada en el resultSet s'afegeix al ArrayList
                     ret.add(obtenirProveidorResultSet(rs));    
                 }
             }
@@ -108,7 +108,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
     };
     
     @Override
-    public Proveidor obtenir(int id){
+    public Proveidor obtenir(int id){//obte un proveidor a partir de la seva id
         Proveidor res = null;
         String sql ="SELECT * FROM proveidor WHERE id = ?";
         
@@ -142,10 +142,12 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         
     }
     
+    //retorna un proveidor a partir del proveidor seleccionat en el ResulSet
     private Proveidor obtenirProveidorResultSet(final ResultSet rs)throws SQLException{
        
-        Proveidor p;
+        Proveidor p;// un proveidor vuit
         
+        //creem variables per a cada atribut del proveidor amb les dades del ResultSet
         String CIF =rs.getString("CIF");
         Date dataAlta = rs.getDate("dataAlta");
         boolean actiu = rs.getBoolean("actiu");
@@ -155,6 +157,8 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         int minimUnitats = rs.getInt("minimUnitats");
         String especialitat =rs.getString("especialitat");
         int id = rs.getInt("id");
+        
+        //instanciem el priveidor vuit amb el constructor posant-li els atributs guardats anteriorment
         p= new Proveidor(nom, CIF, actiu, motiuInactivitat, dataAlta, valoracio, minimUnitats, especialitat);
        
         return p;
