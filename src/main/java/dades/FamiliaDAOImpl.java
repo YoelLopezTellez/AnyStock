@@ -14,29 +14,29 @@ import aplicacio.model.Familia;
 import java.sql.Date;
 
 /**
- * Implementación de la interfaz DAO para gestionar las operaciones CRUD de la 
+ * Implementación de la interfaz DAO para gestionar las operaciones CRUD de la
  * entidad Familia en la base de datos.
- * 
+ *
  * @author Yoel
  */
 public class FamiliaDAOImpl implements DAOInterface<Familia> {
 
     /**
      * Inserta una nueva familia en la base de datos.
-     * 
+     *
      * @param entitat La entidad Familia a agregar.
      */
     @Override
     public void afegir(Familia entitat) {
         String sql = "INSERT INTO familia (id, dataAlta, observacions, nom, descripcio, proveidorPerDefecte) VALUES (id, ?, ?, ?, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setDate(2, new Date(entitat.getDataAlta().getTime()));
-            stmt.setString(3, entitat.getObservacions());
-            stmt.setString(4, entitat.getNom());
-            stmt.setString(5, entitat.getDescripcio());
-            stmt.setString(6, entitat.getProveidorPerDefecte());
-            
+
+            stmt.setDate(1, new Date(entitat.getDataAlta().getTime()));
+            stmt.setString(2, entitat.getObservacions());
+            stmt.setString(3, entitat.getNom());
+            stmt.setString(4, entitat.getDescripcio());
+            stmt.setString(5, entitat.getProveidorPerDefecte());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
 
     /**
      * Modifica una familia existente en la base de datos.
-     * 
+     *
      * @param entitat La entidad Familia con los datos actualizados.
      */
     @Override
@@ -66,7 +66,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
 
     /**
      * Elimina una familia de la base de datos dado su ID.
-     * 
+     *
      * @param id El ID de la familia a eliminar.
      */
     @Override
@@ -82,7 +82,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
 
     /**
      * Lista todas las familias registradas en la base de datos.
-     * 
+     *
      * @return Una lista de objetos Familia.
      */
     @Override
@@ -92,12 +92,12 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Familia familia = new Familia(
+                        rs.getInt("id"),
+                        rs.getDate("dataAlta"),
+                        rs.getString("observacions"),
                         rs.getString("nom"),
                         rs.getString("descripcio"),
-                        rs.getDate("dataAlta"),
-                        rs.getString("proveidorPerDefecte"),
-                        rs.getString("observacions"),
-                        rs.getInt("id")
+                        rs.getString("proveidorPerDefecte")
                 );
                 familias.add(familia);
             }
@@ -109,7 +109,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
 
     /**
      * Obtiene una familia de la base de datos dado su ID.
-     * 
+     *
      * @param id El ID de la familia a obtener.
      * @return El objeto Familia si se encuentra, de lo contrario null.
      */
@@ -122,12 +122,12 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     familia = new Familia(
+                            rs.getInt("id"),
+                            rs.getDate("dataAlta"),
+                            rs.getString("observacions"),
                             rs.getString("nom"),
                             rs.getString("descripcio"),
-                            rs.getDate("dataAlta"),
-                            rs.getString("proveidorPerDefecte"),
-                            rs.getString("observacions"),
-                            rs.getInt("id")
+                            rs.getString("proveidorPerDefecte")
                     );
                 }
             }
