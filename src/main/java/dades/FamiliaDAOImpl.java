@@ -28,7 +28,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
      */
     @Override
     public void afegir(Familia entitat) {
-        String sql = "INSERT INTO familia (id, dataAlta, observacions, nom, descripcio, proveidorPerDefecte) VALUES (id, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO familia (id, dataAlta, observacions, nom, descripcio, PROVEIDOR_CIF) VALUES (id, ?, ?, ?, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDate(1, new Date(entitat.getDataAlta().getTime()));
@@ -50,7 +50,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
      */
     @Override
     public void modificar(Familia entitat) {
-        String sql = "UPDATE familia SET nom = ?, descripcio = ?, dataAlta = ?, proveidorPerDefecte = ?, observacions = ? WHERE id = ?";
+        String sql = "UPDATE familia SET nom = ?, descripcio = ?, dataAlta = ?, PROVEIDOR_CIF = ?, observacions = ? WHERE id = ?";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, entitat.getNom());
             stmt.setString(2, entitat.getDescripcio());
@@ -97,7 +97,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
                         rs.getString("observacions"),
                         rs.getString("nom"),
                         rs.getString("descripcio"),
-                        rs.getString("proveidorPerDefecte")
+                        rs.getString("PROVEIDOR_CIF")
                 );
                 familias.add(familia);
             }
@@ -127,7 +127,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
                             rs.getString("observacions"),
                             rs.getString("nom"),
                             rs.getString("descripcio"),
-                            rs.getString("proveidorPerDefecte")
+                            rs.getString("PROVEIDOR_CIF")
                     );
                 }
             }
