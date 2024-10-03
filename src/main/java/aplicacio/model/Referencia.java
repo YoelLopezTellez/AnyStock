@@ -12,6 +12,9 @@ import java.util.Date;
  * proveedor, fecha de alta y precio.
  *
  * @author Yoel
+ * 
+ * 
+ * s
  */
 public class Referencia {
 
