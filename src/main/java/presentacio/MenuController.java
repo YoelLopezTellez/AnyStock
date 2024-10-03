@@ -1,5 +1,6 @@
-package aplicacio;
+package presentacio;
 
+import aplicacio.App;
 import java.io.IOException;
 import javafx.fxml.FXML;
 

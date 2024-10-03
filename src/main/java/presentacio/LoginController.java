@@ -1,5 +1,6 @@
-package aplicacio;
+package presentacio;
 
+import logica.Login;
 import aplicacio.model.Usuari;
 import java.io.IOException;
 import javafx.event.ActionEvent;
