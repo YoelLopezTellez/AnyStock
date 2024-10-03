@@ -31,11 +31,11 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
         String sql = "INSERT INTO familia (id, dataAlta, observacions, nom, descripcio, proveidorPerDefecte) VALUES (id, ?, ?, ?, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setDate(2, new Date(entitat.getDataAlta().getTime()));
-            stmt.setString(3, entitat.getObservacions());
-            stmt.setString(4, entitat.getNom());
-            stmt.setString(5, entitat.getDescripcio());
-            stmt.setString(6, entitat.getProveidorPerDefecte());
+            stmt.setDate(1, new Date(entitat.getDataAlta().getTime()));
+            stmt.setString(2, entitat.getObservacions());
+            stmt.setString(3, entitat.getNom());
+            stmt.setString(4, entitat.getDescripcio());
+            stmt.setString(5, entitat.getProveidorPerDefecte());
             
             stmt.executeUpdate();
         } catch (SQLException e) {
