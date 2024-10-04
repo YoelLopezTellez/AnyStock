@@ -36,6 +36,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
     public static ProveidorDAOImpl getInstance() {
         return instance;
     }
+
     /**
      * Afegeix un Proveidor a la base de dades
      *
@@ -51,10 +52,11 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         } catch (SQLException e) {
         }
     }
+
     /**
      * Modifica un Proveïdor a la base de dades
-     * 
-     * @param p Es el Proveïdor modificat que es modificara a la base de dades 
+     *
+     * @param p Es el Proveïdor modificat que es modificara a la base de dades
      */
     @Override
     public void modificar(Proveidor p) {
@@ -66,12 +68,13 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
             pstm.executeUpdate();
         } catch (SQLException e) {
         }
-    } 
+    }
+
     /**
      * Elimina un Proveïdor a la base de dades
-     * 
-     * @param id Es el id del Proveïdor que s'eliminara de la base de dades 
-     */    
+     *
+     * @param id Es el id del Proveïdor que s'eliminara de la base de dades
+     */
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM proveidor WHERE id= ?";
@@ -81,12 +84,13 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
             pstm.executeUpdate();
         } catch (SQLException e) {
         }
-    }    
+    }
+
     /**
      * Llista tots els Proveïdors en un ArrayList
-     * 
+     *
      * @return Llista ArrayList de Proveïdors
-     */    
+     */
     @Override
     public List<Proveidor> LlistarTot() {
         String sql = "SELECT * FROM proveidor";
@@ -102,12 +106,13 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         }
         return ret;
     }
+
     /**
      * Obte o selecciona un Proveïdor a partir del seu id
-     * 
+     *
      * @param id La id del Proveïdor a seleccionar o obtenir
      * @return Un Proveïdor
-     */   
+     */
     @Override
     public Proveidor obtenir(int id) {
         Proveidor res = null;
@@ -125,14 +130,15 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         } catch (SQLException e) {
         }
         return res;
-    }  
+    }
+
     /**
-     * Posa al PreparedStatement els paramentres en les posicions per no
-     * repetir codi
-     * 
+     * Posa al PreparedStatement els paramentres en les posicions per no repetir
+     * codi
+     *
      * @param pstm PreparedStatement
      * @param p Proveïdor
-     */   
+     */
     private void setearPreparedStatement(final PreparedStatement pstm, Proveidor p) throws SQLException {
         pstm.setString(1, p.getCIF());
         pstm.setTimestamp(2, (Timestamp) p.getDataAlta());
@@ -143,10 +149,11 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         pstm.setInt(7, p.getMinimUnitats());
         pstm.setString(8, p.getEspecialitat());
     }
+
     /**
-     * Obte un Proveïdor a partir del contigut del Output de la consulta contingut en
-     * el ResultSet
-     * 
+     * Obte un Proveïdor a partir del contigut del Output de la consulta
+     * contingut en el ResultSet
+     *
      * @param rs ResultSet
      * @return Proveidor seleccionat o contingut en el ResultSet
      */
@@ -163,7 +170,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         int minimUnitats = rs.getInt("minimUnitats");
         String especialitat = rs.getString("especialitat");
         int id = rs.getInt("id");
-        
+
         //Instanciem el priveidor vuit amb el constructor posant-li els atributs guardats anteriorment
         p = new Proveidor(nom, CIF, actiu, motiuInactivitat, dataAlta, valoracio, minimUnitats, especialitat);
         return p;

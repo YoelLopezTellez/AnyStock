@@ -71,12 +71,34 @@ public class FamiliaDAOImpl implements DAOInterface<Familia> {
      */
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM familia WHERE id = ?";
-        try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        String verificarFamiliaSql = "SELECT * FROM familia WHERE id = ?";
+        String verificarReferenciasSql = "SELECT COUNT(*) FROM referencia WHERE familia_id = ?";
+        String eliminarSql = "DELETE FROM familia WHERE id = ?";
+
+        try (Connection conn = DataSource.getConnection(); PreparedStatement stmtVerificarFamilia = conn.prepareStatement(verificarFamiliaSql); PreparedStatement stmtVerificarReferencias = conn.prepareStatement(verificarReferenciasSql); PreparedStatement stmtEliminar = conn.prepareStatement(eliminarSql)) {
+
+            stmtVerificarFamilia.setInt(1, id);
+            try (ResultSet rsFamilia = stmtVerificarFamilia.executeQuery()) {
+                if (!rsFamilia.next()) {
+                    System.out.println("La familia con ID " + id + " no existe.");
+                    return;
+                }
+            }
+
+            stmtVerificarReferencias.setInt(1, id);
+            try (ResultSet rsReferencias = stmtVerificarReferencias.executeQuery()) {
+                if (rsReferencias.next() && rsReferencias.getInt(1) > 0) {
+                    System.out.println("No se puede eliminar la familia porque tiene referencias asociadas.");
+                    return;
+                }
+            }
+
+            stmtEliminar.setInt(1, id);
+            stmtEliminar.executeUpdate();
+            System.out.println("Familia eliminada correctamente.");
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error al eliminar la familia: " + e.getMessage());
         }
     }
 

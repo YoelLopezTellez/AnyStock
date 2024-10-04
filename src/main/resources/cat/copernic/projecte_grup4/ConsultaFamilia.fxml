@@ -49,7 +49,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="95.0" prefWidth="404.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label prefHeight="22.0" prefWidth="91.0" text="ID">
+                        <Label prefHeight="22.0" prefWidth="91.0" text="ID:">
                            <HBox.margin>
                               <Insets bottom="5.0" left="15.0" right="5.0" top="10.0" />
                            </HBox.margin>
@@ -87,7 +87,7 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextField>
+                        <TextField prefHeight="28.0" prefWidth="151.0">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>

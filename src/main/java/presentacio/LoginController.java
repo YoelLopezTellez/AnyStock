@@ -12,15 +12,15 @@ public class LoginController {
 
     @FXML
     private Button btn_1;
-    
+
     @FXML
     private TextField tf_nom;
-    
+
     @FXML
     private TextField tf_pass;
-    
+
     private Login login;
-    
+
     //al carregar la escena ja executa els usuaris que hi ha al fitxer
     @FXML
     public void initialize() {
@@ -33,7 +33,7 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-    
+
     /*@FXML
     private onBtn1_action(ActionEvent event){
         String nom = tf_nom.getText();
