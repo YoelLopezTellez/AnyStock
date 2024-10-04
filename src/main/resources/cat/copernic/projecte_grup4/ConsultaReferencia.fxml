@@ -63,7 +63,7 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextField fx:id="tfId" prefHeight="1.0" prefWidth="41.0">
+                        <TextField fx:id="tfId" editable="false" mouseTransparent="true" prefHeight="1.0" prefWidth="41.0">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </HBox.margin>
@@ -173,15 +173,15 @@
          <children>
             <HBox alignment="CENTER" prefHeight="57.0" prefWidth="680.0" style="-fx-background-color: skyblue;" HBox.hgrow="ALWAYS">
                <children>
-                  <Button mnemonicParsing="false" text="&lt;&lt;&lt; Sortir" />
+                  <Button fx:id="btnSortir" mnemonicParsing="false" text="&lt;&lt;&lt; Sortir" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button mnemonicParsing="false" text="Nova" />
+                  <Button fx:id="btnNova" mnemonicParsing="false" text="Nova" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button mnemonicParsing="false" text="Eliminar" />
+                  <Button fx:id="btnEliminar" mnemonicParsing="false" text="Eliminar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button mnemonicParsing="false" text="Modificar" />
+                  <Button fx:id="btnModificar" mnemonicParsing="false" text="Modificar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button mnemonicParsing="false" text="&lt;&lt; Familia" />
+                  <Button fx:id="btnFamilia" mnemonicParsing="false" text="&lt;&lt; Familia" />
                </children>
             </HBox>
          </children>

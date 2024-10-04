@@ -9,20 +9,23 @@ public abstract class Usuari {
     private Date dataAlta;
     private double sueldoMensual;
     private int anysAntiguitat;
+    private TIPUSROL tipusRol;
 
     // Constructor que recibe todos los atributos
-    public Usuari(String nomUsuari, String password, Date dataAlta, double sueldoMensual, int anysAntiguitat) {
+    public Usuari(String nomUsuari, String password, Date dataAlta, double sueldoMensual, int anysAntiguitat, TIPUSROL tipusRol) {
         this.nomUsuari = nomUsuari;
         this.password = password;
         this.dataAlta = dataAlta;
         this.sueldoMensual = sueldoMensual;
         this.anysAntiguitat = anysAntiguitat;
+        this.tipusRol = tipusRol;
     }
 
     // Constructor que solo recibe nomUsuari y password
-    public Usuari(String nomUsuari, String password) {
+    public Usuari(String nomUsuari, String password, TIPUSROL tipusRol) {
         this.nomUsuari = nomUsuari;
         this.password = password;
+        this.tipusRol = tipusRol;
     }
 
     // Getters y Setters
@@ -64,5 +67,13 @@ public abstract class Usuari {
 
     public void setAnysAntiguitat(int anysAntiguitat) {
         this.anysAntiguitat = anysAntiguitat;
+    }
+
+    public TIPUSROL getTipusRol() {
+        return tipusRol;
+    }
+
+    public void setTipusRol(TIPUSROL tipusRol) {
+        this.tipusRol = tipusRol;
     }
 }
