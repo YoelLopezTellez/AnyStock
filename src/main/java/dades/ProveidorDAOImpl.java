@@ -36,6 +36,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
     public static ProveidorDAOImpl getInstance() {
         return instance;
     }
+
     /**
      * Afegeix un Proveidor a la base de dades.
      *
@@ -51,6 +52,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         } catch (SQLException e) {
         }
     }
+
     /**
      * Modifica un Proveïdor a la base de dades.
      * 
@@ -66,7 +68,8 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
             pstm.executeUpdate();
         } catch (SQLException e) {
         }
-    } 
+    }
+
     /**
      * Elimina un Proveïdor a la base de dades.
      * 
@@ -81,7 +84,8 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
             pstm.executeUpdate();
         } catch (SQLException e) {
         }
-    }    
+    }
+
     /**
      * Llista tots els Proveïdors en un ArrayList.
      * 
@@ -102,6 +106,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         }
         return ret;
     }
+
     /**
      * Obte o selecciona un Proveïdor a partir del seu id.
      * 
@@ -191,6 +196,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         pstm.setInt(7, p.getMinimUnitats());
         pstm.setString(8, p.getEspecialitat());
     }
+
     /**
      * Obte un Proveïdor a partir del contigut del Output de la consulta contingut en
      * el ResultSet.
