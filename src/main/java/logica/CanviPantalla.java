@@ -14,7 +14,7 @@ import javafx.scene.Scene;
  * @author reyes
  */
 public class CanviPantalla {
-    
+    //li has de pasar una escena, per exemple un node (node.getscene()) i desrpès passar-li la ruta del fxml
     public static void canviarPantalla(Scene escenaActual, String rutaFxml) throws IOException{
         FXMLLoader loader = new FXMLLoader(CanviPantalla.class.getResource(rutaFxml));
         Parent novaPantalla = loader.load();

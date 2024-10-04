@@ -54,6 +54,15 @@ public class LoginController {
         
         if(usuari != null){
             CanviPantalla.canviarPantalla(tf_nom.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
+            //cambiarPantalla();
         }
     }
+    
+    /*private void cambiarPantalla() throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/cat/copernic/projecte_grup4/Menu.fxml"));
+    Parent nuevaPantalla = loader.load();
+    Scene currentScene = tf_nom.getScene();  // O cualquier nodo en la escena actual
+    currentScene.setRoot(nuevaPantalla);
+    }*/
+    
 }
