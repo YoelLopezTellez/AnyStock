@@ -11,9 +11,9 @@ import javafx.fxml.Initializable;
 /**
  * FXML Controller class
  *
- * @author Yoel
+ * @author david
  */
-public class ConsultaFamiliaController implements Initializable {
+public class ConsultaProveidorController implements Initializable {
 
     /**
      * Initializes the controller class.
@@ -21,11 +21,6 @@ public class ConsultaFamiliaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
     }    
     
-
-    }
-
-
-
+}

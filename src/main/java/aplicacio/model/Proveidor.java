@@ -15,37 +15,48 @@ import java.util.Date;
  */
 public class Proveidor {
 
-    private String nom;
-    private int id;
     private String CIF;
+    private Date dataAlta;
     private boolean actiu;
     private String motiuInactivitat;
-    private Date dataAlta;
+    private String nom;
     private float valoracio;
     private int minimUnitats;
     private String especialitat;
+    private int id;
 
+    /**
+     * Es un cosntructor buit de Proveidors per posar amb seters en comptes de parametres, aixi esta
+     * mes optimitzat per al ResultSet
+     */
+    public Proveidor(){
+    }
+    
     /**
      * Constructor de la clase Proveidor.
      *
-     * @param nom Nombre del proveedor.
+     * 
      * @param CIF Código de identificación fiscal del proveedor.
+     * @param dataAlta Fecha de alta del proveedor.
      * @param actiu Estado activo del proveedor.
      * @param motiuInactivitat Motivo de inactividad (si no está activo).
-     * @param dataAlta Fecha de alta del proveedor.
+     * @param nom Nombre del proveedor.
      * @param valoracio Valoración del proveedor.
      * @param minimUnitats Número mínimo de unidades.
      * @param especialitat Especialidad del proveedor.
+     * @param id El id del Proveidor.
      */
-    public Proveidor(String nom, String CIF, boolean actiu, String motiuInactivitat, Date dataAlta, float valoracio, int minimUnitats, String especialitat) {
-        this.nom = nom;
+    public Proveidor(String CIF, Date dataAlta, boolean actiu, String motiuInactivitat, String nom, float valoracio, int minimUnitats, String especialitat, int id) {
+        
         this.CIF = CIF;
+        this.dataAlta = dataAlta;
         this.actiu = actiu;
         this.motiuInactivitat = motiuInactivitat;
-        this.dataAlta = dataAlta;
+        this.nom = nom;
         this.valoracio = valoracio;
         this.minimUnitats = minimUnitats;
         this.especialitat = especialitat;
+        this.id = id;
     }
 
     // Getters y Setters
@@ -116,4 +127,10 @@ public class Proveidor {
     public int getId() {
         return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
 }
