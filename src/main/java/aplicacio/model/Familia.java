@@ -15,12 +15,12 @@ import java.util.Date;
  */
 public class Familia {
 
+    private int id;
+    private Date dataAlta;
+    private String observacions;
     private String nom;
     private String descripcio;
-    private Date dataAlta;
     private String proveidorPerDefecte; // Proveedor por defecto, opcional
-    private String observacions;
-    private int id;
 
     /**
      * Constructor de la clase Familia.
@@ -32,13 +32,19 @@ public class Familia {
      * @param observacions Observaciones sobre la familia.
      * @param id Identificador de la familia.
      */
-    public Familia(String nom, String descripcio, Date dataAlta, String proveidorPerDefecte, String observacions, int id) {
+    public Familia(int id, Date dataAlta, String observacions, String nom, String descripcio, String proveidorPerDefecte) {
+        this.id = id;
+        this.dataAlta = dataAlta;
+        this.observacions = observacions;
         this.nom = nom;
         this.descripcio = descripcio;
-        this.dataAlta = dataAlta;
         this.proveidorPerDefecte = proveidorPerDefecte;
-        this.observacions = observacions;
-        this.id = id;
+
+    }
+
+    //Constructor vacio
+    public Familia() {
+
     }
 
     // Getters y Setters

@@ -1,9 +1,10 @@
-package aplicacio;
+package presentacio;
 
+import aplicacio.App;
 import java.io.IOException;
 import javafx.fxml.FXML;
 
-public class SecondaryController {
+public class MenuController {
 
     @FXML
     private void switchToPrimary() throws IOException {

@@ -115,7 +115,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
             //Posa en el prepared statment es a dir la query select el id.
-            pstm.setInt(9, id);
+            pstm.setInt(1, id);
             try (ResultSet rs = pstm.executeQuery()) {
                 //La id es executada per el prepared statment y el resultat es posa al result set.
                 while (rs.next()) {//Per cada resultat es crida al metode obtenirProveidorResultSet() el cual dona una instancia Proveidor amb les dades del rs.
@@ -125,7 +125,55 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         } catch (SQLException e) {
         }
         return res;
-    }  
+    }
+    
+    /**
+     * Afeigeix una llista de proveïdors a ka base de dades, si algun CIF proveïdor es igual al de la base de dades
+     * no l'afegeix i el guarde en un ArrayList de proveídors no afeixits que retorna.
+     * 
+     * @param list Llista de Proveïdors a afeixir.
+     * @return Una llista dels Proveïdors que no han sigut afeixits perque ja estan a la base de dades.
+     */
+    public List<Proveidor> afeixirLlistaProveidors(List<Proveidor> list){
+        
+        List<Proveidor> proveidorsNoAfeixits = new ArrayList<Proveidor>();
+        for(Proveidor p : list){
+            if((obtenirProvPerCIF(p.getCIF()))== null){
+                afegir(p);
+            }else{
+                proveidorsNoAfeixits.add(p);
+            }
+            
+        }
+        
+        return proveidorsNoAfeixits;
+    }
+    
+    /**
+     * A partir del CIF S'obte el proveïdor el id retornat sera -1.
+     * 
+     * @param CIF el CIF del proveidor.
+     * @return El proveidor que te el CIF especificat.
+     */
+    public Proveidor obtenirProvPerCIF(String CIF){
+        Proveidor res = null;
+        String sql = "SELECT * FROM proveidor WHERE CIF = ?";
+
+        try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
+           
+            pstm.setString(1, CIF);
+            try (ResultSet rs = pstm.executeQuery()) {
+               
+                while (rs.next()) {
+                    res = obtenirProveidorResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+        }
+        return res;
+    }
+    
+    
     /**
      * Posa al PreparedStatement els paramentres en les posicions per no
      * repetir codi.
