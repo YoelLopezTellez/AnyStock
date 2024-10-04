@@ -96,14 +96,14 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
     }
 
     /**
-     * Lista todas las referencias registradas en la base de datos.
+     * Lista todas las referencias de la familia seleccionada previamente.
      *
      * @return Una lista de objetos Familia.
      */
-    @Override
-    public List<Referencia> LlistarTot() {
+    
+    public List<Referencia> LlistarTot(int idFamilia) {
         List<Referencia> referencias = new ArrayList<>();
-        String sql = "SELECT * FROM referencia";
+        String sql = "SELECT * FROM referencia where FAMILIA_ID = "+idFamilia;
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 UOM uom = UOM.valueOf(rs.getString("UoM").toUpperCase());
@@ -132,7 +132,7 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      * Obtiene una referencia de la base de datos dado su ID.
      *
      * @param id El ID de la referencia a obtener.
-     * @return El objeto Familia si se encuentra, de lo contrario null.
+     * @return El objeto Referencia si se encuentra, de lo contrario null.
      */
     @Override
     public Referencia obtenir(int id) {

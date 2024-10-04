@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author david
  */
-public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
+public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLlistat<Proveidor> {
 
     //Variable estatica per declarar un patro singleton
     private static ProveidorDAOImpl instance;
