@@ -10,6 +10,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import logica.CanviPantalla;
+
+/**
+ * Controlador de la pantalla login, el que fa es cridar al login de logica per comprovar si existeix l'usuari 
+ * si existeix canvia de pantalla al menu
+ *
+ * @author Reyes
+ */
 
 public class LoginController {
 
@@ -45,15 +53,7 @@ public class LoginController {
         Usuari usuari = login.autentificacio(nom, pass);
         
         if(usuari != null){
-            cambiarPantalla();
+            CanviPantalla.canviarPantalla(tf_nom.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
         }
-    }
-    
-    //
-    private void cambiarPantalla() throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/cat/copernic/projecte_grup4/secondary.fxml"));
-        Parent novaPantalla = loader.load();
-        Scene escenaActual = tf_nom.getScene();
-        escenaActual.setRoot(novaPantalla);
     }
 }

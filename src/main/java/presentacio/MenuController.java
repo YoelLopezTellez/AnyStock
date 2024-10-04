@@ -6,18 +6,33 @@ package presentacio;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
  *
- * @author Yoel
+ * @author Reyes
  */
 public class MenuController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
+    @FXML
+    private Button Btn_Fam;
+    
+    @FXML
+    private Button Btn_Prov;
+    
+    @FXML
+    private Button Btn_Imp;
+    
+    @FXML
+    private Button Btn_Exp;
+    
+    @FXML
+    private Button Btn_Tancar;
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
