@@ -28,7 +28,7 @@
         </HBox>
         <HBox alignment="CENTER" prefHeight="167.0" prefWidth="394.0" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
             <children>
-                <TableView fx:id="tb_Familia" prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
+                <TableView fx:id="tb_Familia" onMouseClicked="#onTb_FamiliaMouseClicked" prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="col_IdFamilia" prefWidth="59.20001143217087" text="ID" />
                         <TableColumn fx:id="col_Nom" prefWidth="117.59997940063477" text="NOM" />
@@ -161,7 +161,7 @@
                         <Insets />
                      </HBox.margin></Button>
                         <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="70.0" visible="false" />
-                        <Button fx:id="Btn_Eliminar" mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Eliminar" textAlignment="CENTER">
+                        <Button fx:id="Btn_Eliminar" mnemonicParsing="false" onAction="#onBtn_Eliminar_Clicked" prefHeight="26.0" prefWidth="70.0" text="Eliminar" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin></Button>
