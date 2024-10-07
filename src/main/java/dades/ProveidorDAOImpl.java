@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
  *
  * @author david
  */
-public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
+public class ProveidorDAOImpl implements DAOInterface<Proveidor>{
 
     //Variable estatica per declarar un patro singleton.
     private static ProveidorDAOImpl instance;
@@ -44,10 +45,13 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
      */
     @Override
     public void afegir(Proveidor p) {
-        String sql = "INSERT INTO proveidor (CIF, dataAlta, actiu, motiuInactivitat, nom, valoracioMitjana, minimUnitats, especialitat,id) VALUES (?,?,?,?,?,?,?,?,id);";
+        String sql = "INSERT INTO proveidor (CIF, dataAlta, actiu, motiuInactivitat, nom, valoracioMitjana, minimUnitats, especialitat) VALUES (?,?,?,?,?,?,?,?);";
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
             setearPreparedStatement(pstm, p); //Llama a el petode setearPreparedStatement() on estan tots els sets dels "?".
+            
+            
+            pstm.setDate(2, java.sql.Date.valueOf(LocalDate.now()));// pone en dataAlta la fecha actual 
             pstm.executeUpdate();//Executa el prepared statement.
         } catch (SQLException e) {
         }
@@ -64,6 +68,9 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
             setearPreparedStatement(pstm, p);//Crida a el metode setearPreparedStatement() on estan tots els sets dels "?".
+
+            pstm.setDate(2, java.sql.Date.valueOf(p.getDataAlta()));//posa en dataAlta la data del proveidor.
+            
             pstm.setInt(9, p.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
@@ -188,7 +195,6 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
      */   
     private void setearPreparedStatement(final PreparedStatement pstm, Proveidor p) throws SQLException {
         pstm.setString(1, p.getCIF());
-        pstm.setTimestamp(2, (Timestamp) p.getDataAlta());
         pstm.setBoolean(3, p.isActiu());
         pstm.setString(4, p.getMotiuInactivitat());
         pstm.setString(5, p.getNom());
@@ -211,7 +217,11 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor> {
         
         //Fem els Sets per posar els atributs en el Proveidor.
         p.setCIF(rs.getString("CIF"));
-        p.setDataAlta(rs.getDate("dataAlta"));
+        
+        // obtenim el Date y lo pasamos a LocalDate
+        
+        p.setDataAlta(rs.getDate("dataAlta").toLocalDate());
+        
         p.setActiu(rs.getBoolean("actiu"));
         p.setMotiuInactivitat(rs.getString("motiuInactivitat"));
         p.setNom(rs.getString("nom"));
