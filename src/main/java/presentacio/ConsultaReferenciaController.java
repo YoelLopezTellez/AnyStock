@@ -61,19 +61,20 @@ public class ConsultaReferenciaController {
 
         // Asignar la lista observable a la tabla
         tbReferencia.setItems(referenciasObservableList);
+        llistarReferencias();
     }
 
     @FXML
-    private void onbtnFamilia_Action(ActionEvent event) throws IOException {
+    private void onbtnFamilia_Clicked(ActionEvent event) throws IOException {
         CanviPantalla.canviarPantalla(btnFamilia.getScene(), "/cat/copernic/projecte_grup4/ConsultaFamilia.fxml");
     }
 
     @FXML
-    private void onbtnSortir_Action(ActionEvent event) throws IOException {
+    private void onbtnSortir_Clicked(ActionEvent event) throws IOException {
         CanviPantalla.canviarPantalla(btnSortir.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
     }
 
-    private void listarFamilias() {
+    private void llistarReferencias() {
         // Limpiamos la lista observable antes de añadir los datos actualizados
         referenciasObservableList.clear();
         referenciasObservableList.addAll(referenciaLogica.llistarReferencias(idFamilia));
