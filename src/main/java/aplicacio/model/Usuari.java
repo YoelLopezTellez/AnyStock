@@ -2,7 +2,7 @@ package aplicacio.model;
 
 import java.util.Date;
 
-public abstract class Usuari {
+public class Usuari {
 
     private String nomUsuari;
     private String password;
