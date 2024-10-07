@@ -4,7 +4,8 @@
  */
 package aplicacio.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 /**
  * Clase que representa una familia de productos. Contiene información básica
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Familia {
 
     private int id;
-    private Date dataAlta;
+    private LocalDate dataAlta;
     private String observacions;
     private String nom;
     private String descripcio;
@@ -32,7 +33,7 @@ public class Familia {
      * @param observacions Observaciones sobre la familia.
      * @param id Identificador de la familia.
      */
-    public Familia(int id, Date dataAlta, String observacions, String nom, String descripcio, String proveidorPerDefecte) {
+    public Familia(int id, LocalDate dataAlta, String observacions, String nom, String descripcio, String proveidorPerDefecte) {
         this.id = id;
         this.dataAlta = dataAlta;
         this.observacions = observacions;
@@ -64,11 +65,11 @@ public class Familia {
         this.descripcio = descripcio;
     }
 
-    public Date getDataAlta() {
+    public LocalDate getDataAlta() {
         return dataAlta;
     }
 
-    public void setDataAlta(Date dataAlta) {
+    public void setDataAlta(LocalDate dataAlta) {
         this.dataAlta = dataAlta;
     }
 

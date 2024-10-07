@@ -1,31 +1,149 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package presentacio;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import java.io.IOException;
+import logica.FamiliaLogica;
+import aplicacio.model.Familia;
+import logica.CanviPantalla;
 
-/**
- * FXML Controller class
- *
- * @author Yoel
- */
-public class ConsultaFamiliaController implements Initializable {
+public class ConsultaFamiliaController {
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+    @FXML
+    private Button Btn_Eliminar, Btn_Modificar, Btn_Nova, Btn_Productes, Btn_Sortir;
 
-    }    
-    
+    @FXML
+    private TableColumn<Familia, Integer> col_IdFamilia;
+    @FXML
+    private TableColumn<Familia, String> col_Nom, col_Descripcio, col_Proveidor;
+    @FXML
+    private TableColumn<Familia, LocalDate> col_DataAlta;
+    @FXML
+    private TableColumn<Familia, String> col_observacions;
 
+    @FXML
+    private TextArea ta_Descripcio, ta_Observacions;
+
+    @FXML
+    private TableView<Familia> tb_Familia;
+
+    @FXML
+    private TextField tf_DataAlta, tf_ID, tf_Nom, tf_Proveidor;
+
+    private FamiliaLogica familiaLogica = new FamiliaLogica();
+
+    private ObservableList<Familia> familiasObservableList = FXCollections.observableArrayList();
+
+    @FXML
+    public void initialize() {
+        col_IdFamilia.setCellValueFactory(new PropertyValueFactory<>("id"));
+        col_Nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        col_Descripcio.setCellValueFactory(new PropertyValueFactory<>("descripcio"));
+        col_DataAlta.setCellValueFactory(new PropertyValueFactory<>("dataAlta"));
+        col_observacions.setCellValueFactory(new PropertyValueFactory<>("observacions"));
+        col_Proveidor.setCellValueFactory(new PropertyValueFactory<>("proveidorPerDefecte"));
+
+        tb_Familia.setItems(familiasObservableList);
+        listarFamilias();
     }
 
+    @FXML
+    private void onBtn_Nova_Clicked() {
+        Familia nuevaFamilia = new Familia();
+        nuevaFamilia.setNom(tf_Nom.getText());
+        nuevaFamilia.setDescripcio(ta_Descripcio.getText());
+        nuevaFamilia.setObservacions(ta_Observacions.getText());
+        nuevaFamilia.setDataAlta(LocalDate.now());
+        nuevaFamilia.setProveidorPerDefecte(tf_Proveidor.getText());
 
+        familiaLogica.afegirFamilia(nuevaFamilia);
+        familiasObservableList.add(nuevaFamilia);
+        limpiarCampos();
+    }
 
+    @FXML
+    private void onBtn_Modificar_Clicked() {
+        Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
+        if (familiaSeleccionada != null) {
+            familiaSeleccionada.setNom(tf_Nom.getText());
+            familiaSeleccionada.setDescripcio(ta_Descripcio.getText());
+            familiaSeleccionada.setObservacions(ta_Observacions.getText());
+            familiaSeleccionada.setDataAlta(LocalDate.parse(tf_DataAlta.getText()));
+            familiaSeleccionada.setProveidorPerDefecte(tf_Proveidor.getText());
+            familiaLogica.modificarFamilia(familiaSeleccionada);
+            listarFamilias();
+            limpiarCampos();
+        } else {
+            System.out.println("Por favor, selecciona una familia para modificar.");
+        }
+    }
+
+    @FXML
+    private void onBtn_Eliminar_Clicked() {
+        Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
+        if (familiaSeleccionada != null) {
+            familiaLogica.eliminarFamilia(familiaSeleccionada.getId());
+            familiasObservableList.remove(familiaSeleccionada);
+            limpiarCampos();
+        } else {
+            System.out.println("Por favor, selecciona una familia para eliminar.");
+        }
+    }
+
+    @FXML
+    private void onBtn_Productes_Clicked() {
+        try {
+            CanviPantalla.canviarPantalla(Btn_Productes.getScene(), "/cat/copernic/projecte_grup4/ConsultaReferencia.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onBtn_Sortir_Clicked() {
+        try {
+            CanviPantalla.canviarPantalla(Btn_Sortir.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void listarFamilias() {
+        familiasObservableList.clear();
+        familiasObservableList.addAll(familiaLogica.llistarFamilias());
+    }
+
+    @FXML
+    private void onTb_FamiliaMouseClicked(MouseEvent event) {
+        Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
+        if (familiaSeleccionada != null) {
+            tf_ID.setText(String.valueOf(familiaSeleccionada.getId()));
+            tf_Nom.setText(familiaSeleccionada.getNom());
+            ta_Descripcio.setText(familiaSeleccionada.getDescripcio());
+            ta_Observacions.setText(familiaSeleccionada.getObservacions());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            tf_DataAlta.setText(sdf.format(familiaSeleccionada.getDataAlta()));
+            tf_Proveidor.setText(familiaSeleccionada.getProveidorPerDefecte());
+        }
+    }
+
+    private void limpiarCampos() {
+        tf_ID.clear();
+        tf_Nom.clear();
+        ta_Descripcio.clear();
+        ta_Observacions.clear();
+        tf_DataAlta.clear();
+        tf_Proveidor.clear();
+    }
+}
