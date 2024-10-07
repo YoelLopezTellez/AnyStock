@@ -4,115 +4,63 @@
  */
 package presentacio;
 
+import aplicacio.model.Referencia;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import logica.CanviPantalla;
-
+import logica.ReferenciaLogica;
 /**
  * FXML Controller class
  *
  * @author mario
  */
-public class ConsultaReferenciaController{
+public class ConsultaReferenciaController {
+  private ReferenciaLogica referenciaLogica = new ReferenciaLogica();
+    int idFamilia = 0;
+    @FXML
+    private Button btnNova, btnEliminar, btnModificar, btnFamilia, btnSortir;
 
     @FXML
-    private Button btnNova;
+    private TextField tfVegadesAlarma, tfNom, tfIdFamilia, tfPreu, tfDataAlarma, tfUom, tfProveidor, tfDataAlta, tfQuantitat, tfId;
 
     @FXML
-    private TextField tfVegadesAlarma;
-
-    @FXML
-    private TextField tfNom;
-
-    @FXML
-    private TextField tfIdFamilia;
-
-    @FXML
-    private TableColumn<?, ?> colProveidor;
-
-    @FXML
-    private TableColumn<?, ?> colUom;
-
-    @FXML
-    private TableColumn<?, ?> colQuantitat;
-
-    @FXML
-    private TextField tfPreu;
-
-    @FXML
-    private TextField tfDataAlarma;
-
-    @FXML
-    private TableColumn<?, ?> colNom;
-
-    @FXML
-    private TextField tfUom;
+    private TableColumn<?, ?> colProveidor, colQuantitat, colUom, colNom, colPreu, colId, colDataAlta;
 
     @FXML
     private TextArea taObservacions;
 
     @FXML
-    private TextField tfProveidor;
-
-    @FXML
-    private TextField tfDataAlta;
-
-    @FXML
-    private TextField tfQuantitat;
-
-    @FXML
-    private Button btnEliminar;
-
-    @FXML
-    private TableColumn<?, ?> colPreu;
-
-    @FXML
-    private TextField tfId;
-
-    @FXML
-    private TableColumn<?, ?> colId;
-
-    @FXML
-    private Button btnModificar;
-
-    @FXML
-    private Button btnFamilia;
-
-    @FXML
-    private TableColumn<?, ?> colDataAlta;
-
-    @FXML
-    private Button btnSortir;
+    private TableView<Referencia> tbReferencia;
 
     /**
      * Initializes the controller class.
      */
-    
+    private ObservableList<Referencia> referenciasObservableList = FXCollections.observableArrayList();
+
     @FXML
     public void initialize() {
         // Asociar las columnas de la tabla con los atributos de los items usando métodos tradicionales
-        colId.setCellValueFactory(new PropertyValueFactory<Item, String>("id"));
-        colNom.setCellValueFactory(new PropertyValueFactory<Item, String>("nom"));
-        colPreu.setCellValueFactory(new PropertyValueFactory<Item, String>("preu"));
-        colQuantitat.setCellValueFactory(new PropertyValueFactory<Item, String>("quantitat"));
-        colUom.setCellValueFactory(new PropertyValueFactory<Item, String>("uom"));
-        colProveidor.setCellValueFactory(new PropertyValueFactory<Item, String>("proveidor"));
-        colDataAlta.setCellValueFactory(new PropertyValueFactory<Item, String>("dataAlta"));
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        colPreu.setCellValueFactory(new PropertyValueFactory<>("preu"));
+        colQuantitat.setCellValueFactory(new PropertyValueFactory<>("quantitat"));
+        colUom.setCellValueFactory(new PropertyValueFactory<>("uom"));
+        colProveidor.setCellValueFactory(new PropertyValueFactory<>("proveidor"));
+        colDataAlta.setCellValueFactory(new PropertyValueFactory<>("dataAlta"));
 
         // Asignar la lista observable a la tabla
-        tableView.setItems(itemList);
-
-        // Agregar algunos elementos de ejemplo
-        itemList.add(new Item("1", "Producte 1", "10.0", "5", "uom1", "CIF123", "2023-10-01"));
+        tbReferencia.setItems(referenciasObservableList);
     }
 
     @FXML
@@ -123,5 +71,11 @@ public class ConsultaReferenciaController{
     @FXML
     private void onbtnSortir_Action(ActionEvent event) throws IOException {
         CanviPantalla.canviarPantalla(btnSortir.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
+    }
+
+    private void listarFamilias() {
+        // Limpiamos la lista observable antes de añadir los datos actualizados
+        referenciasObservableList.clear();
+        referenciasObservableList.addAll(referenciaLogica.llistarReferencias(idFamilia));
     }
 }
