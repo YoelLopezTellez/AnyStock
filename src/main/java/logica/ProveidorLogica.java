@@ -8,6 +8,8 @@ package logica;
 import aplicacio.model.Proveidor;
 import dades.ProveidorDAOImpl;
 import static dades.ProveidorDAOImpl.getInstance;
+import java.util.List;
+import java.util.regex.Pattern;
 
 
 
@@ -17,11 +19,19 @@ import static dades.ProveidorDAOImpl.getInstance;
  */
 public class ProveidorLogica {
     private final ProveidorDAOImpl proveidorDAO;
-
+    
+    /**
+     * Constructor per instanciar el ProveidorsDAOImpl().
+     */
     public ProveidorLogica() {
         this.proveidorDAO = getInstance();
     }
     
+    /**
+     * Afegeizx un proveidor validant i trucant als metodes corresponents.
+     * 
+     * @param proveidor 
+     */
     public void afegirProveidor(Proveidor proveidor){
         if(proveidor == null){
             throw new IllegalArgumentException("El proveidor no pot ser nul.");
@@ -31,6 +41,63 @@ public class ProveidorLogica {
         System.out.println("Proveïdor agregat correctament.");
         
     }
+    /**
+     * Modifica un proveidor validant i trucant als metodes corresponents.
+     * 
+     * @param proveidor 
+     */
+    public void ModificarProveidor(Proveidor proveidor){
+        if(proveidor == null){
+            throw new IllegalArgumentException("El proveidor no pot ser nul.");
+        }
+        validarProveidor(proveidor);
+        proveidorDAO.modificar(proveidor);
+        System.out.println("Proveïdor Modificat correctament.");
+        
+    }
+    /**
+     * Elimina un proveidor per el CIF trucant als metodes corresponents.
+     * 
+     * @param CIF El cif del proveidor a eliminar.
+     */
+    public void EliminarProveidor(String CIF){
+        if(CIF == null){
+            throw new IllegalArgumentException("El CIF del proveidor no pot ser nul.");
+        }
+        
+        proveidorDAO.delete((proveidorDAO.obtenirProvPerCIF(CIF)).getId()); //Aixo aconsegeix el cif del proveidor donat, i busca el id a la bbdd per pasar-li la id al metode eliminar.
+        System.out.println("Proveïdor Modificat correctament.");
+        
+    }
+    /**
+     * Obte el proveidor per el seu CIF.
+     * 
+     * @param CIF El cif del proveidor a obtenir.
+     */
+    public void ObtenirProveidor(String CIF){
+        if(CIF == null){
+            throw new IllegalArgumentException("El CIF del proveidor no pot ser nul.");
+        }
+        
+        proveidorDAO.obtenirProvPerCIF(CIF); //Aixo obte el proveidor per el seu cif.
+        System.out.println("Proveïdor Modificat correctament.");
+        
+    }
+    
+    /**
+     * Llista tots els proveidors..
+     *
+     * @return Una llista de tots els proveidors.
+     */
+    public List<Proveidor> llistarProveidors() {
+        return proveidorDAO.LlistarTot();
+    }
+
+    /**
+     * Valida el Proveidor asegurantse de que els seus camps son valids i llançant una excepcio en cas negatiu.
+     * 
+     * @param proveidor 
+     */
      private void validarProveidor(Proveidor proveidor) {
         if (proveidor.getNom() == null || proveidor.getNom().trim().isEmpty()) {
             throw new IllegalArgumentException("El nom del proveïdor no pot estar buit.");
@@ -46,10 +113,19 @@ public class ProveidorLogica {
         }
     }
      
+     /**
+      * Aquest metode verifica si un CIF es correcte
+      * 
+      * @param CIF El cif del proveidor
+      * @return Un boolean true si es correcte false si no ho es.
+      */
      private boolean ValidadorCIF(String CIF){
-         boolean cifValid=true;
          
-         
-         return cifValid;
+        // Expresio regex per a validar el CIF
+        String regexCIF = "^[A-HJ-NP-SUVW][0-9]{7}[0-9A-J]$";
+        Pattern pattern = Pattern.compile(regexCIF);
+        pattern.matcher(CIF).matches();
+    
+         return pattern.matcher(CIF).matches();
      }
 }
