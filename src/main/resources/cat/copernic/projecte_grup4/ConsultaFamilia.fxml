@@ -168,7 +168,7 @@
                         <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="60.0" visible="false" />
                         <Button fx:id="Btn_Modificar" mnemonicParsing="false" onAction="#onBtn_Modificar_Clicked" prefHeight="26.0" prefWidth="78.0" text="Modificar" />
                         <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="60.0" visible="false" />
-                        <Button fx:id="Btn_Proveidor" mnemonicParsing="false" prefHeight="26.0" prefWidth="113.0" text="Proveïdors &gt;&gt;&gt;">
+                        <Button fx:id="Btn_Productes" mnemonicParsing="false" prefHeight="26.0" prefWidth="113.0" text="Productes &gt;&gt;&gt;">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin></Button>

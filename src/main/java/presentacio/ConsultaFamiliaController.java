@@ -2,7 +2,8 @@ package presentacio;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -41,6 +42,9 @@ public class ConsultaFamiliaController {
 
     private FamiliaLogica familiaLogica = new FamiliaLogica();
 
+    // Usamos un ObservableList para enlazar los datos con la tabla
+    private ObservableList<Familia> familiasObservableList = FXCollections.observableArrayList();
+
     @FXML
     public void initialize() {
         col_IdFamilia.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -50,6 +54,8 @@ public class ConsultaFamiliaController {
         col_observacions.setCellValueFactory(new PropertyValueFactory<>("observacions"));
         col_Proveidor.setCellValueFactory(new PropertyValueFactory<>("proveidorPerDefecte"));
 
+        // Vinculamos el ObservableList a la tabla
+        tb_Familia.setItems(familiasObservableList);
         listarFamilias();
     }
 
@@ -63,7 +69,8 @@ public class ConsultaFamiliaController {
         nuevaFamilia.setProveidorPerDefecte(tf_Proveidor.getText());
 
         familiaLogica.afegirFamilia(nuevaFamilia);
-        listarFamilias();
+        // Agregamos la nueva familia a la lista observable para actualizar la tabla
+        familiasObservableList.add(nuevaFamilia);
         limpiarCampos();
     }
 
@@ -94,7 +101,8 @@ public class ConsultaFamiliaController {
         try {
             int id = Integer.parseInt(tf_ID.getText());
             familiaLogica.eliminarFamilia(id);
-            listarFamilias();
+            // Eliminamos la familia de la lista observable para actualizar la tabla
+            familiasObservableList.removeIf(f -> f.getId() == id);
             limpiarCampos();
         } catch (NumberFormatException e) {
             System.out.println("Por favor, introduce un ID válido.");
@@ -102,9 +110,9 @@ public class ConsultaFamiliaController {
     }
 
     @FXML
-    private void onBtn_Proveidor_Clicked() {
+    private void onBtn_Productes_Clicked() {
         try {
-            CanviPantalla.canviarPantalla(Btn_Productes.getScene(), "/cat/copernic/projecte_grup4/ConsultaProveidor.fxml");
+            CanviPantalla.canviarPantalla(Btn_Productes.getScene(), "/cat/copernic/projecte_grup4/ConsultaReferencia.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,8 +128,9 @@ public class ConsultaFamiliaController {
     }
 
     private void listarFamilias() {
-        List<Familia> familias = familiaLogica.llistarFamilias();
-        tb_Familia.getItems().setAll(familias);
+        // Limpiamos la lista observable antes de añadir los datos actualizados
+        familiasObservableList.clear();
+        familiasObservableList.addAll(familiaLogica.llistarFamilias());
     }
 
     @FXML

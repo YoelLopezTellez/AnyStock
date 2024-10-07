@@ -40,6 +40,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("No se ha podido conectar a la base de datos.");
         }
     }
 
