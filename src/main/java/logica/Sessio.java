@@ -16,4 +16,25 @@ public class Sessio {
     
     //constructor buit per no fer un new ja que es una clase Singleton
     private Sessio(){}
+
+    //metode per comprovar que tan sols es pot iniciar aquest metode tan sols una vegada
+    public static Sessio getInstancia() {
+        
+        if(instancia == null)
+            instancia = new Sessio();
+        return instancia;
+    }
+
+    //metode per establir l'usuari
+    public void iniciarSessio(Usuari usuari){
+        this.usuari = usuari;
+    }
+    
+    public Usuari getUsuari() {
+        return usuari;
+    }
+    
+    public void tancarSessio(){
+        usuari = null;
+    }
 }

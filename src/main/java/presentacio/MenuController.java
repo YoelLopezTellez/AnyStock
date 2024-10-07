@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import logica.CanviPantalla;
+import logica.Sessio;
 
 /**
  * FXML Controller class
@@ -49,6 +50,12 @@ public class MenuController implements Initializable {
     @FXML
     private void onBtn_Prov_Action(ActionEvent event) throws IOException{
         CanviPantalla.canviarPantalla(Btn_Fam.getScene(), "/cat/copernic/projecte_grup4/ConsultaProveidor.fxml");
+    }
+    
+    @FXML
+    private void onBtn_Tancar_Action(ActionEvent event) throws IOException{
+        Sessio.getInstancia().tancarSessio();
+        CanviPantalla.canviarPantalla(Btn_Fam.getScene(), "/cat/copernic/projecte_grup4/login.fxml");
     }
     
 }
