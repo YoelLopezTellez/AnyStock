@@ -4,9 +4,8 @@
  */
 package logica;
 
-import aplicacio.model.Responsable;
+import aplicacio.model.TIPUSROL;
 import aplicacio.model.Usuari;
-import aplicacio.model.Venedor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,9 +44,9 @@ public class Login {
                 Usuari usuari;
 
                 if (rol.equalsIgnoreCase("Responsable")) {
-                    usuari = new Responsable(nom, contra);
+                    usuari = new Usuari(nom, contra, TIPUSROL.RESPONSABLE);
                 } else if (rol.equalsIgnoreCase("Venedor")) {
-                    usuari = new Venedor(nom, contra);
+                    usuari = new Usuari(nom, contra, TIPUSROL.VENDEDOR);
                 } else {
                     continue;
                 }
