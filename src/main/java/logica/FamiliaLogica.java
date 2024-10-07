@@ -3,7 +3,6 @@ package logica;
 import dades.FamiliaDAOImpl;
 import aplicacio.model.Familia;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,6 +63,7 @@ public class FamiliaLogica {
             throw new IllegalArgumentException("El ID de la familia debe ser positivo.");
         }
         familiaDAO.delete(id);
+        System.out.println("Familia eliminada correctamente.");
     }
 
     /**
