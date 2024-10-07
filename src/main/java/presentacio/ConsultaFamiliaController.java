@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import logica.FamiliaLogica;
 import aplicacio.model.Familia;
-import logica.CanviPantalla;
 
 public class ConsultaFamiliaController {
 
