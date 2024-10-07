@@ -5,10 +5,13 @@
 
 import aplicacio.model.TIPUSROL;
 import aplicacio.model.Usuari;
+import java.io.IOException;
+import java.io.InputStream;
 import logica.Login;
 import logica.Sessio;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  *
@@ -16,7 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TestLogin {
     
-    Login login;
+    private Login login;
+    
+    //utilizamos el beforeEach para que utilice el setUp y así antes de cada test cargue la lista de usuarios
+    @BeforeEach
+    public void setUp() throws IOException {
+        // Inicializamos el objeto login con el archivo de usuarios
+        InputStream rutaUsuaris = getClass().getClassLoader().getResourceAsStream("usuaris.txt");
+        assertNotNull(rutaUsuaris, "El archivo de usuarios no se pudo cargar correctamente.");
+        login = new Login(rutaUsuaris);
+    }
     
     //comprova que l'usuari que hem ficat existeix en el fitxer amb el not null i també que el nom sigui correcte
     @Test
