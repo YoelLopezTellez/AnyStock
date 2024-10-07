@@ -1,7 +1,7 @@
 package presentacio;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,7 +27,7 @@ public class ConsultaFamiliaController {
     @FXML
     private TableColumn<Familia, String> col_Nom, col_Descripcio, col_Proveidor;
     @FXML
-    private TableColumn<Familia, Date> col_DataAlta;
+    private TableColumn<Familia, LocalDate> col_DataAlta;
     @FXML
     private TableColumn<Familia, String> col_observacions;
 
@@ -42,7 +42,6 @@ public class ConsultaFamiliaController {
 
     private FamiliaLogica familiaLogica = new FamiliaLogica();
 
-    // Usamos un ObservableList para enlazar los datos con la tabla
     private ObservableList<Familia> familiasObservableList = FXCollections.observableArrayList();
 
     @FXML
@@ -54,7 +53,6 @@ public class ConsultaFamiliaController {
         col_observacions.setCellValueFactory(new PropertyValueFactory<>("observacions"));
         col_Proveidor.setCellValueFactory(new PropertyValueFactory<>("proveidorPerDefecte"));
 
-        // Vinculamos el ObservableList a la tabla
         tb_Familia.setItems(familiasObservableList);
         listarFamilias();
     }
@@ -65,47 +63,40 @@ public class ConsultaFamiliaController {
         nuevaFamilia.setNom(tf_Nom.getText());
         nuevaFamilia.setDescripcio(ta_Descripcio.getText());
         nuevaFamilia.setObservacions(ta_Observacions.getText());
-        nuevaFamilia.setDataAlta(new Date());
+        nuevaFamilia.setDataAlta(LocalDate.now());
         nuevaFamilia.setProveidorPerDefecte(tf_Proveidor.getText());
 
         familiaLogica.afegirFamilia(nuevaFamilia);
-        // Agregamos la nueva familia a la lista observable para actualizar la tabla
         familiasObservableList.add(nuevaFamilia);
         limpiarCampos();
     }
 
     @FXML
     private void onBtn_Modificar_Clicked() {
-        try {
-            int id = Integer.parseInt(tf_ID.getText());
-            Familia familiaExistente = familiaLogica.obtenirFamilia(id);
-            if (familiaExistente != null) {
-                familiaExistente.setNom(tf_Nom.getText());
-                familiaExistente.setDescripcio(ta_Descripcio.getText());
-                familiaExistente.setObservacions(ta_Observacions.getText());
-                familiaExistente.setDataAlta(new Date());
-                familiaExistente.setProveidorPerDefecte(tf_Proveidor.getText());
-                familiaLogica.modificarFamilia(familiaExistente);
-                listarFamilias();
-                limpiarCampos();
-            } else {
-                System.out.println("Familia no encontrada.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Por favor, introduce un ID válido.");
+        Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
+        if (familiaSeleccionada != null) {
+            familiaSeleccionada.setNom(tf_Nom.getText());
+            familiaSeleccionada.setDescripcio(ta_Descripcio.getText());
+            familiaSeleccionada.setObservacions(ta_Observacions.getText());
+            familiaSeleccionada.setDataAlta(LocalDate.parse(tf_DataAlta.getText()));
+            familiaSeleccionada.setProveidorPerDefecte(tf_Proveidor.getText());
+            familiaLogica.modificarFamilia(familiaSeleccionada);
+            listarFamilias();
+            limpiarCampos();
+        } else {
+            System.out.println("Por favor, selecciona una familia para modificar.");
         }
     }
 
     @FXML
     private void onBtn_Eliminar_Clicked() {
-        try {
-            int id = Integer.parseInt(tf_ID.getText());
-            familiaLogica.eliminarFamilia(id);
-            // Eliminamos la familia de la lista observable para actualizar la tabla
-            familiasObservableList.removeIf(f -> f.getId() == id);
+        Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
+        if (familiaSeleccionada != null) {
+            familiaLogica.eliminarFamilia(familiaSeleccionada.getId());
+            familiasObservableList.remove(familiaSeleccionada);
             limpiarCampos();
-        } catch (NumberFormatException e) {
-            System.out.println("Por favor, introduce un ID válido.");
+        } else {
+            System.out.println("Por favor, selecciona una familia para eliminar.");
         }
     }
 
@@ -128,7 +119,6 @@ public class ConsultaFamiliaController {
     }
 
     private void listarFamilias() {
-        // Limpiamos la lista observable antes de añadir los datos actualizados
         familiasObservableList.clear();
         familiasObservableList.addAll(familiaLogica.llistarFamilias());
     }
