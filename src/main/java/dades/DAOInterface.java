@@ -20,8 +20,6 @@ public interface DAOInterface<T> {
 
     public void delete(int id);
 
-    public List<T> LlistarTot();
-
     public T obtenir(int id);
 
 }

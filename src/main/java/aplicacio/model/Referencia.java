@@ -11,57 +11,83 @@ import java.util.Date;
  * información relevante como nombre, unidad de medida, cantidad, familia,
  * proveedor, fecha de alta y precio.
  *
- * @author Yoel
+ * @author Mario
  */
 public class Referencia {
 
-    private String nom;
-    private String uom;  // Unidad de Medida
-    private int quantitat;
-    private String familia;
-    private String proveidor;
-    private Date dataAlta;
-    private float preu;
     private int id;
+    private int vegadesAlarma;
+    private float preuCompra;
+    private String observacions;
+    private int quantitat;
+    private String nom;
+    private UOM uom;  // Unidad de Medida
+    private Date dataAlta;
+    private Date ultimaDataAlarma;
+    private String proveidor;
+    private int familiaID;
 
     /**
      * Constructor de la clase Referencia.
      *
+     * @param id Identificador único de la referencia.
+     * @param vegadesAlarma Las veces que ha saltado la alarma de stock sobre esta referencia.
+     * @param preuCompra Precio de la referencia.
+     * @param observacions Observaciones sobre las referencias.
+     * @param quantitat Cantidad disponible.
      * @param nom Nombre de la referencia.
      * @param uom Unidad de medida de la referencia.
-     * @param quantitat Cantidad disponible.
-     * @param familia Familia a la que pertenece.
-     * @param proveidor Proveedor de la referencia.
      * @param dataAlta Fecha de alta de la referencia.
-     * @param preu Precio de la referencia.
-     * @param id Identificador único de la referencia.
+     * @param ultimDataAlarma Fecha en la que saltó la alarma por ultima vez.
+     * @param proveidor Proveedor de la referencia.
+     * @param familiaID La id de la familia
      */
-    public Referencia(String nom, String uom, int quantitat, String familia, String proveidor, Date dataAlta, float preu, int id) {
+    public Referencia(int id, int vegadesAlarma, float preuCompra, String observacions, int quantitat, String nom, UOM uom, Date dataAlta, Date ultimaDataAlarma, String proveidor, int familiaID) {
+        this.id = id;
+        this.vegadesAlarma = vegadesAlarma;
+        this.preuCompra = preuCompra;
+        this.observacions = observacions;
+        this.quantitat = quantitat;
         this.nom = nom;
         this.uom = uom;
-        this.quantitat = quantitat;
-        this.familia = familia;
-        this.proveidor = proveidor;
         this.dataAlta = dataAlta;
-        this.preu = preu;
-        this.id = id;
+        this.ultimaDataAlarma = ultimaDataAlarma;
+        this.proveidor = proveidor;
+        this.familiaID = familiaID;
     }
 
     // Getters y Setters
-    public String getNom() {
-        return nom;
+
+    public int getId() {
+        return id;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getUom() {
-        return uom;
+    public int getVegadesAlarma() {
+        return vegadesAlarma;
     }
 
-    public void setUom(String uom) {
-        this.uom = uom;
+    public void setVegadesAlarma(int vegadesAlarma) {
+        this.vegadesAlarma = vegadesAlarma;
+    }
+
+    public float getPreuCompra() {
+        return preuCompra;
+    }
+
+    public void setPreuCompra(float preuCompra) {
+        this.preuCompra = preuCompra;
+    }
+
+    public String getObservacions() {
+        return observacions;
+    }
+
+    public void setObservacions(String observacions) {
+        this.observacions = observacions;
     }
 
     public int getQuantitat() {
@@ -72,20 +98,20 @@ public class Referencia {
         this.quantitat = quantitat;
     }
 
-    public String getFamilia() {
-        return familia;
+    public String getNom() {
+        return nom;
     }
 
-    public void setFamilia(String familia) {
-        this.familia = familia;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
-    public String getProveidor() {
-        return proveidor;
+    public UOM getUom() {
+        return uom;
     }
 
-    public void setProveidor(String proveidor) {
-        this.proveidor = proveidor;
+    public void setUom(UOM uom) {
+        this.uom = uom;
     }
 
     public Date getDataAlta() {
@@ -96,19 +122,28 @@ public class Referencia {
         this.dataAlta = dataAlta;
     }
 
-    public float getPreu() {
-        return preu;
+    public Date getUltimaDataAlarma() {
+        return ultimaDataAlarma;
     }
 
-    public void setPreu(float preu) {
-        this.preu = preu;
+    public void setUltimaDataAlarma(Date ultimaDataAlarma) {
+        this.ultimaDataAlarma = ultimaDataAlarma;
     }
 
-    public int getId() {
-        return id;
+    public String getProveidor() {
+        return proveidor;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProveidor(String proveidor) {
+        this.proveidor = proveidor;
+    }    
+
+    public int getFamiliaID() {
+        return familiaID;
     }
+
+    public void setFamiliaID(int familiaID) {
+        this.familiaID = familiaID;
+    }
+    
 }

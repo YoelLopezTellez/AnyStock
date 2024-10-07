@@ -19,7 +19,7 @@ import java.sql.Date;
  *
  * @author Yoel
  */
-public class FamiliaDAOImpl implements DAOInterface<Familia> {
+public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlistat<Familia>{
 
     /**
      * Inserta una nueva familia en la base de datos.
