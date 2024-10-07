@@ -28,7 +28,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="167.0" prefWidth="394.0" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
          <children>
-            <TableView prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
+            <TableView fx:id="tbReferencia" prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="colId" maxWidth="1000.0" prefWidth="33.0" text="ID" />
                 <TableColumn fx:id="colNom" prefWidth="137.0" text="NOM" />
