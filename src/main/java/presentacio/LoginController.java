@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import logica.CanviPantalla;
+import logica.Sessio;
 
 /**
  * Controlador de la pantalla login, el que fa es cridar al login de logica per comprovar si existeix l'usuari 
@@ -50,6 +51,7 @@ public class LoginController {
         Usuari usuari = login.autentificacio(nom, pass);
         
         if(usuari != null){
+            Sessio.getInstancia().iniciarSessio(usuari);
             CanviPantalla.canviarPantalla(tf_nom.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
             //cambiarPantalla();
         }
