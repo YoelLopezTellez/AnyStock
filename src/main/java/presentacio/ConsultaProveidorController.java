@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package presentacio;
 
 import aplicacio.model.Proveidor;
@@ -22,6 +18,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import logica.CanviPantalla;
 import logica.ProveidorLogica;
 /**
  * FXML Controller class
@@ -30,7 +28,7 @@ import logica.ProveidorLogica;
  */
 public class ConsultaProveidorController implements Initializable {
 
-    private ProveidorLogica provLogic;
+    private ProveidorLogica provLogic = new ProveidorLogica();
     
     @FXML
     private Button btnNova;
@@ -100,12 +98,13 @@ public class ConsultaProveidorController implements Initializable {
 
     @FXML
     private Button btnSortir;
-    private ObservableList<Proveidor> Llistaproveidors;
+    private ObservableList<Proveidor> Llistaproveidors = FXCollections.observableArrayList();;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         
        
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -115,21 +114,24 @@ public class ConsultaProveidorController implements Initializable {
         colActiu.setCellValueFactory(new PropertyValueFactory<>("actiu"));
         colMotiuInactivitat.setCellValueFactory(new PropertyValueFactory<>("motiuInactivitat"));
         colValoracio.setCellValueFactory(new PropertyValueFactory<>("valoracio"));
-        colEspecialitat.setCellValueFactory(new PropertyValueFactory<>("especialitatt"));
+        colEspecialitat.setCellValueFactory(new PropertyValueFactory<>("especialitat"));
         colMinimUnitats.setCellValueFactory(new PropertyValueFactory<>("minimUnitats"));
         
         
-        Llistaproveidors = FXCollections.observableArrayList(provLogic.llistarProveidors());
-        
         tbView.setItems(Llistaproveidors);
+        listarProveidors();
     }
        @FXML
-    private void onBtnSortir_action(ActionEvent event){
-        
+    private void onBtnSortir_Clicked(){
+         try {
+            CanviPantalla.canviarPantalla(btnSortir.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void onBtnNova_action(ActionEvent event) {
+    private void onBtnNova_Clicked() {
         String CIF = tfCif.getText();
         String Nom = tfNom.getText();
         LocalDate DataAlta = dpDataAlta.getValue();
@@ -151,17 +153,76 @@ public class ConsultaProveidorController implements Initializable {
         
         
         provLogic.afegirProveidor(p);
+        
+        Llistaproveidors.add(p);
+        listarProveidors();
+        limpiarCampos();
     }
 
     @FXML
-    private void onBtnEliminar_action(ActionEvent event) {
-        
+    private void onBtnEliminar_Clicked() {
+        Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
+        if (provSeleccionat != null) {
+            provLogic.EliminarProveidor(provSeleccionat.getCIF());
+            Llistaproveidors.remove(provSeleccionat);
+            limpiarCampos();
+        } else {
+            System.out.println("Por favor, selecciona un proveidor para eliminar.");
+        }
     }
 
     @FXML
-    private void onBtnModificar_action(ActionEvent event) {
-        
+    private void onBtnModificar_Clicked() {
+        Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
+        if (provSeleccionat != null) {
+            provSeleccionat.setCIF(tfCif.getText());
+            provSeleccionat.setNom(tfNom.getText());
+            provSeleccionat.setDataAlta(dpDataAlta.getValue());
+            provSeleccionat.setActiu(cbActiu.isSelected());
+            provSeleccionat.setMotiuInactivitat(tfMotiuInactivitat.getText());
+            provSeleccionat.setValoracio(Float.parseFloat(tfValoracio.getText()));
+            provSeleccionat.setEspecialitat(tfEspecialitat.getText());
+            provSeleccionat.setMinimUnitats(Integer.parseInt(tfMinimUnitats.getText()));
+            
+            provLogic.ModificarProveidor(provSeleccionat);
+            listarProveidors();
+            limpiarCampos();
+        } else {
+            System.out.println("Por favor, selecciona un proveidor para modificar.");
+        }
     }
 
+    private void listarProveidors() {
+        Llistaproveidors.clear();
+        Llistaproveidors.addAll(provLogic.llistarProveidors());
+    }
     
+    @FXML
+    void ontbView_mouseClicked(MouseEvent event) {
+        Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
+        
+        if(provSeleccionat != null){
+        tfId.setText(""+provSeleccionat.getId());
+        tfCif.setText(provSeleccionat.getCIF());
+        tfNom.setText(provSeleccionat.getNom());
+        dpDataAlta.setValue(provSeleccionat.getDataAlta());
+        cbActiu.setSelected(provSeleccionat.isActiu());
+        tfMotiuInactivitat.setText(provSeleccionat.getMotiuInactivitat());
+        tfValoracio.setText(""+provSeleccionat.getValoracio());
+        tfEspecialitat.setText(provSeleccionat.getEspecialitat());
+        tfMinimUnitats.setText(""+provSeleccionat.getMinimUnitats());
+        }
+    }
+    
+    private void limpiarCampos() {
+        tfId.clear();
+        tfNom.clear();
+        tfCif.clear();
+        dpDataAlta.setValue(java.time.LocalDate.now());
+        cbActiu.setSelected(false);
+        tfMotiuInactivitat.clear();
+        tfValoracio.clear();
+        tfEspecialitat.clear();
+        tfMinimUnitats.clear();
+    }
 }
