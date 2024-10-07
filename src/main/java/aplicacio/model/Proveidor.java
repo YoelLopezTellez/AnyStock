@@ -4,7 +4,8 @@
  */
 package aplicacio.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 /**
  * Clase que representa un proveedor en el sistema. Contiene información
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Proveidor {
 
     private String CIF;
-    private Date dataAlta;
+    private LocalDate dataAlta;
     private boolean actiu;
     private String motiuInactivitat;
     private String nom;
@@ -46,7 +47,7 @@ public class Proveidor {
      * @param especialitat Especialidad del proveedor.
      * @param id El id del Proveidor.
      */
-    public Proveidor(String CIF, Date dataAlta, boolean actiu, String motiuInactivitat, String nom, float valoracio, int minimUnitats, String especialitat, int id) {
+    public Proveidor(String CIF, LocalDate dataAlta, boolean actiu, String motiuInactivitat, String nom, float valoracio, int minimUnitats, String especialitat, int id) {
         
         this.CIF = CIF;
         this.dataAlta = dataAlta;
@@ -92,11 +93,11 @@ public class Proveidor {
         this.motiuInactivitat = motiuInactivitat;
     }
 
-    public Date getDataAlta() {
+    public LocalDate getDataAlta() {
         return dataAlta;
     }
 
-    public void setDataAlta(Date dataAlta) {
+    public void setDataAlta(LocalDate dataAlta) {
         this.dataAlta = dataAlta;
     }
 
