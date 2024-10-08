@@ -8,7 +8,15 @@ package logica;
 import aplicacio.model.Proveidor;
 import dades.ProveidorDAOImpl;
 import static dades.ProveidorDAOImpl.getInstance;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 
@@ -128,4 +136,72 @@ public class ProveidorLogica {
     
          return pattern.matcher(CIF).matches();
      }
+     
+     public void importarCSV(File fitxer){
+        try(BufferedReader br = new BufferedReader(new FileReader(fitxer))){
+            String lineaCabecera = br.readLine(); //llegeix la primera linea on ha d'ahver-hi una capçelera
+            String[] cabecera = lineaCabecera.split(","); // separem cada nom de la capçelera
+            String linea;
+            while((linea = br.readLine()) != null){
+                String[] dades = linea.split(",");
+
+                Map<String, Object> proveidorData = procesarLineaCSV(cabecera, dades);
+                
+                if(validarProveidor(proveidorData)){
+                    Proveidor proveidor = new Proveidor(
+                        (String) proveidorData.get("CIF"),
+                        (LocalDate) proveidorData.get("dataAlta"),
+                        (Boolean) proveidorData.get("actiu"),
+                        (String) proveidorData.get("motiuInactivitat"),
+                        (String) proveidorData.get("nom"),
+                        (Float) proveidorData.get("valoracio"),
+                        (Integer) proveidorData.get("minimUnitats"),
+                        (String) proveidorData.get("especialitat"));
+                    
+                    proveidorDAO.afegir(proveidor);
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+     
+     private Map<String, Object> procesarLineaCSV(String[] cabecera, String[] dades){
+         Map<String, Object> proveidorDades = new HashMap();
+         
+         for(int i = 0; i < dades.length; i++){
+            String clau = cabecera[i].trim().toLowerCase(); // per saber en quina capçelera estem
+            String dada = dades[i].trim(); //obtenim la dada corresponent
+            
+            switch(clau){
+                case "cif":
+                    proveidorDades.put("CIF", dada.isEmpty() ? null : dada);
+                    break;
+                case "actiu":
+                    proveidorDades.put("actiu", dada.equalsIgnoreCase("true"));
+                    break;
+                case "nom":
+                    proveidorDades.put("nom", dada.isEmpty() ? null : dada);
+                    break;
+                case "minimunitats":
+                    proveidorDades.put("minimUnitats", dada.isEmpty() ? null : Integer.parseInt(dada));
+                    break;
+                case "valoracio":
+                    proveidorDades.put("valoracio", dada.isEmpty() ? null : Float.parseFloat(dada));
+                    break;
+                case "dataalta":
+                    proveidorDades.put("dataAlta", dada.isEmpty() ? LocalDate.now() : LocalDate.parse(dada));
+                    break;
+            }
+        }
+         
+         return proveidorDades;
+     }
+     
+     private boolean validarProveidor(Map<String, Object> proveedorData) {
+        // Validar los datos del proveedor antes de insertar
+        String cif = (String) proveedorData.get("CIF");
+        String nom = (String) proveedorData.get("nom");
+        return cif != null && !cif.isEmpty() && nom != null && !nom.isEmpty();
+    }
 }
