@@ -94,14 +94,6 @@ public class FamiliaLogica {
      * @param familia La familia a validar.
      */
     private void validarFamilia(Familia familia) {
-        if (familia.getNom() == null || familia.getNom().trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre de la familia no puede estar vacío.");
-        }
-        if (familia.getDescripcio() == null || familia.getDescripcio().trim().isEmpty()) {
-            throw new IllegalArgumentException("La descripción de la familia no puede estar vacía.");
-        }
-        if (familia.getDataAlta() == null) {
-            throw new IllegalArgumentException("La fecha de alta no puede ser nula.");
-        }
+
     }
 }
