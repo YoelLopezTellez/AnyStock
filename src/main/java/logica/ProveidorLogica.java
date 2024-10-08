@@ -185,13 +185,13 @@ public class ProveidorLogica {
                     proveidorDades.put("nom", dada.isEmpty() ? null : dada);
                     break;
                 case "minimunitats":
-                    proveidorDades.put("minimUnitats", dada.isEmpty() ? null : Integer.parseInt(dada));
+                    proveidorDades.put("minimUnitats", dada.isEmpty() ? null : validarInt(dada));
                     break;
                 case "valoracio":
-                    proveidorDades.put("valoracio", dada.isEmpty() ? null : Float.parseFloat(dada));
+                    proveidorDades.put("valoracio", dada.isEmpty() ? null : validarFloat(dada));
                     break;
                 case "dataalta":
-                    proveidorDades.put("dataAlta", dada.isEmpty() ? LocalDate.now() : LocalDate.parse(dada));
+                    proveidorDades.put("dataAlta", dada.isEmpty() ? LocalDate.now() : validarData(dada));
                     break;
             }
         }
@@ -212,4 +212,31 @@ public class ProveidorLogica {
         }
         return true;
     }
+     
+     private Float validarFloat(String valor){
+         try{
+             return Float.parseFloat(valor);
+         }catch(NumberFormatException e){
+             System.out.println("Valor float invàlid: " + valor);
+             return null;
+         }
+     }
+     
+     private LocalDate validarData(String valor){
+         try{
+             return LocalDate.parse(valor);
+         }catch(NumberFormatException e){
+             System.out.println("Data invàlida: " + valor + " es possarà la data d'avui");
+             return LocalDate.now();
+         }
+     }
+     
+     private Integer validarInt(String valor){
+         try{
+             return Integer.parseInt(valor);
+         }catch(NumberFormatException e){
+             System.out.println("Valor enter invàlid: " + valor);
+             return null;
+         }
+     }
 }
