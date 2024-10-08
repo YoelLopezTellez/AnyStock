@@ -19,7 +19,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import logica.CanviPantalla;
 import logica.ProveidorLogica;
 /**
  * FXML Controller class

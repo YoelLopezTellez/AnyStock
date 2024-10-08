@@ -4,14 +4,17 @@
  */
 package presentacio;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import logica.CanviPantalla;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import logica.Sessio;
 
 /**
@@ -50,6 +53,25 @@ public class MenuController implements Initializable {
     @FXML
     private void onBtn_Prov_Action(ActionEvent event) throws IOException{
         CanviPantalla.canviarPantalla(Btn_Fam.getScene(), "/cat/copernic/projecte_grup4/ConsultaProveidor.fxml");
+    }
+    
+    @FXML
+    private void onBtn_Imp_Action (ActionEvent event){
+        //creem la classe
+        FileChooser seleccionador = new FileChooser();
+        
+        //fer un filtre perque tan sols mostri fitxers csv
+        FileChooser.ExtensionFilter filtre = new FileChooser.ExtensionFilter("Fitxers CSV (*.csv)", "*.csv");
+        seleccionador.getExtensionFilters().add(filtre);
+        
+        //fiquem un titol
+        seleccionador.setTitle("Seleccioni un fitxer CSV");
+        
+        //obtenim el Stage actual on está el botó en comptes de crear un Stage nou utilitzem la referència d'aquest botó
+        Stage escenari = (Stage)((Node) event.getSource()).getScene().getWindow();
+        
+        //obrim el diàleg per la selecció del fitxer
+        File fitxerSeleccionar = seleccionador.showOpenDialog(escenari);
     }
     
     @FXML
