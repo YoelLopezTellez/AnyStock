@@ -60,53 +60,58 @@ public class ConsultaFamiliaController {
 
     @FXML
     private void onBtn_Nova_Clicked() {
+        // Crear una nueva familia con los campos en blanco
         Familia nuevaFamilia = new Familia();
-        nuevaFamilia.setNom(tf_Nom.getText());
-        nuevaFamilia.setDescripcio(ta_Descripcio.getText());
-        nuevaFamilia.setObservacions(ta_Observacions.getText());
-        nuevaFamilia.setDataAlta(LocalDate.now());
-        nuevaFamilia.setProveidorPerDefecte(tf_Proveidor.getText());
+        nuevaFamilia.setNom(""); // Campo en blanco
+        nuevaFamilia.setDescripcio(""); // Campo en blanco
+        nuevaFamilia.setObservacions(""); // Campo en blanco
+        nuevaFamilia.setDataAlta(LocalDate.now()); // Establecer la fecha actual
+        nuevaFamilia.setProveidorPerDefecte(""); // Campo en blanco
 
+        // Agregar a la base de datos (esto debería manejar la lógica de autoincremento)
         familiaLogica.afegirFamilia(nuevaFamilia);
-        familiasObservableList.add(nuevaFamilia);
+
+        // Actualizar la lista de familias y agregar el nuevo registro a la vista
+        listarFamilias();
+
+        // Limpiar los campos de entrada
         limpiarCampos();
     }
 
     @FXML
-private void onBtn_Modificar_Clicked() {
-    Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
-    if (familiaSeleccionada != null) {
-        familiaSeleccionada.setNom(tf_Nom.getText());
-        familiaSeleccionada.setDescripcio(ta_Descripcio.getText());
-        familiaSeleccionada.setObservacions(ta_Observacions.getText());
+    private void onBtn_Modificar_Clicked() {
+        Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
+        if (familiaSeleccionada != null) {
+            familiaSeleccionada.setNom(tf_Nom.getText());
+            familiaSeleccionada.setDescripcio(ta_Descripcio.getText());
+            familiaSeleccionada.setObservacions(ta_Observacions.getText());
 
-        // Validar y convertir la fecha
-        if (!tf_DataAlta.getText().isEmpty()) {
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                familiaSeleccionada.setDataAlta(LocalDate.parse(tf_DataAlta.getText(), formatter));
-            } catch (Exception e) {
-                System.out.println("Formato de fecha incorrecto: " + e.getMessage());
-                return; // No continuar si la fecha es inválida
+            // Validar y convertir la fecha
+            if (!tf_DataAlta.getText().isEmpty()) {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    familiaSeleccionada.setDataAlta(LocalDate.parse(tf_DataAlta.getText(), formatter));
+                } catch (Exception e) {
+                    System.out.println("Formato de fecha incorrecto: " + e.getMessage());
+                    return; // No continuar si la fecha es inválida
+                }
             }
-        }
 
-        familiaSeleccionada.setProveidorPerDefecte(tf_Proveidor.getText());
+            familiaSeleccionada.setProveidorPerDefecte(tf_Proveidor.getText());
 
-        try {
-            familiaLogica.modificarFamilia(familiaSeleccionada);
-            listarFamilias(); // Actualiza la lista después de modificar
-            tb_Familia.refresh(); // Refresca la tabla
-            limpiarCampos(); // Limpia los campos
-        } catch (Exception e) {
-            System.out.println("Error al modificar la familia: " + e.getMessage());
-            e.printStackTrace();
+            try {
+                familiaLogica.modificarFamilia(familiaSeleccionada);
+                listarFamilias(); // Actualiza la lista después de modificar
+                tb_Familia.refresh(); // Refresca la tabla
+                limpiarCampos(); // Limpia los campos
+            } catch (Exception e) {
+                System.out.println("Error al modificar la familia: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Por favor, selecciona una familia para modificar.");
         }
-    } else {
-        System.out.println("Por favor, selecciona una familia para modificar.");
     }
-}
-
 
     @FXML
     private void onBtn_Eliminar_Clicked() {
