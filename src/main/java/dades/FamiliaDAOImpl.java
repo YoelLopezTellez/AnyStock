@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlistat<Familia> {
 
-    @Override
     public void afegir(Familia entitat) {
         String sql = "INSERT INTO familia (dataAlta, observacions, nom, descripcio, PROVEIDOR_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -20,14 +19,19 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
             stmt.setString(2, entitat.getObservacions());
             stmt.setString(3, entitat.getNom());
             stmt.setString(4, entitat.getDescripcio());
-            stmt.setInt(5, entitat.getProveidorPerDefecte());
+
+            // Si no hay proveedor, se establece como NULL
+            if (entitat.getProveidorPerDefecte() == 0) {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                stmt.setInt(5, entitat.getProveidorPerDefecte());
+            }
 
             stmt.executeUpdate();
 
-            // Obtener el ID generado
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    entitat.setId(generatedKeys.getInt(1)); // Establece el ID en el objeto Familia
+                    entitat.setId(generatedKeys.getInt(1));
                 }
             }
         } catch (SQLException e) {
@@ -38,6 +42,12 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
 
     @Override
     public void modificar(Familia entitat) {
+        // Verificar si el proveedor existe antes de modificar la familia
+        if (!proveedorExiste(entitat.getProveidorPerDefecte())) {
+            System.out.println("Error: El proveedor con ID " + entitat.getProveidorPerDefecte() + " no existe.");
+            return;
+        }
+
         String sql = "UPDATE familia SET nom = ?, descripcio = ?, dataAlta = ?, PROVEIDOR_id = ?, observacions = ? WHERE id = ?";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -67,7 +77,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
             stmtVerificarFamilia.setInt(1, id);
             try (ResultSet rsFamilia = stmtVerificarFamilia.executeQuery()) {
                 if (!rsFamilia.next()) {
-                    System.out.println("La familia con ID " + id + " no existe.");
+                    System.out.println("Error: La familia con ID " + id + " no existe.");
                     return;
                 }
             }
@@ -76,7 +86,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
             stmtVerificarReferencias.setInt(1, id);
             try (ResultSet rsReferencias = stmtVerificarReferencias.executeQuery()) {
                 if (rsReferencias.next() && rsReferencias.getInt(1) > 0) {
-                    System.out.println("No se puede eliminar la familia porque tiene referencias asociadas.");
+                    System.out.println("Error: No se puede eliminar la familia porque tiene referencias asociadas.");
                     return;
                 }
             }
@@ -142,5 +152,22 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
             System.out.println("Error al obtener la familia: " + e.getMessage());
         }
         return familia;
+    }
+
+    // Método para verificar si un proveedor existe
+    private boolean proveedorExiste(int proveedorId) {
+        String sql = "SELECT COUNT(*) FROM proveidor WHERE id = ?";
+        try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, proveedorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Retorna true si el proveedor existe
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error al verificar el proveedor: " + e.getMessage());
+        }
+        return false; // Si ocurre un error, asumimos que no existe
     }
 }
