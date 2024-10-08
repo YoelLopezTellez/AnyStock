@@ -13,14 +13,14 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
 
     @Override
     public void afegir(Familia entitat) {
-        String sql = "INSERT INTO familia (dataAlta, observacions, nom, descripcio, PROVEIDOR_CIF) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO familia (dataAlta, observacions, nom, descripcio, PROVEIDOR_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             stmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
             stmt.setString(2, entitat.getObservacions());
             stmt.setString(3, entitat.getNom());
             stmt.setString(4, entitat.getDescripcio());
-            stmt.setString(5, entitat.getProveidorPerDefecte());
+            stmt.setInt(5, entitat.getProveidorPerDefecte());
 
             stmt.executeUpdate();
 
@@ -38,13 +38,13 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
 
     @Override
     public void modificar(Familia entitat) {
-        String sql = "UPDATE familia SET nom = ?, descripcio = ?, dataAlta = ?, PROVEIDOR_CIF = ?, observacions = ? WHERE id = ?";
+        String sql = "UPDATE familia SET nom = ?, descripcio = ?, dataAlta = ?, PROVEIDOR_id = ?, observacions = ? WHERE id = ?";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, entitat.getNom());
             stmt.setString(2, entitat.getDescripcio());
             stmt.setDate(3, java.sql.Date.valueOf(entitat.getDataAlta()));
-            stmt.setString(4, entitat.getProveidorPerDefecte());
+            stmt.setInt(4, entitat.getProveidorPerDefecte());
             stmt.setString(5, entitat.getObservacions());
             stmt.setInt(6, entitat.getId());
 
@@ -106,7 +106,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
                         rs.getString("observacions"),
                         rs.getString("nom"),
                         rs.getString("descripcio"),
-                        rs.getString("PROVEIDOR_CIF")
+                        rs.getInt("PROVEIDOR_id")
                 );
                 familias.add(familia);
             }
@@ -133,7 +133,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
                             rs.getString("observacions"),
                             rs.getString("nom"),
                             rs.getString("descripcio"),
-                            rs.getString("PROVEIDOR_CIF")
+                            rs.getInt("PROVEIDOR_id")
                     );
                 }
             }

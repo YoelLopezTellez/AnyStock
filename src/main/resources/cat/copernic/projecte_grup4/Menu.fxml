@@ -42,7 +42,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="Btn_Imp" mnemonicParsing="false" prefHeight="80.0" prefWidth="170.0" text="Importar" textFill="#3a96bd">
+                  <Button fx:id="Btn_Imp" mnemonicParsing="false" onAction="#onBtn_Imp_Action" prefHeight="80.0" prefWidth="170.0" text="Importar" textFill="#3a96bd">
                      <font>
                         <Font size="16.0" />
                      </font></Button>

@@ -30,10 +30,11 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      */
     @Override
     public void afegir(Referencia entitat) {
-        String sql = "INSERT INTO referencia (id, FAMILIA_id) VALUES (id, ?)";
+        String sql = "INSERT INTO referencia (id, dataAlta, FAMILIA_id) VALUES (id, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, entitat.getFamiliaID());
+
+            stmt.setInt(2, entitat.getFamiliaID());
+            stmt.setDate(1, java.sql.Date.valueOf(entitat.getDataAlta().now()));
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,13 +93,15 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      *
      * @return Una lista de objetos Familia.
      */
-    
     public List<Referencia> LlistarTot(int idFamilia) {
         List<Referencia> referencias = new ArrayList<>();
-        String sql = "SELECT * FROM referencia where FAMILIA_ID = "+idFamilia;
+        String sql = "SELECT * FROM referencia where FAMILIA_ID = " + idFamilia;
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 UOM uom = UOM.valueOf(rs.getString("UoM").toUpperCase());
+                Date dataAlarmaSql = rs.getDate("ultimaDataAlarma");
+                LocalDate dataAlarma = (dataAlarmaSql != null) ? dataAlarmaSql.toLocalDate() : null;
+
                 Referencia referencia = new Referencia(
                         rs.getInt("id"),
                         rs.getInt("vegadesAlarma"),
@@ -107,8 +110,8 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
                         rs.getInt("quantitat"),
                         rs.getString("nom"),
                         uom,
-                        rs.getDate("dataAlta").toLocalDate(),
-                        rs.getDate("ultimaDataAlarma").toLocalDate(),
+                        rs.getDate("dataAlta").toLocalDate(), // Supongo que dataAlta no es nulo
+                        dataAlarma, // Usamos la variable que contiene null si la fecha es nula
                         rs.getInt("PROVEIDOR_ID"),
                         rs.getInt("FAMILIA_ID")
                 );

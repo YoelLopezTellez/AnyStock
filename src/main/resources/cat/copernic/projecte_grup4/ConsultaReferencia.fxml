@@ -28,7 +28,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="167.0" prefWidth="394.0" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
          <children>
-            <TableView fx:id="tbReferencia" onSort="#ontbReferenciaMouseClicked" prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
+            <TableView fx:id="tbReferencia" onMouseClicked="#ontbReferenciaMouseClicked" prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="colId" maxWidth="1000.0" prefWidth="33.0" text="ID" />
                 <TableColumn fx:id="colNom" prefWidth="137.0" text="NOM" />
@@ -72,7 +72,7 @@
                            </padding>
                         </Label>
                         <TextField fx:id="tfVegadesAlarma" prefHeight="31.0" prefWidth="33.0" />
-                        <Label prefHeight="26.0" prefWidth="49.0" text="Preu">
+                        <Label prefHeight="26.0" prefWidth="31.0" text="Preu">
                            <padding>
                               <Insets top="5.0" />
                            </padding>
@@ -80,7 +80,7 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="tfPreu" prefHeight="31.0" prefWidth="36.0" />
+                        <TextField fx:id="tfPreu" prefHeight="31.0" prefWidth="68.0" />
                         <Label prefHeight="26.0" prefWidth="73.0" text="Quantitat">
                            <padding>
                               <Insets top="5.0" />
@@ -124,7 +124,7 @@
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="tfIdFamilia" prefHeight="31.0" prefWidth="74.0" />
+                        <TextField fx:id="tfIdFamilia" editable="false" mouseTransparent="true" prefHeight="31.0" prefWidth="74.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="95.0" prefWidth="404.0">
@@ -170,11 +170,11 @@
                <children>
                   <Button fx:id="btnSortir" mnemonicParsing="false" onAction="#onbtnSortir_Clicked" text="&lt;&lt;&lt; Sortir" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnNova" mnemonicParsing="false" text="Nova" />
+                  <Button fx:id="btnNova" mnemonicParsing="false" onAction="#onbtnNova_Clicked" text="Nova" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnEliminar" mnemonicParsing="false" text="Eliminar" />
+                  <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#onbtnEliminar_Clicked" text="Eliminar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnModificar" mnemonicParsing="false" text="Modificar" />
+                  <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#onbtnModificar_Clicked" text="Modificar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
                   <Button fx:id="btnFamilia" mnemonicParsing="false" onAction="#onbtnFamilia_Clicked" text="&lt;&lt; Familia" />
                </children>
