@@ -59,7 +59,30 @@ public class ConsultaReferenciaController {
     private TableView<Referencia> tbReferencia;
 
     private ReferenciaLogica referenciaLogica = new ReferenciaLogica();
-    int idFamilia = 1;
+
+    /*private int idFamilia;
+
+    public void setIdFamilia(int idFamilia) {
+        this.idFamilia = idFamilia;
+        tfIdFamilia.setText(String.valueOf(idFamilia));
+    }
+
+    public int getIdFamilia() {
+        return idFamilia;
+    }*/
+    ConsultaFamiliaController controladorFamilia;
+
+    public ConsultaFamiliaController getControladorFamilia() {
+        return controladorFamilia;
+    }
+
+    public void setControladorFamilia(ConsultaFamiliaController controladorFamilia) {
+        this.controladorFamilia = controladorFamilia;
+    }
+    
+    int idFamilia = controladorFamilia.getId();
+    
+    
     private ObservableList<Referencia> referenciasObservableList = FXCollections.observableArrayList();
 
     /**
@@ -67,6 +90,11 @@ public class ConsultaReferenciaController {
      */
     @FXML
     public void initialize() {
+       /* taObservacions.getScene().getWindow().setOnShown(event -> {
+    System.out.println(controladorFamilia.getId());
+    llistarReferencias(idFamilia);
+        });*/
+                
         // Asociar las columnas de la tabla con los atributos de los items usando métodos tradicionales
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -75,11 +103,11 @@ public class ConsultaReferenciaController {
         colUom.setCellValueFactory(new PropertyValueFactory<>("uom"));
         colProveidor.setCellValueFactory(new PropertyValueFactory<>("proveidor"));
         colDataAlta.setCellValueFactory(new PropertyValueFactory<>("dataAlta"));
-
+        
         // Asignar la lista observable a la tabla
         tbReferencia.setItems(referenciasObservableList);
-        llistarReferencias(idFamilia);
     }
+    
 
     @FXML
     private void onbtnFamilia_Clicked(ActionEvent event) throws IOException {
