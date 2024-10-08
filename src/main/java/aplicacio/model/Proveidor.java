@@ -60,6 +60,19 @@ public class Proveidor {
         this.id = id;
     }
 
+    public Proveidor(String CIF, LocalDate dataAlta, boolean actiu, String motiuInactivitat, String nom, float valoracio, int minimUnitats, String especialitat) {
+        this.CIF = CIF;
+        this.dataAlta = dataAlta;
+        this.actiu = actiu;
+        this.motiuInactivitat = motiuInactivitat;
+        this.nom = nom;
+        this.valoracio = valoracio;
+        this.minimUnitats = minimUnitats;
+        this.especialitat = especialitat;
+    }
+
+    
+    
     // Getters y Setters
     public String getNom() {
         return nom;

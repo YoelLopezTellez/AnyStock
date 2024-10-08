@@ -6,7 +6,6 @@ package aplicacio.model;
 
 import java.time.LocalDate;
 
-
 /**
  * Clase que representa una familia de productos. Contiene información básica
  * como nombre, descripción, fecha de alta, proveedor por defecto, observaciones
@@ -21,7 +20,7 @@ public class Familia {
     private String observacions;
     private String nom;
     private String descripcio;
-    private int proveidorPerDefecte; 
+    private int proveidorPerDefecte;
 
     /**
      * Constructor de la clase Familia.

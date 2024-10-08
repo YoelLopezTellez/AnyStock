@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import logica.ProveidorLogica;
 import logica.Sessio;
 
 /**
@@ -71,7 +72,12 @@ public class MenuController implements Initializable {
         Stage escenari = (Stage)((Node) event.getSource()).getScene().getWindow();
         
         //obrim el diàleg per la selecció del fitxer
-        File fitxerSeleccionar = seleccionador.showOpenDialog(escenari);
+        File fitxerSeleccionat = seleccionador.showOpenDialog(escenari);
+        
+        if(fitxerSeleccionat != null){
+            ProveidorLogica logica = new ProveidorLogica();
+            logica.importarCSV(fitxerSeleccionat);
+        }
     }
     
     @FXML
