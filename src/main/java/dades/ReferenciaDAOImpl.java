@@ -48,7 +48,7 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      */
     @Override
     public void modificar(Referencia entitat) {
-        String sql = "UPDATE referencia SET vegadesAlarma = ?, preuCompra = ?, observacions = ?, quantitat = ?, nom = ?, UoM = ?, dataAlta = ?, dataUltimaAlarma = ?, PROVEIDOR_CIF = ?, FAMILIA_ID = ? WHERE id = ?";
+        String sql = "UPDATE referencia SET vegadesAlarma = ?, preuCompra = ?, observacions = ?, quantitat = ?, nom = ?, UoM = ?, dataAlta = ?, PROVEIDOR_ID = ?, FAMILIA_ID = ? WHERE id = ?";
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -59,12 +59,11 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
             stmt.setString(5, entitat.getNom());
             stmt.setString(6, entitat.getUom().toString());
             stmt.setDate(7, java.sql.Date.valueOf(entitat.getDataAlta()));
-            stmt.setDate(8, java.sql.Date.valueOf(entitat.getUltimaDataAlarma()));
-            stmt.setInt(9, entitat.getProveidor());
-            stmt.setInt(10, entitat.getFamiliaID());
+            stmt.setInt(8, entitat.getProveidor());
+            stmt.setInt(9, entitat.getFamiliaID());
 
             // Establecer el id al final, ya que es el parámetro de la cláusula WHERE
-            stmt.setInt(11, entitat.getId());
+            stmt.setInt(10, entitat.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -95,10 +94,20 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      */
     public List<Referencia> LlistarTot(int idFamilia) {
         List<Referencia> referencias = new ArrayList<>();
-        String sql = "SELECT * FROM referencia where FAMILIA_ID = " + idFamilia;
+        String sql = "SELECT * FROM referencia";
+        if(idFamilia != 0){
+            sql = "SELECT * FROM referencia where FAMILIA_ID = " + idFamilia;
+        }
+        
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                UOM uom = UOM.valueOf(rs.getString("UoM").toUpperCase());
+                UOM uom;
+                if(rs.getString("UoM") != null){
+                uom = UOM.valueOf(rs.getString("UoM").toUpperCase());
+                }
+                else{
+                    uom = UOM.ALTRES;
+                }
                 Date dataAlarmaSql = rs.getDate("ultimaDataAlarma");
                 LocalDate dataAlarma = (dataAlarmaSql != null) ? dataAlarmaSql.toLocalDate() : null;
 
