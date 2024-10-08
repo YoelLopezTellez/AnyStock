@@ -4,8 +4,7 @@
  */
 package aplicacio.model;
 
-import java.util.Date;
-
+import java.time.LocalDate;
 /**
  * Clase que representa una referencia de producto en el sistema. Contiene
  * información relevante como nombre, unidad de medida, cantidad, familia,
@@ -22,9 +21,9 @@ public class Referencia {
     private int quantitat;
     private String nom;
     private UOM uom;  // Unidad de Medida
-    private Date dataAlta;
-    private Date ultimaDataAlarma;
-    private String proveidor;
+    private LocalDate dataAlta;
+    private LocalDate ultimaDataAlarma;
+    private int proveidor;
     private int familiaID;
 
     /**
@@ -42,7 +41,7 @@ public class Referencia {
      * @param proveidor Proveedor de la referencia.
      * @param familiaID La id de la familia
      */
-    public Referencia(int id, int vegadesAlarma, float preuCompra, String observacions, int quantitat, String nom, UOM uom, Date dataAlta, Date ultimaDataAlarma, String proveidor, int familiaID) {
+    public Referencia(int id, int vegadesAlarma, float preuCompra, String observacions, int quantitat, String nom, UOM uom, LocalDate dataAlta, LocalDate ultimaDataAlarma, int proveidor, int familiaID) {
         this.id = id;
         this.vegadesAlarma = vegadesAlarma;
         this.preuCompra = preuCompra;
@@ -54,6 +53,10 @@ public class Referencia {
         this.ultimaDataAlarma = ultimaDataAlarma;
         this.proveidor = proveidor;
         this.familiaID = familiaID;
+    }
+
+    public Referencia() {
+        
     }
 
     // Getters y Setters
@@ -114,27 +117,27 @@ public class Referencia {
         this.uom = uom;
     }
 
-    public Date getDataAlta() {
+    public LocalDate getDataAlta() {
         return dataAlta;
     }
 
-    public void setDataAlta(Date dataAlta) {
+    public void setDataAlta(LocalDate dataAlta) {
         this.dataAlta = dataAlta;
     }
 
-    public Date getUltimaDataAlarma() {
+    public LocalDate getUltimaDataAlarma() {
         return ultimaDataAlarma;
     }
 
-    public void setUltimaDataAlarma(Date ultimaDataAlarma) {
+    public void setUltimaDataAlarma(LocalDate ultimaDataAlarma) {
         this.ultimaDataAlarma = ultimaDataAlarma;
     }
 
-    public String getProveidor() {
+    public int getProveidor() {
         return proveidor;
     }
 
-    public void setProveidor(String proveidor) {
+    public void setProveidor(int proveidor) {
         this.proveidor = proveidor;
     }    
 

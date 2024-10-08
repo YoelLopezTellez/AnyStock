@@ -28,7 +28,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="167.0" prefWidth="394.0" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
          <children>
-            <TableView fx:id="tbReferencia" prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
+            <TableView fx:id="tbReferencia" onSort="#ontbReferenciaMouseClicked" prefHeight="128.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="colId" maxWidth="1000.0" prefWidth="33.0" text="ID" />
                 <TableColumn fx:id="colNom" prefWidth="137.0" text="NOM" />
@@ -170,11 +170,11 @@
                <children>
                   <Button fx:id="btnSortir" mnemonicParsing="false" onAction="#onbtnSortir_Clicked" text="&lt;&lt;&lt; Sortir" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnNova" mnemonicParsing="false" onAction="#onbtnNova_Clicked" text="Nova" />
+                  <Button fx:id="btnNova" mnemonicParsing="false" text="Nova" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#onbtnEliminar_Clicked" text="Eliminar" />
+                  <Button fx:id="btnEliminar" mnemonicParsing="false" text="Eliminar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#onbtnModificar_Clicked" text="Modificar" />
+                  <Button fx:id="btnModificar" mnemonicParsing="false" text="Modificar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
                   <Button fx:id="btnFamilia" mnemonicParsing="false" onAction="#onbtnFamilia_Clicked" text="&lt;&lt; Familia" />
                </children>

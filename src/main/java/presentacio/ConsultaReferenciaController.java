@@ -10,6 +10,7 @@ import aplicacio.model.UOM;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +22,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import logica.CanviPantalla;
 import logica.ReferenciaLogica;
 
@@ -117,7 +119,32 @@ public class ConsultaReferenciaController {
 
     @FXML
     private void onbtnNova_Clicked() {
+        Referencia nuevaReferencia = new Referencia();
+        referenciaLogica.afegirReferencia(nuevaReferencia);
+        referenciasObservableList.add(nuevaReferencia);
+        limpiarCampos();
+    }
 
+    @FXML
+    private void ontbReferenciaMouseClicked(MouseEvent event) {
+        Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
+        if (referenciaSeleccionada != null) {
+            tfId.setText(String.valueOf(referenciaSeleccionada.getId()));
+            tfNom.setText(referenciaSeleccionada.getNom());
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            tfDataAlta.setText((referenciaSeleccionada.getDataAlta().format(format)));
+            tfProveidor.setText(String.valueOf(referenciaSeleccionada.getProveidor()));
+            tfQuantitat.setText(String.valueOf(referenciaSeleccionada.getQuantitat()));
+            tfDataAlarma.setText((referenciaSeleccionada.getUltimaDataAlarma().format(format)));
+            tfIdFamilia.setText(String.valueOf(referenciaSeleccionada.getFamiliaID()));
+            tfVegadesAlarma.setText(String.valueOf(referenciaSeleccionada.getVegadesAlarma()));
+            tfPreu.setText(String.valueOf(referenciaSeleccionada.getPreuCompra()));
+            tfUom.setText(String.valueOf(referenciaSeleccionada.getUom()));
+            taObservacions.setText(referenciaSeleccionada.getObservacions());
+            
+            
+
+        }
     }
 
     private void limpiarCampos() {
