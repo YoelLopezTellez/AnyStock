@@ -30,6 +30,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
     static { //Instanciar l'unic objecte de la clase.
         instance = new ProveidorDAOImpl();
     }
+
     private ProveidorDAOImpl() { //Declarem el constructor privat per a que ningu pugui cridarlo.
     }
 
@@ -48,8 +49,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
             setearPreparedStatement(pstm, p); //Llama a el petode setearPreparedStatement() on estan tots els sets dels "?".
-            
-            
+
             pstm.setDate(2, java.sql.Date.valueOf(LocalDate.now()));// pone en dataAlta la fecha actual 
             pstm.executeUpdate();//Executa el prepared statement.
         } catch (SQLException e) {
@@ -73,7 +73,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
 
     /**
      * Modifica un Proveïdor a la base de dades.
-     * 
+     *
      * @param p Es el Proveïdor modificat que es modificara a la base de dades.
      */
     @Override
@@ -84,7 +84,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
             setearPreparedStatement(pstm, p);//Crida a el metode setearPreparedStatement() on estan tots els sets dels "?".
 
             pstm.setDate(2, java.sql.Date.valueOf(p.getDataAlta()));//posa en dataAlta la data del proveidor.
-            
+
             pstm.setInt(9, p.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
@@ -93,9 +93,9 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
 
     /**
      * Elimina un Proveïdor a la base de dades.
-     * 
+     *
      * @param id Es el id del Proveïdor que s'eliminara de la base de dades .
-     */    
+     */
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM proveidor WHERE id= ?";
@@ -109,9 +109,9 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
 
     /**
      * Llista tots els Proveïdors en un ArrayList.
-     * 
+     *
      * @return Llista ArrayList de Proveïdors.
-     */    
+     */
     @Override
     public List<Proveidor> LlistarTot() {
         String sql = "SELECT * FROM proveidor";
@@ -130,10 +130,10 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
 
     /**
      * Obte o selecciona un Proveïdor a partir del seu id.
-     * 
+     *
      * @param id La id del Proveïdor a seleccionar o obtenir.
      * @return Un Proveïdor.
-     */   
+     */
     @Override
     public Proveidor obtenir(int id) {
         Proveidor res = null;
@@ -152,44 +152,46 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
         }
         return res;
     }
-    
+
     /**
-     * Afeigeix una llista de proveïdors a ka base de dades, si algun CIF proveïdor es igual al de la base de dades
-     * no l'afegeix i el guarde en un ArrayList de proveídors no afeixits que retorna.
-     * 
+     * Afeigeix una llista de proveïdors a ka base de dades, si algun CIF
+     * proveïdor es igual al de la base de dades no l'afegeix i el guarde en un
+     * ArrayList de proveídors no afeixits que retorna.
+     *
      * @param list Llista de Proveïdors a afeixir.
-     * @return Una llista dels Proveïdors que no han sigut afeixits perque ja estan a la base de dades.
+     * @return Una llista dels Proveïdors que no han sigut afeixits perque ja
+     * estan a la base de dades.
      */
-    public List<Proveidor> afeixirLlistaProveidors(List<Proveidor> list){
-        
+    public List<Proveidor> afeixirLlistaProveidors(List<Proveidor> list) {
+
         List<Proveidor> proveidorsNoAfeixits = new ArrayList<Proveidor>();
-        for(Proveidor p : list){
-            if((obtenirProvPerCIF(p.getCIF()))== null){
+        for (Proveidor p : list) {
+            if ((obtenirProvPerCIF(p.getCIF())) == null) {
                 afegir(p);
-            }else{
+            } else {
                 proveidorsNoAfeixits.add(p);
             }
-            
+
         }
-        
+
         return proveidorsNoAfeixits;
     }
-    
+
     /**
      * A partir del CIF S'obte el proveïdor el id retornat sera -1.
-     * 
+     *
      * @param CIF el CIF del proveidor.
      * @return El proveidor que te el CIF especificat.
      */
-    public Proveidor obtenirProvPerCIF(String CIF){
+    public Proveidor obtenirProvPerCIF(String CIF) {
         Proveidor res = null;
         String sql = "SELECT * FROM proveidor WHERE CIF = ?";
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
-           
+
             pstm.setString(1, CIF);
             try (ResultSet rs = pstm.executeQuery()) {
-               
+
                 while (rs.next()) {
                     res = obtenirProveidorResultSet(rs);
                 }
@@ -198,15 +200,14 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
         }
         return res;
     }
-    
-    
+
     /**
-     * Posa al PreparedStatement els paramentres en les posicions per no
-     * repetir codi.
-     * 
+     * Posa al PreparedStatement els paramentres en les posicions per no repetir
+     * codi.
+     *
      * @param pstm PreparedStatement.
      * @param p Proveïdor.
-     */   
+     */
     private void setearPreparedStatement(final PreparedStatement pstm, Proveidor p) throws SQLException {
         pstm.setString(1, p.getCIF());
         pstm.setBoolean(3, p.isActiu());
@@ -218,24 +219,23 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
     }
 
     /**
-     * Obte un Proveïdor a partir del contigut del Output de la consulta contingut en
-     * el ResultSet.
-     * 
+     * Obte un Proveïdor a partir del contigut del Output de la consulta
+     * contingut en el ResultSet.
+     *
      * @param rs ResultSet.
      * @return Proveidor seleccionat o contingut en el ResultSet.
      */
     private Proveidor obtenirProveidorResultSet(final ResultSet rs) throws SQLException {
         Proveidor p; //Un proveidor vuit.
-       //Cridem alconstructor buit i posen amb sets els seus atributs.
-        p= new Proveidor();
-        
+        //Cridem alconstructor buit i posen amb sets els seus atributs.
+        p = new Proveidor();
+
         //Fem els Sets per posar els atributs en el Proveidor.
         p.setCIF(rs.getString("CIF"));
-        
+
         // obtenim el Date y lo pasamos a LocalDate
-        
         p.setDataAlta(rs.getDate("dataAlta").toLocalDate());
-        
+
         p.setActiu(rs.getBoolean("actiu"));
         p.setMotiuInactivitat(rs.getString("motiuInactivitat"));
         p.setNom(rs.getString("nom"));

@@ -6,7 +6,6 @@ package aplicacio.model;
 
 import java.time.LocalDate;
 
-
 /**
  * Clase que representa una familia de productos. Contiene información básica
  * como nombre, descripción, fecha de alta, proveedor por defecto, observaciones
@@ -21,7 +20,7 @@ public class Familia {
     private String observacions;
     private String nom;
     private String descripcio;
-    private String proveidorPerDefecte; // Proveedor por defecto, opcional
+    private int proveidorPerDefecte;
 
     /**
      * Constructor de la clase Familia.
@@ -33,7 +32,7 @@ public class Familia {
      * @param observacions Observaciones sobre la familia.
      * @param id Identificador de la familia.
      */
-    public Familia(int id, LocalDate dataAlta, String observacions, String nom, String descripcio, String proveidorPerDefecte) {
+    public Familia(int id, LocalDate dataAlta, String observacions, String nom, String descripcio, int proveidorPerDefecte) {
         this.id = id;
         this.dataAlta = dataAlta;
         this.observacions = observacions;
@@ -73,11 +72,11 @@ public class Familia {
         this.dataAlta = dataAlta;
     }
 
-    public String getProveidorPerDefecte() {
+    public int getProveidorPerDefecte() {
         return proveidorPerDefecte;
     }
 
-    public void setProveidorPerDefecte(String proveidorPerDefecte) {
+    public void setProveidorPerDefecte(int proveidorPerDefecte) {
         this.proveidorPerDefecte = proveidorPerDefecte;
     }
 

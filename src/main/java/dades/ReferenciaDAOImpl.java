@@ -13,6 +13,7 @@ import java.util.List;
 import aplicacio.model.Referencia;
 import aplicacio.model.UOM;
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Implementación de la interfaz DAO para gestionar las operaciones CRUD de la
@@ -29,19 +30,11 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      */
     @Override
     public void afegir(Referencia entitat) {
-        String sql = "INSERT INTO referencia (id, vegadesAlarma, preuCompra, observacions, quantitat, nom, UoM, dataAlma, ultimaDataAlarma, PROVEIDOR_CIF, FAMILIA_CIF) VALUES (id, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO referencia (id, dataAlta, FAMILIA_id) VALUES (id, ?, ?)";
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setFloat(1, entitat.getPreuCompra());
-            stmt.setString(2, entitat.getObservacions());
-            stmt.setInt(3, entitat.getQuantitat());
-            stmt.setString(4, entitat.getNom());
-            // Convertimos el valor del ENUM a cadena antes de usar setString
-            stmt.setString(5, entitat.getUom().toString());
-            stmt.setDate(6, new Date(entitat.getDataAlta().getTime()));
-            stmt.setDate(7, new Date(entitat.getUltimaDataAlarma().getTime()));
-            stmt.setString(8, entitat.getProveidor());
-            stmt.setInt(9, entitat.getFamiliaID());
+            stmt.setInt(2, entitat.getFamiliaID());
+            stmt.setDate(1, java.sql.Date.valueOf(entitat.getDataAlta().now()));
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,9 +58,9 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
             stmt.setInt(4, entitat.getQuantitat());
             stmt.setString(5, entitat.getNom());
             stmt.setString(6, entitat.getUom().toString());
-            stmt.setDate(7, new Date(entitat.getDataAlta().getTime()));
-            stmt.setDate(8, new Date(entitat.getUltimaDataAlarma().getTime()));
-            stmt.setString(9, entitat.getProveidor());
+            stmt.setDate(7, java.sql.Date.valueOf(entitat.getDataAlta()));
+            stmt.setDate(8, java.sql.Date.valueOf(entitat.getUltimaDataAlarma()));
+            stmt.setInt(9, entitat.getProveidor());
             stmt.setInt(10, entitat.getFamiliaID());
 
             // Establecer el id al final, ya que es el parámetro de la cláusula WHERE
@@ -100,13 +93,15 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      *
      * @return Una lista de objetos Familia.
      */
-    
     public List<Referencia> LlistarTot(int idFamilia) {
         List<Referencia> referencias = new ArrayList<>();
-        String sql = "SELECT * FROM referencia where FAMILIA_ID = "+idFamilia;
+        String sql = "SELECT * FROM referencia where FAMILIA_ID = " + idFamilia;
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 UOM uom = UOM.valueOf(rs.getString("UoM").toUpperCase());
+                Date dataAlarmaSql = rs.getDate("ultimaDataAlarma");
+                LocalDate dataAlarma = (dataAlarmaSql != null) ? dataAlarmaSql.toLocalDate() : null;
+
                 Referencia referencia = new Referencia(
                         rs.getInt("id"),
                         rs.getInt("vegadesAlarma"),
@@ -115,9 +110,9 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
                         rs.getInt("quantitat"),
                         rs.getString("nom"),
                         uom,
-                        rs.getDate("dataAlta"),
-                        rs.getDate("ultimaDataAlarma"),
-                        rs.getString("PROVEIDOR_CIF"),
+                        rs.getDate("dataAlta").toLocalDate(), // Supongo que dataAlta no es nulo
+                        dataAlarma, // Usamos la variable que contiene null si la fecha es nula
+                        rs.getInt("PROVEIDOR_ID"),
                         rs.getInt("FAMILIA_ID")
                 );
                 referencias.add(referencia);
@@ -151,9 +146,9 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
                             rs.getInt("quantitat"),
                             rs.getString("nom"),
                             uom,
-                            rs.getDate("dataAlta"),
-                            rs.getDate("ultimaDataAlarma"),
-                            rs.getString("PROVEIDOR_CIF"),
+                            rs.getDate("dataAlta").toLocalDate(),
+                            rs.getDate("ultimaDataAlarma").toLocalDate(),
+                            rs.getInt("PROVEIDOR_ID"),
                             rs.getInt("FAMILIA_ID")
                     );
                 }

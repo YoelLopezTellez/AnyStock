@@ -73,7 +73,7 @@ public class ReferenciaLogica {
      */
     public Referencia obtenirReferencia(int id) {
         if (id <= 0) {
-            throw new IllegalArgumentException("El ID de la familia debe ser positivo.");
+            throw new IllegalArgumentException("El ID de la referencia debe ser positivo.");
         }
         return referenciaDAO.obtenir(id);
     }
@@ -94,11 +94,5 @@ public class ReferenciaLogica {
      * @param referencia La referencia a validar.
      */
     private void validarReferencia(Referencia referencia) {
-        if (referencia.getNom() == null || referencia.getNom().trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre de la familia no puede estar vacío.");
-        }
-        if (referencia.getDataAlta() == null) {
-            throw new IllegalArgumentException("La fecha de alta no puede ser nula.");
-        }
     }
 }

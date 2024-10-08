@@ -4,12 +4,12 @@
  */
 package presentacio;
 
-import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
 import aplicacio.model.UOM;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +21,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import logica.ReferenciaLogica;
 
 /**
@@ -41,13 +42,13 @@ public class ConsultaReferenciaController {
 
     @FXML
     private TableColumn<Referencia, Float> colPreu;
-    
+
     @FXML
     private TableColumn<Referencia, String> colNom, colProveidor;
-    
+
     @FXML
     private TableColumn<Referencia, LocalDate> colDataAlta;
-    
+
     @FXML
     private TableColumn<Referencia, UOM> colUom;
 
@@ -66,7 +67,6 @@ public class ConsultaReferenciaController {
      */
     @FXML
     public void initialize() {
-        System.out.println("inicializa");
         // Asociar las columnas de la tabla con los atributos de los items usando métodos tradicionales
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -95,5 +95,112 @@ public class ConsultaReferenciaController {
         // Limpiamos la lista observable antes de añadir los datos actualizados
         referenciasObservableList.clear();
         referenciasObservableList.addAll(referenciaLogica.llistarReferencias(idFamilia));
+    }
+
+    @FXML
+    private void onbtnEliminar_Clicked() {
+        Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
+        if (referenciaSeleccionada != null) {
+            referenciaLogica.eliminarReferencia(referenciaSeleccionada.getId());
+            referenciasObservableList.remove(referenciaSeleccionada);
+            limpiarCampos();
+        } else {
+            System.out.println("Por favor, selecciona una referencia para eliminar.");
+        }
+    }
+
+    @FXML
+    private void onbtnModificar_Clicked() {
+        Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
+        if (referenciaSeleccionada != null) {
+            referenciaSeleccionada.setNom(tfNom.getText());
+            referenciaSeleccionada.setObservacions(taObservacions.getText());
+
+            // Validar y convertir la fecha
+            if (!tfDataAlta.getText().isEmpty()) {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    referenciaSeleccionada.setDataAlta(LocalDate.parse(tfDataAlta.getText(), formatter));
+                } catch (Exception e) {
+                    System.out.println("Formato de fecha incorrecto: " + e.getMessage());
+                    return; // No continuar si la fecha es inválida
+                }
+            }
+
+            // Convertir el campo tf_Proveidor a int antes de asignar
+            try {
+                int idProveidor = Integer.parseInt(tfProveidor.getText());
+                referenciaSeleccionada.setProveidor(idProveidor);
+            } catch (NumberFormatException e) {
+                System.out.println("ID del proveedor no válido. Asegúrate de que sea un número.");
+                return; // Salir si el ID del proveedor es inválido
+            }
+
+            try {
+                referenciaLogica.modificarReferencia(referenciaSeleccionada);
+                llistarReferencias(idFamilia); // Actualiza la lista después de modificar
+                tbReferencia.refresh(); // Refresca la tabla
+                limpiarCampos(); // Limpia los campos
+            } catch (Exception e) {
+                System.out.println("Error al modificar la referencia: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Por favor, selecciona una referencia para modificar.");
+        }
+    }
+
+    @FXML
+    private void onbtnNova_Clicked() {
+        Referencia nuevaReferencia = new Referencia();
+        referenciaLogica.afegirReferencia(nuevaReferencia);
+        referenciasObservableList.add(nuevaReferencia);
+        limpiarCampos();
+    }
+
+    @FXML
+    private void ontbReferenciaMouseClicked(MouseEvent event) {
+        Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
+        if (referenciaSeleccionada != null) {
+            // Setear los valores en los campos de texto
+            tfId.setText(String.valueOf(referenciaSeleccionada.getId()));
+            tfNom.setText(referenciaSeleccionada.getNom());
+
+            // Formatear la fecha de alta
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            tfDataAlta.setText(referenciaSeleccionada.getDataAlta().format(format));
+
+            // Setear el resto de valores
+            tfProveidor.setText(String.valueOf(referenciaSeleccionada.getProveidor()));
+            tfQuantitat.setText(String.valueOf(referenciaSeleccionada.getQuantitat()));
+
+            // Verificar si la fecha de alarma es nula antes de formatearla
+            if (referenciaSeleccionada.getUltimaDataAlarma() != null) {
+                tfDataAlarma.setText(referenciaSeleccionada.getUltimaDataAlarma().format(format));
+            } else {
+                tfDataAlarma.setText(""); // Dejar el campo vacío si es nulo
+            }
+
+            // Setear el resto de valores en los campos correspondientes
+            tfIdFamilia.setText(String.valueOf(referenciaSeleccionada.getFamiliaID()));
+            tfVegadesAlarma.setText(String.valueOf(referenciaSeleccionada.getVegadesAlarma()));
+            tfPreu.setText(String.valueOf(referenciaSeleccionada.getPreuCompra()));
+            tfUom.setText(String.valueOf(referenciaSeleccionada.getUom()));
+            taObservacions.setText(referenciaSeleccionada.getObservacions());
+        }
+    }
+
+    private void limpiarCampos() {
+        taObservacions.clear();
+        tfVegadesAlarma.clear();
+        tfIdFamilia.clear();
+        tfDataAlarma.clear();
+        tfNom.clear();
+        tfPreu.clear();
+        tfUom.clear();
+        tfProveidor.clear();
+        tfDataAlta.clear();
+        tfQuantitat.clear();
+        tfId.clear();
     }
 }
