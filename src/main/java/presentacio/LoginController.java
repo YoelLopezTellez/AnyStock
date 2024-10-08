@@ -6,6 +6,7 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import logica.Sessio;
 
@@ -20,6 +21,9 @@ public class LoginController {
 
     @FXML
     private Button btn_1;
+    
+    @FXML
+    private Label l_error;
 
     @FXML
     private TextField tf_nom;
@@ -40,6 +44,8 @@ public class LoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //amb aquest metode seleccionem que si presionem intro activi el botó btn_1 que es el login
+        btn_1.setDefaultButton(true);
     }
     
     @FXML
@@ -53,6 +59,9 @@ public class LoginController {
             Sessio.getInstancia().iniciarSessio(usuari);
             CanviPantalla.canviarPantalla(tf_nom.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
             //cambiarPantalla();
+        }else{
+            l_error.setText("Nom d'usuari o contrasenya incorrectes");
+            l_error.setStyle("-fx-text-fill: red;"); //canvia el color del text a vermell
         }
     }
     

@@ -4,6 +4,8 @@
  */
 package presentacio;
 
+import aplicacio.model.TIPUSROL;
+import aplicacio.model.Usuari;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -40,10 +42,16 @@ public class MenuController implements Initializable {
     @FXML
     private Button Btn_Tancar;
     
+    private Usuari usuari;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        //carguem l'usuari que tenim guardat en sessio
+        usuari = Sessio.getInstancia().getUsuari();
+        
+        if(usuari.getTipusRol() == TIPUSROL.VENDEDOR)
+            Btn_Imp.setVisible(false);
     }    
     
     @FXML
