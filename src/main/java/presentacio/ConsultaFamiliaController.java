@@ -1,6 +1,7 @@
 package presentacio;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,21 +73,40 @@ public class ConsultaFamiliaController {
     }
 
     @FXML
-    private void onBtn_Modificar_Clicked() {
-        Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
-        if (familiaSeleccionada != null) {
-            familiaSeleccionada.setNom(tf_Nom.getText());
-            familiaSeleccionada.setDescripcio(ta_Descripcio.getText());
-            familiaSeleccionada.setObservacions(ta_Observacions.getText());
-            familiaSeleccionada.setDataAlta(LocalDate.parse(tf_DataAlta.getText()));
-            familiaSeleccionada.setProveidorPerDefecte(tf_Proveidor.getText());
-            familiaLogica.modificarFamilia(familiaSeleccionada);
-            listarFamilias();
-            limpiarCampos();
-        } else {
-            System.out.println("Por favor, selecciona una familia para modificar.");
+private void onBtn_Modificar_Clicked() {
+    Familia familiaSeleccionada = tb_Familia.getSelectionModel().getSelectedItem();
+    if (familiaSeleccionada != null) {
+        familiaSeleccionada.setNom(tf_Nom.getText());
+        familiaSeleccionada.setDescripcio(ta_Descripcio.getText());
+        familiaSeleccionada.setObservacions(ta_Observacions.getText());
+
+        // Validar y convertir la fecha
+        if (!tf_DataAlta.getText().isEmpty()) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                familiaSeleccionada.setDataAlta(LocalDate.parse(tf_DataAlta.getText(), formatter));
+            } catch (Exception e) {
+                System.out.println("Formato de fecha incorrecto: " + e.getMessage());
+                return; // No continuar si la fecha es inválida
+            }
         }
+
+        familiaSeleccionada.setProveidorPerDefecte(tf_Proveidor.getText());
+
+        try {
+            familiaLogica.modificarFamilia(familiaSeleccionada);
+            listarFamilias(); // Actualiza la lista después de modificar
+            tb_Familia.refresh(); // Refresca la tabla
+            limpiarCampos(); // Limpia los campos
+        } catch (Exception e) {
+            System.out.println("Error al modificar la familia: " + e.getMessage());
+            e.printStackTrace();
+        }
+    } else {
+        System.out.println("Por favor, selecciona una familia para modificar.");
     }
+}
+
 
     @FXML
     private void onBtn_Eliminar_Clicked() {
@@ -132,8 +152,8 @@ public class ConsultaFamiliaController {
             ta_Descripcio.setText(familiaSeleccionada.getDescripcio());
             ta_Observacions.setText(familiaSeleccionada.getObservacions());
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            tf_DataAlta.setText(sdf.format(familiaSeleccionada.getDataAlta()));
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            tf_DataAlta.setText((familiaSeleccionada.getDataAlta().format(format)));
             tf_Proveidor.setText(familiaSeleccionada.getProveidorPerDefecte());
         }
     }
