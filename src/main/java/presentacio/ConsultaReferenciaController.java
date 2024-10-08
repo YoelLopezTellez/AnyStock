@@ -42,13 +42,13 @@ public class ConsultaReferenciaController {
 
     @FXML
     private TableColumn<Referencia, Float> colPreu;
-    
+
     @FXML
     private TableColumn<Referencia, String> colNom, colProveidor;
-    
+
     @FXML
     private TableColumn<Referencia, LocalDate> colDataAlta;
-    
+
     @FXML
     private TableColumn<Referencia, UOM> colUom;
 
@@ -96,5 +96,41 @@ public class ConsultaReferenciaController {
         // Limpiamos la lista observable antes de añadir los datos actualizados
         referenciasObservableList.clear();
         referenciasObservableList.addAll(referenciaLogica.llistarReferencias(idFamilia));
+    }
+
+    @FXML
+    private void onbtnEliminar_Clicked() {
+        Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
+        if (referenciaSeleccionada != null) {
+            referenciaLogica.eliminarReferencia(referenciaSeleccionada.getId());
+            referenciasObservableList.remove(referenciaSeleccionada);
+            limpiarCampos();
+        } else {
+            System.out.println("Por favor, selecciona una referencia para eliminar.");
+        }
+    }
+
+    @FXML
+    private void onbtnModificar_Clicked() {
+
+    }
+
+    @FXML
+    private void onbtnNova_Clicked() {
+
+    }
+
+    private void limpiarCampos() {
+        taObservacions.clear();
+        tfVegadesAlarma.clear();
+        tfIdFamilia.clear();
+        tfDataAlarma.clear();
+        tfNom.clear();
+        tfPreu.clear();
+        tfUom.clear();
+        tfProveidor.clear();
+        tfDataAlta.clear();
+        tfQuantitat.clear();
+        tfId.clear();
     }
 }

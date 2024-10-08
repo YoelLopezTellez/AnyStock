@@ -170,11 +170,11 @@
                <children>
                   <Button fx:id="btnSortir" mnemonicParsing="false" onAction="#onbtnSortir_Clicked" text="&lt;&lt;&lt; Sortir" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnNova" mnemonicParsing="false" text="Nova" />
+                  <Button fx:id="btnNova" mnemonicParsing="false" onAction="#onbtnNova_Clicked" text="Nova" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnEliminar" mnemonicParsing="false" text="Eliminar" />
+                  <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#onbtnEliminar_Clicked" text="Eliminar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnModificar" mnemonicParsing="false" text="Modificar" />
+                  <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#onbtnModificar_Clicked" text="Modificar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
                   <Button fx:id="btnFamilia" mnemonicParsing="false" onAction="#onbtnFamilia_Clicked" text="&lt;&lt; Familia" />
                </children>
