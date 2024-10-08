@@ -147,6 +147,7 @@ public class ProveidorLogica {
 
                 Map<String, Object> proveidorData = procesarLineaCSV(cabecera, dades);
                 
+                //si hi ha cif i nom el valida i llavors fará un objecte proveidor amb els camps ja siguin null o no, segons el procesarLinea
                 if(validarProveidor(proveidorData)){
                     Proveidor proveidor = new Proveidor(
                         (String) proveidorData.get("CIF"),
