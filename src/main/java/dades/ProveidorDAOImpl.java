@@ -30,7 +30,6 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
     static { //Instanciar l'unic objecte de la clase.
         instance = new ProveidorDAOImpl();
     }
-
     private ProveidorDAOImpl() { //Declarem el constructor privat per a que ningu pugui cridarlo.
     }
 

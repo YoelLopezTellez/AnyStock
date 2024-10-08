@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.ConsultaProveidorController">
    <children>
       <HBox alignment="CENTER" prefHeight="67.0" prefWidth="680.0" style="-fx-background-color: skyblue; -fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
          <children>
@@ -22,17 +22,17 @@
       </HBox>
       <ScrollPane prefHeight="121.0" prefWidth="1133.0">
          <content>
-            <TableView prefHeight="126.0">
+            <TableView fx:id="tbView" onMouseClicked="#ontbView_mouseClicked" prefHeight="126.0">
               <columns>
-                <TableColumn fx:id="idFamilia" prefWidth="39.0" text="ID" />
-                <TableColumn prefWidth="141.0" text="CIF" />
-                  <TableColumn minWidth="6.4000244140625" prefWidth="103.99998474121094" text="NOM" />
-                  <TableColumn prefWidth="121.60003662109375" text="DATA ALTA" />
-                  <TableColumn prefWidth="140.79998779296875" text="ACTIU" />
-                  <TableColumn prefWidth="172.0" text="MOTIU INACTIVITAT" />
-                  <TableColumn prefWidth="140.79998779296875" text="VALORACIÓ" />
-                  <TableColumn prefWidth="137.5999755859375" text="ESPECIALITAT" />
-                  <TableColumn prefWidth="137.5999755859375" text="MINIM UNITATS" />
+                <TableColumn fx:id="colId" prefWidth="39.0" text="ID" />
+                <TableColumn fx:id="colCif" prefWidth="141.0" text="CIF" />
+                  <TableColumn fx:id="colNom" minWidth="6.4000244140625" prefWidth="103.99998474121094" text="NOM" />
+                  <TableColumn fx:id="colDataAlta" prefWidth="121.60003662109375" text="DATA ALTA" />
+                  <TableColumn fx:id="colActiu" prefWidth="140.79998779296875" text="ACTIU" />
+                  <TableColumn fx:id="colMotiuInactivitat" prefWidth="172.0" text="MOTIU INACTIVITAT" />
+                  <TableColumn fx:id="colValoracio" prefWidth="140.79998779296875" text="VALORACIÓ" />
+                  <TableColumn fx:id="colEspecialitat" prefWidth="137.5999755859375" text="ESPECIALITAT" />
+                  <TableColumn fx:id="colMinimUnitats" prefWidth="137.5999755859375" text="MINIM UNITATS" />
               </columns>
             </TableView>
          </content>
@@ -51,7 +51,7 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextField disable="true" prefHeight="31.0" prefWidth="105.0">
+                        <TextField fx:id="tfId" disable="true" prefHeight="31.0" prefWidth="69.0">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" top="10.0" />
                            </HBox.margin>
@@ -66,13 +66,13 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextField prefHeight="31.0" prefWidth="63.0" />
+                        <TextField fx:id="tfMinimUnitats" prefHeight="31.0" prefWidth="63.0" />
                         <Separator orientation="VERTICAL" prefHeight="46.0" prefWidth="37.0">
                            <HBox.margin>
                               <Insets bottom="5.0" top="5.0" />
                            </HBox.margin>
                         </Separator>
-                        <CheckBox mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="21.0" prefWidth="88.0" text="ACTIU" wrapText="true">
+                        <CheckBox fx:id="cbActiu" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="21.0" prefWidth="88.0" text="ACTIU" wrapText="true">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -89,7 +89,7 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextField prefHeight="31.0" prefWidth="167.0">
+                        <TextField fx:id="tfCif" prefHeight="31.0" prefWidth="167.0">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
@@ -107,7 +107,7 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextArea prefHeight="54.0" prefWidth="200.0" />
+                        <TextArea fx:id="tfMotiuInactivitat" prefHeight="54.0" prefWidth="200.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="95.0" prefWidth="404.0">
@@ -120,7 +120,7 @@
                               <Insets left="45.0" />
                            </padding>
                         </Label>
-                        <TextField prefHeight="26.0" prefWidth="154.0">
+                        <TextField fx:id="tfNom" prefHeight="26.0" prefWidth="154.0">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
@@ -135,7 +135,7 @@
                               <Insets left="45.0" />
                            </padding>
                         </Label>
-                        <TextField prefHeight="31.0" prefWidth="35.0" />
+                        <TextField fx:id="tfValoracio" prefHeight="31.0" prefWidth="35.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="95.0" prefWidth="404.0">
@@ -148,11 +148,7 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextField prefHeight="26.0" prefWidth="154.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
+                        <DatePicker fx:id="dpDataAlta" />
                         <Separator orientation="VERTICAL" prefHeight="41.0" prefWidth="48.0">
                            <HBox.margin>
                               <Insets bottom="5.0" top="5.0" />
@@ -163,7 +159,7 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <TextField prefHeight="26.0" prefWidth="154.0" />
+                        <TextField fx:id="tfEspecialitat" prefHeight="26.0" prefWidth="154.0" />
                      </children>
                      <VBox.margin>
                         <Insets bottom="5.0" />
@@ -177,13 +173,13 @@
          <children>
             <HBox alignment="CENTER" prefHeight="57.0" prefWidth="680.0" style="-fx-background-color: skyblue;" HBox.hgrow="ALWAYS">
                <children>
-                  <Button mnemonicParsing="false" text="&lt;&lt;&lt; Sortir" />
+                  <Button fx:id="btnSortir" mnemonicParsing="false" onAction="#onBtnSortir_Clicked" text="&lt;&lt;&lt; Sortir" />
                   <Separator orientation="VERTICAL" prefHeight="31.0" prefWidth="48.0" visible="false" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="68.0" text="Nova" />
+                  <Button fx:id="btnNova" mnemonicParsing="false" onAction="#onBtnNova_Clicked" prefHeight="31.0" prefWidth="68.0" text="Nova" />
                   <Separator orientation="VERTICAL" prefHeight="31.0" prefWidth="44.0" visible="false" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="93.0" text="Eliminar" />
+                  <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#onBtnEliminar_Clicked" prefHeight="31.0" prefWidth="93.0" text="Eliminar" />
                   <Separator orientation="VERTICAL" prefHeight="31.0" prefWidth="46.0" visible="false" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="95.0" text="Modificar" />
+                  <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#onBtnModificar_Clicked" prefHeight="31.0" prefWidth="95.0" text="Modificar" />
                </children>
             </HBox>
          </children>
