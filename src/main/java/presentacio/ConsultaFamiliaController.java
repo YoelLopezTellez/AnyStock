@@ -61,11 +61,6 @@ public class ConsultaFamiliaController {
     private void onBtn_Nova_Clicked() {
         // Crear una nueva familia con los campos en blanco
         Familia nuevaFamilia = new Familia();
-        nuevaFamilia.setNom(""); // Campo en blanco
-        nuevaFamilia.setDescripcio(""); // Campo en blanco
-        nuevaFamilia.setObservacions(""); // Campo en blanco
-        nuevaFamilia.setDataAlta(LocalDate.now()); // Establecer la fecha actual
-        nuevaFamilia.setProveidorPerDefecte(""); // Campo en blanco
 
         // Agregar a la base de datos (esto debería manejar la lógica de autoincremento)
         familiaLogica.afegirFamilia(nuevaFamilia);
@@ -96,7 +91,14 @@ public class ConsultaFamiliaController {
                 }
             }
 
-            familiaSeleccionada.setProveidorPerDefecte(tf_Proveidor.getText());
+            // Convertir el campo tf_Proveidor a int antes de asignar
+            try {
+                int idProveidor = Integer.parseInt(tf_Proveidor.getText());
+                familiaSeleccionada.setProveidorPerDefecte(idProveidor);
+            } catch (NumberFormatException e) {
+                System.out.println("ID del proveedor no válido. Asegúrate de que sea un número.");
+                return; // Salir si el ID del proveedor es inválido
+            }
 
             try {
                 familiaLogica.modificarFamilia(familiaSeleccionada);
@@ -158,7 +160,7 @@ public class ConsultaFamiliaController {
 
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             tf_DataAlta.setText((familiaSeleccionada.getDataAlta().format(format)));
-            tf_Proveidor.setText(familiaSeleccionada.getProveidorPerDefecte());
+            tf_Proveidor.setText(String.valueOf(familiaSeleccionada.getProveidorPerDefecte()));
         }
     }
 
