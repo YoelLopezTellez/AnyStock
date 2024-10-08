@@ -203,6 +203,13 @@ public class ProveidorLogica {
         // Validar los datos del proveedor antes de insertar
         String cif = (String) proveedorData.get("CIF");
         String nom = (String) proveedorData.get("nom");
-        return cif != null && !cif.isEmpty() && nom != null && !nom.isEmpty();
+        
+        if(cif != null || cif.isEmpty() || nom != null || nom.isEmpty()){
+            return false;
+        }
+        if(proveidorDAO.existeixCIF(cif)){
+            return false;
+        }
+        return true;
     }
 }

@@ -55,6 +55,21 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
         } catch (SQLException e) {
         }
     }
+    
+    public boolean existeixCIF(String cif){
+        String sql = "SELECT COUNT(*) FROM proveidor WHERE cif = ?";
+        
+        try(Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);){
+            pstm.setString(1, cif);
+            ResultSet rs = pstm.executeQuery();
+            if(rs.next()){
+                return rs.getInt(1) > 0;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     /**
      * Modifica un Proveïdor a la base de dades.
