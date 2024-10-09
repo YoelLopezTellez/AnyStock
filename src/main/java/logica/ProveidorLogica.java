@@ -152,10 +152,13 @@ public class ProveidorLogica {
      public void ExportarCSV(File fitxer){
         //Llista de proveidors a exportar en array de strings per a csv
         List<String> provExpCsv =new ArrayList<String>();
+        String cabecera ="cif,dataalta,actiu,motiuinactivitat,nom,valoracio,minimunitats,especialitat";
+        provExpCsv.add(cabecera);
         //pasar els proveidors a la llista de strings de proveidors.
         for(Proveidor p : llistarProveidors()){
+            String motiuInactivitatNull = ( p.getMotiuInactivitat()==null || p.getMotiuInactivitat().isBlank()) ? null : p.getMotiuInactivitat() ;
             //Posa en un array de strings tots els atributs del proveidor.
-            String provString =p.getCIF()+","+p.getDataAlta().toString()+","+p.isActiu()+","+p.getMotiuInactivitat()+","+p.getNom()+","+p.getValoracio()+","+p.getMinimUnitats()+","+p.getEspecialitat()+","+p.getId();
+            String provString = p.getCIF()+","+p.getDataAlta().toString()+","+p.isActiu()+","+motiuInactivitatNull+","+p.getNom()+","+p.getValoracio()+","+p.getMinimUnitats()+","+p.getEspecialitat();
             
             provExpCsv.add(provString);
         }
@@ -226,6 +229,9 @@ public class ProveidorLogica {
                 case "nom":
                     proveidorDades.put("nom", dada.isEmpty() ? null : dada);
                     break;
+                case "motiuinactivitat":
+                    proveidorDades.put("motiuInactivitat", proveidorDades.get("actiu").equals(true) ? "" :dada); //cuando sea actiu no posara res al motiu al importar-lo pero si al exportarlo
+                    break;
                 case "minimunitats":
                     proveidorDades.put("minimUnitats", dada.isEmpty() ? null : validarInt(dada));
                     break;
@@ -246,7 +252,7 @@ public class ProveidorLogica {
         String cif = (String) proveedorData.get("CIF");
         String nom = (String) proveedorData.get("nom");
         
-        if(cif != null || cif.isEmpty() || nom != null || nom.isEmpty()){
+        if((cif != null && cif.isEmpty()) || (nom != null && nom.isEmpty())){
             return false;
         }
         if(proveidorDAO.existeixCIF(cif)){
