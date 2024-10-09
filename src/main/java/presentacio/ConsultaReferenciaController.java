@@ -6,7 +6,9 @@ package presentacio;
 
 import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
+import aplicacio.model.TIPUSROL;
 import aplicacio.model.UOM;
+import aplicacio.model.Usuari;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -26,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import logica.ReferenciaLogica;
+import logica.Sessio;
 
 /**
  * FXML Controller class
@@ -74,12 +77,20 @@ public class ConsultaReferenciaController {
     }
 
     private ObservableList<Referencia> referenciasObservableList = FXCollections.observableArrayList();
-
+       
+    private Usuari usuari;
     /**
      * Initializes the controller class.
      */
     @FXML
     public void initialize() {
+                usuari = Sessio.getInstancia().getUsuari();
+        
+        if(usuari.getTipusRol() == TIPUSROL.VENDEDOR){
+            btnModificar.setVisible(false);
+            btnEliminar.setVisible(false);
+            btnNova.setVisible(false);        
+        }
         // Asociar las columnas de la tabla con los atributos de los items usando métodos tradicionales
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));

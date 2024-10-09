@@ -41,7 +41,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
     }
 
     @Override
-    public void modificar(Familia entitat) {
+    public void modificar(Familia entitat) throws Exception {
         // Verificar si el proveedor existe antes de modificar la familia
         if (!proveedorExiste(entitat.getProveidorPerDefecte())) {
             System.out.println("Error: El proveedor con ID " + entitat.getProveidorPerDefecte() + " no existe.");
@@ -62,6 +62,7 @@ public class FamiliaDAOImpl implements DAOInterface<Familia>, DAOInterfaceLlista
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error al modificar la familia: " + e.getMessage());
+            throw e;
         }
     }
 

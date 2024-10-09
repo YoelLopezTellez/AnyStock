@@ -47,7 +47,7 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      * @param entitat La entidad referencia con los datos actualizados.
      */
     @Override
-    public void modificar(Referencia entitat) {
+    public void modificar(Referencia entitat) throws Exception {
         String sql = "UPDATE referencia SET vegadesAlarma = ?, preuCompra = ?, observacions = ?, quantitat = ?, nom = ?, UoM = ?, dataAlta = ?, PROVEIDOR_ID = ?, FAMILIA_ID = ? WHERE id = ?";
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -66,8 +66,8 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
             stmt.setInt(10, entitat.getId());
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw SQLException;
+        } catch (Exception e) {
+            throw e;
         }
     }
 

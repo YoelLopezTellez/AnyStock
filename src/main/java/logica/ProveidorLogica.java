@@ -54,13 +54,19 @@ public class ProveidorLogica {
      * 
      * @param proveidor 
      */
-    public void ModificarProveidor(Proveidor proveidor){
+    public void ModificarProveidor(Proveidor proveidor) throws Exception{
         if(proveidor == null){
             throw new IllegalArgumentException("El proveidor no pot ser nul.");
         }
         validarProveidor(proveidor);
+        try{
         proveidorDAO.modificar(proveidor);
         System.out.println("Proveïdor Modificat correctament.");
+        }catch(Exception e){
+            throw e;
+        }
+        
+
         
     }
     /**
