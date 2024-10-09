@@ -75,14 +75,14 @@ public class ProveidorLogica {
     /**
      * Elimina un proveidor per el CIF trucant als metodes corresponents.
      * 
-     * @param CIF El cif del proveidor a eliminar.
+     * @param id El cif del proveidor a eliminar.
      */
-    public void EliminarProveidor(String CIF){
-        if(CIF == null){
+    public void EliminarProveidor(int id){
+        if(id <0){
             throw new IllegalArgumentException("El CIF del proveidor no pot ser nul.");
         }
         try{
-        proveidorDAO.delete((proveidorDAO.obtenirProvPerCIF(CIF)).getId()); //Aixo aconsegeix el cif del proveidor donat, i busca el id a la bbdd per pasar-li la id al metode eliminar.
+        proveidorDAO.delete(id); //Aixo aconsegeix el cif del proveidor donat, i busca el id a la bbdd per pasar-li la id al metode eliminar.
         }catch(Exception e){
                System.out.println("Proveïdor NO Eliminat correctament.");
         }

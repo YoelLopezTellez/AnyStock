@@ -164,10 +164,13 @@ public class ConsultaProveidorController implements Initializable {
     private void onBtnEliminar_Clicked() {
         Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
         if (provSeleccionat != null) {
-            provLogic.EliminarProveidor(provSeleccionat.getCIF());
+            try {
+            provLogic.EliminarProveidor(provSeleccionat.getId());
             Llistaproveidors.remove(provSeleccionat);
             limpiarCampos();
-            
+            }catch(Exception e) {
+                System.out.println("Error al eliminar el proveidor: " + e.getMessage());
+            }
         } else {
             System.out.println("Por favor, selecciona un proveidor para eliminar.");
         }
