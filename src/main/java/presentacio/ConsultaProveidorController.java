@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -175,6 +177,7 @@ public class ConsultaProveidorController implements Initializable {
     private void onBtnModificar_Clicked(){
         Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
         if (provSeleccionat != null) {
+            try {
             provSeleccionat.setCIF(tfCif.getText());
             provSeleccionat.setNom(tfNom.getText());
             provSeleccionat.setDataAlta(dpDataAlta.getValue());
@@ -183,8 +186,10 @@ public class ConsultaProveidorController implements Initializable {
             provSeleccionat.setValoracio(Float.parseFloat(tfValoracio.getText()));
             provSeleccionat.setEspecialitat(tfEspecialitat.getText());
             provSeleccionat.setMinimUnitats(Integer.parseInt(tfMinimUnitats.getText()));
-            
             provLogic.ModificarProveidor(provSeleccionat);
+            } catch (Exception ex) {
+                
+            }
             listarProveidors();
             limpiarCampos();
         } else {

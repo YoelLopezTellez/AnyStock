@@ -77,7 +77,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
      * @param p Es el Proveïdor modificat que es modificara a la base de dades.
      */
     @Override
-    public void modificar(Proveidor p) {
+    public void modificar(Proveidor p) throws Exception{
         String sql = "UPDATE proveidor SET  CIF = ?, dataAlta = ?, actiu = ?, motiuInactivitat = ?, nom = ?, valoracioMitjana = ?, minimUnitats = ?, especialitat = ? WHERE id = ?";
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
@@ -88,6 +88,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
             pstm.setInt(9, p.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
+            throw e;
         }
     }
 

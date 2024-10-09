@@ -55,7 +55,7 @@ public class FamiliaLogica {
      *
      * @param familia La família amb dades actualitzades.
      */
-    public void modificarFamilia(Familia familia) {
+    public void modificarFamilia(Familia familia) throws Exception {
     if (familia == null) {
         mostrarError("La familia no puede ser nula.");
         return;
@@ -70,6 +70,7 @@ public class FamiliaLogica {
         System.out.println("Familia modificada correctamente.");
     } catch (Exception e) {
         mostrarError("Error al modificar la familia: " + e.getMessage());
+        throw e;
     }
 }
 

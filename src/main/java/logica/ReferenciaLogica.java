@@ -31,7 +31,6 @@ public class ReferenciaLogica {
         if (referencia == null) {
             throw new IllegalArgumentException("La referencia no puede ser nula.");
         }
-        validarReferencia(referencia);
         referenciaDAO.afegir(referencia);
         System.out.println("Referencia agregada correctamente.");
     }
@@ -42,7 +41,7 @@ public class ReferenciaLogica {
      *
      * @param referencia La referencia con datos actualizados.
      */
-    public void modificarReferencia(Referencia referencia) {
+    public void modificarReferencia(Referencia referencia) throws Exception{
         if (referencia == null) {
             throw new IllegalArgumentException("La referencia no puede ser nula.");
         } else if (referencia.getId() <= 0) {
@@ -50,8 +49,12 @@ public class ReferenciaLogica {
 
         } else {
             validarReferencia(referencia);
+            try{
             referenciaDAO.modificar(referencia);
             System.out.println("Referencia modificada correctamente.");
+            }catch(Exception e){
+                throw e;
+            }
         }
     }
 
@@ -99,5 +102,6 @@ public class ReferenciaLogica {
      * @param referencia La referencia a validar.
      */
     private void validarReferencia(Referencia referencia) {
+        
     }
 }

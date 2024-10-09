@@ -16,7 +16,7 @@ public interface DAOInterface<T> {
 
     public void afegir(T entitat);
 
-    public void modificar(T entitat);
+    public void modificar(T entitat) throws Exception;
 
     public void delete(int id);
 
