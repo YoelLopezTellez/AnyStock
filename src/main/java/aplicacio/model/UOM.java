@@ -9,5 +9,5 @@ package aplicacio.model;
  * @author mario
  */
 public enum UOM {
-    METRES, LITRES, KILOMETRES, ALTRES;
+    METRES, LITRES, KILOGRAMS, ALTRES;
 }
