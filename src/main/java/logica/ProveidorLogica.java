@@ -8,6 +8,10 @@ package logica;
 import aplicacio.model.Proveidor;
 import dades.ProveidorDAOImpl;
 import static dades.ProveidorDAOImpl.getInstance;
+import exceptions.BuitException;
+import exceptions.CifRepetitException;
+import exceptions.DataInvalidaException;
+import exceptions.FormatInvalidException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -182,18 +186,21 @@ public class ProveidorLogica {
         }
      }
      
-     public void importarCSV(File fitxer){
+     public void importarCSV(File fitxer) throws FormatInvalidException, CifRepetitException, DataInvalidaException, BuitException{
         try(BufferedReader br = new BufferedReader(new FileReader(fitxer))){
             String lineaCabecera = br.readLine(); //llegeix la primera linea on ha d'ahver-hi una capçelera
             String[] cabecera = lineaCabecera.split(","); // separem cada nom de la capçelera
             String linea;
+            
+            int numLinia = 2; //comencem en 2 perque la linea 1 es la capçalera, utilitzem aixó per poder indicar desprès en quina linea ha saltat l'error
+            
             while((linea = br.readLine()) != null){
                 String[] dades = linea.split(",");
 
-                Map<String, Object> proveidorData = procesarLineaCSV(cabecera, dades);
+                Map<String, Object> proveidorData = procesarLineaCSV(cabecera, dades, numLinia);
                 
                 //si hi ha cif i nom el valida i llavors fará un objecte proveidor amb els camps ja siguin null o no, segons el procesarLinea
-                if(validarProveidor(proveidorData)){
+                if(validarProveidor(proveidorData,numLinia)){
                     Proveidor proveidor = new Proveidor(
                         (String) proveidorData.get("CIF"),
                         (LocalDate) proveidorData.get("dataAlta"),
@@ -206,85 +213,99 @@ public class ProveidorLogica {
                     
                     proveidorDAO.afegir(proveidor);
                 }
+                numLinia++;
             }
         }catch (IOException e){
             e.printStackTrace();
+        }catch(FormatInvalidException e){
+            throw new FormatInvalidException(e.getMessage());
+        }catch(CifRepetitException e){
+            throw new CifRepetitException(e.getMessage());
+        }catch(DataInvalidaException e){
+            throw new DataInvalidaException(e.getMessage());
+        }catch(BuitException e){
+            throw new BuitException(e.getMessage());
         }
     }
      
-     private Map<String, Object> procesarLineaCSV(String[] cabecera, String[] dades){
+     private Map<String, Object> procesarLineaCSV(String[] cabecera, String[] dades, int linia) throws FormatInvalidException, DataInvalidaException{
          Map<String, Object> proveidorDades = new HashMap();
          
          for(int i = 0; i < dades.length; i++){
             String clau = cabecera[i].trim().toLowerCase(); // per saber en quina capçelera estem
             String dada = dades[i].trim(); //obtenim la dada corresponent
             
-            switch(clau){
-                case "cif":
-                    proveidorDades.put("CIF", dada.isEmpty() ? null : dada);
-                    break;
-                case "actiu":
-                    proveidorDades.put("actiu", dada.equalsIgnoreCase("true"));
-                    break;
-                case "nom":
-                    proveidorDades.put("nom", dada.isEmpty() ? null : dada);
-                    break;
-                case "motiuinactivitat":
-                    proveidorDades.put("motiuInactivitat", proveidorDades.get("actiu").equals(true) ? "" :dada); //cuando sea actiu no posara res al motiu al importar-lo pero si al exportarlo
-                    break;
-                case "minimunitats":
-                    proveidorDades.put("minimUnitats", dada.isEmpty() ? null : validarInt(dada));
-                    break;
-                case "valoracio":
-                    proveidorDades.put("valoracio", dada.isEmpty() ? null : validarFloat(dada));
-                    break;
-                case "dataalta":
-                    proveidorDades.put("dataAlta", dada.isEmpty() ? LocalDate.now() : validarData(dada));
-                    break;
+            try{
+                switch(clau){
+                    case "cif":
+                        proveidorDades.put("CIF", dada.isEmpty() ? null : dada);
+                        break;
+                    case "actiu":
+                        proveidorDades.put("actiu", dada.equalsIgnoreCase("true"));
+                        break;
+                    case "nom":
+                        proveidorDades.put("nom", dada.isEmpty() ? null : dada);
+                        break;
+                    case "motiuinactivitat":
+                        proveidorDades.put("motiuInactivitat", proveidorDades.get("actiu").equals(true) ? "" :dada); //cuando sea actiu no posara res al motiu al importar-lo pero si al exportarlo
+                        break;
+                    case "minimunitats":
+                        proveidorDades.put("minimUnitats", dada.isEmpty() ? null : validarInt(dada));
+                        break;
+                    case "valoracio":
+                        proveidorDades.put("valoracio", dada.isEmpty() ? null : validarFloat(dada));
+                        break;
+                    case "dataalta":
+                        proveidorDades.put("dataAlta", dada.isEmpty() ? LocalDate.now() : validarData(dada));
+                        break;
+                }
+            }catch(FormatInvalidException e){
+                proveidorDades.put(clau, null);//possem el valor incorrecte a null
+                throw new FormatInvalidException("Error de format en el camp " + clau + " amb la dada " +dada + " en la linia "+linia);
+            }catch(DataInvalidaException e){
+                proveidorDades.put("dataAlta", LocalDate.now());//possem la data incorrecte a la data d'avui
+                throw new DataInvalidaException("Data invàlida en la linia " + linia);
             }
         }
          
          return proveidorDades;
      }
      
-     private boolean validarProveidor(Map<String, Object> proveedorData) {
+     private boolean validarProveidor(Map<String, Object> proveedorData, int linia) throws CifRepetitException,BuitException {
         // Validar los datos del proveedor antes de insertar
         String cif = (String) proveedorData.get("CIF");
         String nom = (String) proveedorData.get("nom");
         
-        if((cif != null && cif.isEmpty()) || (nom != null && nom.isEmpty())){
-            return false;
+        if(cif == null || cif.isEmpty() || nom == null || nom.isEmpty()){
+            throw new BuitException("CIF i nom no poden ser camps buits en la linia " + linia);
         }
         if(proveidorDAO.existeixCIF(cif)){
-            return false;
+            throw new CifRepetitException("CIF ja existeix " + cif + " en la linia " + linia);
         }
         return true;
     }
      
-     private Float validarFloat(String valor){
+     private Float validarFloat(String valor) throws FormatInvalidException{
          try{
              return Float.parseFloat(valor);
          }catch(NumberFormatException e){
-             System.out.println("Valor float invàlid: " + valor);
-             return null;
+             throw new FormatInvalidException("Valor float invàlid: " + valor);
          }
      }
      
-     private LocalDate validarData(String valor){
+     private LocalDate validarData(String valor) throws DataInvalidaException{
          try{
              return LocalDate.parse(valor);
          }catch(NumberFormatException e){
-             System.out.println("Data invàlida: " + valor + " es possarà la data d'avui");
-             return LocalDate.now();
+             throw new DataInvalidaException("Data invàlida: " + valor + " es possarà la data d'avui");
          }
      }
      
-     private Integer validarInt(String valor){
+     private Integer validarInt(String valor) throws FormatInvalidException{
          try{
              return Integer.parseInt(valor);
          }catch(NumberFormatException e){
-             System.out.println("Valor enter invàlid: " + valor);
-             return null;
+             throw new FormatInvalidException("Valor enter invàlid: " + valor);
          }
      }
 }

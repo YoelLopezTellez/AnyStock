@@ -6,6 +6,10 @@ package presentacio;
 
 import aplicacio.model.TIPUSROL;
 import aplicacio.model.Usuari;
+import exceptions.BuitException;
+import exceptions.CifRepetitException;
+import exceptions.DataInvalidaException;
+import exceptions.FormatInvalidException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -43,6 +47,7 @@ public class MenuController implements Initializable {
     private Button Btn_Tancar;
     
     private Usuari usuari;
+    private Error error;
     
     
     @Override
@@ -84,7 +89,17 @@ public class MenuController implements Initializable {
         
         if(fitxerSeleccionat != null){
             ProveidorLogica logica = new ProveidorLogica();
-            logica.importarCSV(fitxerSeleccionat);
+            try{
+                logica.importarCSV(fitxerSeleccionat);
+            }catch(FormatInvalidException e){
+                error.mostrarError("Error importar", e.getMessage());
+            }catch(CifRepetitException e){
+                error.mostrarError("Error importar", e.getMessage());
+            }catch(DataInvalidaException e){
+                error.mostrarError("Error importar", e.getMessage());
+            }catch(BuitException e){
+                error.mostrarError("Error importar", e.getMessage());
+            }
         }
     }
     
