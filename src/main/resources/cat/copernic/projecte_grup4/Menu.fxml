@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -9,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.MenuController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.MenuController">
    <top>
       <HBox alignment="CENTER" prefHeight="49.0" prefWidth="600.0" style="-fx-background-color: skyblue; -fx-border-color: black; -fx-border-width: 2;" BorderPane.alignment="CENTER">
          <children>
@@ -47,7 +52,7 @@
                         <Font size="16.0" />
                      </font></Button>
                   <Separator orientation="VERTICAL" prefHeight="100.0" prefWidth="130.0" visible="false" />
-                  <Button fx:id="Btn_Exp" mnemonicParsing="false" prefHeight="80.0" prefWidth="170.0" text="Exportar" textFill="#3a96bd">
+                  <Button fx:id="Btn_Exp" mnemonicParsing="false" onAction="#onBtn_Exp_Action" prefHeight="80.0" prefWidth="170.0" text="Exportar" textFill="#3a96bd">
                      <font>
                         <Font size="16.0" />
                      </font></Button>

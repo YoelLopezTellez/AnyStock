@@ -9,11 +9,14 @@ import aplicacio.model.Proveidor;
 import dades.ProveidorDAOImpl;
 import static dades.ProveidorDAOImpl.getInstance;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +62,11 @@ public class ProveidorLogica {
             throw new IllegalArgumentException("El proveidor no pot ser nul.");
         }
         validarProveidor(proveidor);
+        
         proveidorDAO.modificar(proveidor);
         System.out.println("Proveïdor Modificat correctament.");
+         
+        
         
     }
     /**
@@ -72,9 +78,12 @@ public class ProveidorLogica {
         if(CIF == null){
             throw new IllegalArgumentException("El CIF del proveidor no pot ser nul.");
         }
-        
+        try{
         proveidorDAO.delete((proveidorDAO.obtenirProvPerCIF(CIF)).getId()); //Aixo aconsegeix el cif del proveidor donat, i busca el id a la bbdd per pasar-li la id al metode eliminar.
-        System.out.println("Proveïdor Modificat correctament.");
+        }catch(Exception e){
+               System.out.println("Proveïdor NO Eliminat correctament.");
+        }
+     
         
     }
     /**
@@ -135,6 +144,36 @@ public class ProveidorLogica {
         pattern.matcher(CIF).matches();
     
          return pattern.matcher(CIF).matches();
+     }
+     
+     public void ExportarCSV(File fitxer){
+        //Llista de proveidors a exportar en array de strings per a csv
+        List<String> provExpCsv =new ArrayList<String>();
+        //pasar els proveidors a la llista de strings de proveidors.
+        for(Proveidor p : llistarProveidors()){
+            //Posa en un array de strings tots els atributs del proveidor.
+            String provString =p.getCIF()+","+p.getDataAlta().toString()+","+p.isActiu()+","+p.getMotiuInactivitat()+","+p.getNom()+","+p.getValoracio()+","+p.getMinimUnitats()+","+p.getEspecialitat()+","+p.getId();
+            
+            provExpCsv.add(provString);
+        }
+        
+        //Amb BufferedWriter escrivim l'arxiu
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fitxer))) {
+            //Escriu les linies en format CSV
+            for (String linea : provExpCsv) {
+                
+                // Escriu la línea en el fitxer
+                writer.write(linea);
+                // Afegaix un salt de linea despres de cada linea de proveidor format CSV
+                writer.newLine();
+            }
+
+            System.out.println("Arxiu CSV exportat amb éxit.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al exportar el arxiu CSV.");
+        }
      }
      
      public void importarCSV(File fitxer){

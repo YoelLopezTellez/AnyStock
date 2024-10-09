@@ -88,6 +88,31 @@ public class MenuController implements Initializable {
         }
     }
     
+    
+    @FXML
+    void onBtn_Exp_Action(ActionEvent event) {
+        
+        //creem la classe
+        FileChooser seleccionador = new FileChooser();
+        
+        //fer un filtre perque tan sols mostri fitxers csv
+        FileChooser.ExtensionFilter filtre = new FileChooser.ExtensionFilter("Fitxers CSV (*.csv)", "*.csv");
+        seleccionador.getExtensionFilters().add(filtre);
+        
+        //fiquem un titol
+        seleccionador.setTitle("Seleccioni una carpeta per exportar fitxer CSV");
+        
+        //obtenim el Stage actual on está el botó en comptes de crear un Stage nou utilitzem la referència d'aquest botó
+        Stage escenari = (Stage)((Node) event.getSource()).getScene().getWindow();
+        
+        //obrim el diàleg per seleccionar on es guardara el fitxer
+        File fitxerExportar  = seleccionador.showSaveDialog(escenari);
+        
+        if(fitxerExportar != null){
+            ProveidorLogica logica = new ProveidorLogica();
+            logica.ExportarCSV(fitxerExportar);
+        }
+    }
     @FXML
     private void onBtn_Tancar_Action(ActionEvent event) throws IOException{
         Sessio.getInstancia().tancarSessio();

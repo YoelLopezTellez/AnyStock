@@ -165,13 +165,14 @@ public class ConsultaProveidorController implements Initializable {
             provLogic.EliminarProveidor(provSeleccionat.getCIF());
             Llistaproveidors.remove(provSeleccionat);
             limpiarCampos();
+            
         } else {
             System.out.println("Por favor, selecciona un proveidor para eliminar.");
         }
     }
 
     @FXML
-    private void onBtnModificar_Clicked() {
+    private void onBtnModificar_Clicked(){
         Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
         if (provSeleccionat != null) {
             provSeleccionat.setCIF(tfCif.getText());
