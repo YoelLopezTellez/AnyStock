@@ -9,6 +9,7 @@ import aplicacio.model.Referencia;
 import aplicacio.model.UOM;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -16,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -132,42 +134,22 @@ public class ConsultaReferenciaController {
     private void onbtnModificar_Clicked() {
         Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
         if (referenciaSeleccionada != null) {
-            referenciaSeleccionada.setNom(tfNom.getText());
-            referenciaSeleccionada.setObservacions(taObservacions.getText());
 
-            // Validar y convertir la fecha
-            if (!tfDataAlta.getText().isEmpty()) {
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    referenciaSeleccionada.setDataAlta(LocalDate.parse(tfDataAlta.getText(), formatter));
-                } catch (Exception e) {
-                    System.out.println("Formato de fecha incorrecto: " + e.getMessage());
-                    return; // No continuar si la fecha es inválida
-                }
-            }
-
-            // setProveidor
             try {
+                referenciaSeleccionada.setNom(tfNom.getText());
+                referenciaSeleccionada.setObservacions(taObservacions.getText());
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                referenciaSeleccionada.setDataAlta(LocalDate.parse(tfDataAlta.getText(), formatter));
                 int idProveidor = Integer.parseInt(tfProveidor.getText());
                 referenciaSeleccionada.setProveidor(idProveidor);
-            } catch (NumberFormatException e) {
-                System.out.println("ID del proveedor no válido. Asegúrate de que sea un número.");
-                return; // Salir si el ID del proveedor es inválido
-            }
-            int quantitat = Integer.parseInt(tfQuantitat.getText());
-            referenciaSeleccionada.setQuantitat(quantitat);
+                int quantitat = Integer.parseInt(tfQuantitat.getText());
+                referenciaSeleccionada.setQuantitat(quantitat);
 
-            float preu = Float.parseFloat(tfPreu.getText());
-            referenciaSeleccionada.setPreuCompra(preu);
-            try {
+                float preu = Float.parseFloat(tfPreu.getText());
+                referenciaSeleccionada.setPreuCompra(preu);
                 UOM uom = UOM.valueOf(tfUom.getText().toUpperCase());
                 referenciaSeleccionada.setUom(uom);
-            } catch (NumberFormatException e) {
-                System.out.println("ID del proveedor no válido. Asegúrate de que sea un número.");
-                return; // Salir si el ID del proveedor es inválido
-            }
-
-            try {
                 int familia = Integer.parseInt(tfIdFamilia.getText());
                 referenciaSeleccionada.setFamiliaID(familia);
                 referenciaLogica.modificarReferencia(referenciaSeleccionada);
@@ -175,8 +157,13 @@ public class ConsultaReferenciaController {
                 tbReferencia.refresh(); // Refresca la tabla
                 limpiarCampos(); // Limpia los campos
             } catch (Exception e) {
-                System.out.println("Error al modificar la referencia: " + e.getMessage());
-                e.printStackTrace();
+                // Crear una alerta de error 
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Datos Incorrectos");
+                alert.setHeaderText(null);
+                alert.setContentText("Los datos introducidos son incorrectos, referencia no modificada.");
+                alert.showAndWait(); // Mostrar el diálogo y esperar que el usuario lo cierre
+
             }
         } else {
             System.out.println("Por favor, selecciona una referencia para modificar.");

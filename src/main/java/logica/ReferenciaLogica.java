@@ -31,7 +31,6 @@ public class ReferenciaLogica {
         if (referencia == null) {
             throw new IllegalArgumentException("La referencia no puede ser nula.");
         }
-        validarReferencia(referencia);
         referenciaDAO.afegir(referencia);
         System.out.println("Referencia agregada correctamente.");
     }
@@ -99,5 +98,6 @@ public class ReferenciaLogica {
      * @param referencia La referencia a validar.
      */
     private void validarReferencia(Referencia referencia) {
+        
     }
 }

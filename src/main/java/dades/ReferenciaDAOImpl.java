@@ -67,7 +67,7 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw SQLException;
         }
     }
 
