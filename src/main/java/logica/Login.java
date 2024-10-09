@@ -45,7 +45,7 @@ public class Login {
 
                 if (rol.equalsIgnoreCase("Responsable")) {
                     usuari = new Usuari(nom, contra, TIPUSROL.RESPONSABLE);
-                } else if (rol.equalsIgnoreCase("Venedor")) {
+                } else if (rol.equalsIgnoreCase("Vendedor")) {
                     usuari = new Usuari(nom, contra, TIPUSROL.VENDEDOR);
                 } else {
                     continue;
