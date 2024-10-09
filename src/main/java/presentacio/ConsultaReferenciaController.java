@@ -4,6 +4,7 @@
  */
 package presentacio;
 
+import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
 import aplicacio.model.UOM;
 import java.io.IOException;
@@ -32,10 +33,10 @@ import logica.ReferenciaLogica;
 public class ConsultaReferenciaController {
 
     @FXML
-    private Button btnNova, btnEliminar, btnModificar, btnFamilia, btnSortir;
+    private Button btnNova, btnEliminar, btnModificar, btnFamilia, btnSortir, btnFiltro;
 
     @FXML
-    private TextField tfVegadesAlarma, tfNom, tfIdFamilia, tfPreu, tfDataAlarma, tfUom, tfProveidor, tfDataAlta, tfQuantitat, tfId;
+    private TextField tfVegadesAlarma, tfNom, tfIdFamilia, tfPreu, tfDataAlarma, tfUom, tfProveidor, tfDataAlta, tfQuantitat, tfId, tfFiltro;
 
     @FXML
     private TableColumn<Referencia, Integer> colQuantitat, colId;
@@ -60,29 +61,16 @@ public class ConsultaReferenciaController {
 
     private ReferenciaLogica referenciaLogica = new ReferenciaLogica();
 
-    /*private int idFamilia;
-
-    public void setIdFamilia(int idFamilia) {
-        this.idFamilia = idFamilia;
-        tfIdFamilia.setText(String.valueOf(idFamilia));
-    }
+    private int idFamilia;
 
     public int getIdFamilia() {
         return idFamilia;
-    }*/
-    ConsultaFamiliaController controladorFamilia;
-
-    public ConsultaFamiliaController getControladorFamilia() {
-        return controladorFamilia;
     }
 
-    public void setControladorFamilia(ConsultaFamiliaController controladorFamilia) {
-        this.controladorFamilia = controladorFamilia;
+    public void setIdFamilia(int idFamilia) {
+        this.idFamilia = idFamilia;
     }
-    
-    int idFamilia = controladorFamilia.getId();
-    
-    
+
     private ObservableList<Referencia> referenciasObservableList = FXCollections.observableArrayList();
 
     /**
@@ -90,11 +78,6 @@ public class ConsultaReferenciaController {
      */
     @FXML
     public void initialize() {
-       /* taObservacions.getScene().getWindow().setOnShown(event -> {
-    System.out.println(controladorFamilia.getId());
-    llistarReferencias(idFamilia);
-        });*/
-                
         // Asociar las columnas de la tabla con los atributos de los items usando métodos tradicionales
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -103,11 +86,19 @@ public class ConsultaReferenciaController {
         colUom.setCellValueFactory(new PropertyValueFactory<>("uom"));
         colProveidor.setCellValueFactory(new PropertyValueFactory<>("proveidor"));
         colDataAlta.setCellValueFactory(new PropertyValueFactory<>("dataAlta"));
-        
+        setIdFamilia(0);
         // Asignar la lista observable a la tabla
+        llistarReferencias(idFamilia);
         tbReferencia.setItems(referenciasObservableList);
     }
-    
+
+    @FXML
+    private void onbtnFiltro_Clicked() {
+        System.out.println("Hola");
+        setIdFamilia(Integer.parseInt(tfFiltro.getText()));
+        limpiarCampos();
+        llistarReferencias(idFamilia);
+    }
 
     @FXML
     private void onbtnFamilia_Clicked(ActionEvent event) throws IOException {
@@ -155,7 +146,7 @@ public class ConsultaReferenciaController {
                 }
             }
 
-            // Convertir el campo tf_Proveidor a int antes de asignar
+            // setProveidor
             try {
                 int idProveidor = Integer.parseInt(tfProveidor.getText());
                 referenciaSeleccionada.setProveidor(idProveidor);
@@ -163,8 +154,22 @@ public class ConsultaReferenciaController {
                 System.out.println("ID del proveedor no válido. Asegúrate de que sea un número.");
                 return; // Salir si el ID del proveedor es inválido
             }
+            int quantitat = Integer.parseInt(tfQuantitat.getText());
+            referenciaSeleccionada.setQuantitat(quantitat);
+
+            float preu = Float.parseFloat(tfPreu.getText());
+            referenciaSeleccionada.setPreuCompra(preu);
+            try {
+                UOM uom = UOM.valueOf(tfUom.getText().toUpperCase());
+                referenciaSeleccionada.setUom(uom);
+            } catch (NumberFormatException e) {
+                System.out.println("ID del proveedor no válido. Asegúrate de que sea un número.");
+                return; // Salir si el ID del proveedor es inválido
+            }
 
             try {
+                int familia = Integer.parseInt(tfIdFamilia.getText());
+                referenciaSeleccionada.setFamiliaID(familia);
                 referenciaLogica.modificarReferencia(referenciaSeleccionada);
                 llistarReferencias(idFamilia); // Actualiza la lista después de modificar
                 tbReferencia.refresh(); // Refresca la tabla
@@ -181,9 +186,15 @@ public class ConsultaReferenciaController {
     @FXML
     private void onbtnNova_Clicked() {
         Referencia nuevaReferencia = new Referencia();
+        nuevaReferencia.setDataAlta(LocalDate.now()); // Establece la fecha de alta con la fecha actual
+        if (idFamilia == 0) {
+            nuevaReferencia.setFamiliaID(1);
+        } else {
+            nuevaReferencia.setFamiliaID(idFamilia);
+        }
+
         referenciaLogica.afegirReferencia(nuevaReferencia);
-        referenciasObservableList.add(nuevaReferencia);
-        limpiarCampos();
+        llistarReferencias(idFamilia);
     }
 
     @FXML

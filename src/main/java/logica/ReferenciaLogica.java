@@ -7,8 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Clase que gestiona la lógica de negocio relacionada con la entidad Referencia.
- * Proporciona métodos para realizar operaciones sobre las referencias del almacen
+ * Clase que gestiona la lógica de negocio relacionada con la entidad
+ * Referencia. Proporciona métodos para realizar operaciones sobre las
+ * referencias del almacen
  *
  * @author mario
  */
@@ -21,7 +22,8 @@ public class ReferenciaLogica {
     }
 
     /**
-     * Agrega una nueva referencia después de realizar las validaciones necesarias.
+     * Agrega una nueva referencia después de realizar las validaciones
+     * necesarias.
      *
      * @param referencia La referencia a agregar.
      */
@@ -43,13 +45,14 @@ public class ReferenciaLogica {
     public void modificarReferencia(Referencia referencia) {
         if (referencia == null) {
             throw new IllegalArgumentException("La referencia no puede ser nula.");
-        }
-        if (referencia.getId() <= 0) {
+        } else if (referencia.getId() <= 0) {
             throw new IllegalArgumentException("El ID de la referencia debe ser positivo.");
+
+        } else {
+            validarReferencia(referencia);
+            referenciaDAO.modificar(referencia);
+            System.out.println("Referencia modificada correctamente.");
         }
-        validarReferencia(referencia);
-        referenciaDAO.modificar(referencia);
-        System.out.println("Referencia modificada correctamente.");
     }
 
     /**
@@ -79,9 +82,11 @@ public class ReferenciaLogica {
     }
 
     /**
-     * Lista todas las referencia.
+     * Lista todas las referencia. Por defecto mostraremos todas las referencias
+     * del almacen.
      *
-     * @param idFamilia El ID de la familia de la que mostraremos las referencias
+     * @param idFamilia El ID de la familia de la que mostraremos las
+     * referencias
      * @return Una lista de todas las referencia.
      */
     public List<Referencia> llistarReferencias(int idFamilia) {
