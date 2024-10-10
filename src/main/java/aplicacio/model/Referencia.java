@@ -5,10 +5,11 @@
 package aplicacio.model;
 
 import java.time.LocalDate;
+
 /**
- * Clase que representa una referencia de producto en el sistema. Contiene
- * información relevante como nombre, unidad de medida, cantidad, familia,
- * proveedor, fecha de alta y precio.
+ * Classe que representa una referència de producte en el sistema. Conté
+ * informació rellevant com a nom, unitat de mesura, quantitat, família,
+ * proveïdor, data d'alta i preu.
  *
  * @author Mario
  */
@@ -20,26 +21,28 @@ public class Referencia {
     private String observacions;
     private int quantitat;
     private String nom;
-    private UOM uom;  // Unidad de Medida
+    private UOM uom;  // Unitat de mesura
     private LocalDate dataAlta;
     private LocalDate ultimaDataAlarma;
     private int proveidor;
     private int familiaID;
 
     /**
-     * Constructor de la clase Referencia.
+     * Constructor de la classe Referència.
      *
-     * @param id Identificador único de la referencia.
-     * @param vegadesAlarma Las veces que ha saltado la alarma de stock sobre esta referencia.
-     * @param preuCompra Precio de la referencia.
-     * @param observacions Observaciones sobre las referencias.
-     * @param quantitat Cantidad disponible.
-     * @param nom Nombre de la referencia.
-     * @param uom Unidad de medida de la referencia.
-     * @param dataAlta Fecha de alta de la referencia.
-     * @param ultimDataAlarma Fecha en la que saltó la alarma por ultima vez.
-     * @param proveidor Proveedor de la referencia.
-     * @param familiaID La id de la familia
+     * @param id Identificador únic de la referència.
+     * @param vegadesAlarma Les vegades que ha saltat l'alarma d'estoc sobre
+     * aquesta referència.
+     * @param preuCompra Preu de la referència.
+     * @param observacions Observacions sobre les referències.
+     * @param quantitat Quantitat disponible.
+     * @param nom Nom de la referència.
+     * @param uom Unitat de mesura de la referència.
+     * @param dataAlta Data d'alta de la referència.
+     * @param ultimDataAlarma Data en la qual va saltar l'alarma per última
+     * vegada.
+     * @param proveidor Proveïdor de la referència.
+     * @param familiaID La id de la família
      */
     public Referencia(int id, int vegadesAlarma, float preuCompra, String observacions, int quantitat, String nom, UOM uom, LocalDate dataAlta, LocalDate ultimaDataAlarma, int proveidor, int familiaID) {
         this.id = id;
@@ -56,11 +59,10 @@ public class Referencia {
     }
 
     public Referencia() {
-        
+
     }
 
-    // Getters y Setters
-
+    // Getters i Setters
     public int getId() {
         return id;
     }
@@ -139,7 +141,7 @@ public class Referencia {
 
     public void setProveidor(int proveidor) {
         this.proveidor = proveidor;
-    }    
+    }
 
     public int getFamiliaID() {
         return familiaID;
@@ -148,5 +150,5 @@ public class Referencia {
     public void setFamiliaID(int familiaID) {
         this.familiaID = familiaID;
     }
-    
+
 }

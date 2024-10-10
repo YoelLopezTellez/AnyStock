@@ -4,7 +4,6 @@
  */
 package presentacio;
 
-import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
 import aplicacio.model.TIPUSROL;
 import aplicacio.model.UOM;
@@ -32,7 +31,9 @@ import logica.ReferenciaLogica;
 import logica.Sessio;
 
 /**
- * FXML Controller class
+ * Controlador de l'FXML per gestionar la consulta de referències. Aquesta
+ * classe s'encarrega de gestionar les interaccions de l'usuari amb la
+ * interfície d'usuari.
  *
  * @author mario
  */
@@ -82,7 +83,10 @@ public class ConsultaReferenciaController {
     private Usuari usuari;
 
     /**
-     * Initializes the controller class.
+     * Inicialitza el controlador de la classe. Aquest mètode és cridat
+     * automàticament quan es carrega la vista. Estableix la visibilitat dels
+     * botons segons el rol de l'usuari i associa les columnes de la taula amb
+     * els atributs de les referències.
      */
     @FXML
     public void initialize() {
@@ -93,7 +97,7 @@ public class ConsultaReferenciaController {
             btnEliminar.setVisible(false);
             btnNova.setVisible(false);
         }
-        // Asociar las columnas de la tabla con los atributos de los items usando métodos tradicionales
+        // Associar les columnes de la taula amb els atributs de les referències
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colPreu.setCellValueFactory(new PropertyValueFactory<>("preuCompra"));
@@ -102,11 +106,15 @@ public class ConsultaReferenciaController {
         colProveidor.setCellValueFactory(new PropertyValueFactory<>("proveidor"));
         colDataAlta.setCellValueFactory(new PropertyValueFactory<>("dataAlta"));
         setIdFamilia(0);
-        // Asignar la lista observable a la tabla
+        // Assignar la llista observable a la taula
         llistarReferencias(idFamilia);
         tbReferencia.setItems(referenciasObservableList);
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic del botó de filtre. Llegeix l'ID de la
+     * família del camp de text i actualitza la llista de referències.
+     */
     @FXML
     private void onbtnFiltro_Clicked() {
         setIdFamilia(Integer.parseInt(tfFiltro.getText()));
@@ -114,22 +122,45 @@ public class ConsultaReferenciaController {
         llistarReferencias(idFamilia);
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic del botó per canviar a la pantalla de
+     * família.
+     *
+     * @param event L'esdeveniment de clic.
+     * @throws IOException Si es produeix un error durant el canvi de pantalla.
+     */
     @FXML
     private void onbtnFamilia_Clicked(ActionEvent event) throws IOException {
         CanviPantalla.canviarPantalla(btnFamilia.getScene(), "/cat/copernic/projecte_grup4/ConsultaFamilia.fxml");
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic del botó de sortir.
+     *
+     * @param event L'esdeveniment de clic.
+     * @throws IOException Si es produeix un error durant el canvi de pantalla.
+     */
     @FXML
     private void onbtnSortir_Clicked(ActionEvent event) throws IOException {
         CanviPantalla.canviarPantalla(btnSortir.getScene(), "/cat/copernic/projecte_grup4/Menu.fxml");
     }
 
+    /**
+     * Llista les referències associades a una família determinada.
+     *
+     * @param idFamilia L'ID de la família per la qual es volen obtenir les
+     * referències.
+     */
     private void llistarReferencias(int idFamilia) {
         // Limpiamos la lista observable antes de añadir los datos actualizados
         referenciasObservableList.clear();
         referenciasObservableList.addAll(referenciaLogica.llistarReferencias(idFamilia));
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic del botó d'eliminació. Elimina la
+     * referència seleccionada de la taula i actualitza la llista.
+     */
     @FXML
     private void onbtnEliminar_Clicked() {
         Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
@@ -138,11 +169,15 @@ public class ConsultaReferenciaController {
             referenciasObservableList.remove(referenciaSeleccionada);
             limpiarCampos();
         } else {
-            Error.mostrarError("Referencia no seleccionada", "Referencia no seleccionada. Selecciona una referencia para poder eliminarla.");
+            Error.mostrarError("Referència no seleccionada", "Referència no seleccionada. Selecciona una referència per a poder eliminar-la.");
             System.out.println("Por favor, selecciona una referencia para eliminar.");
         }
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic del botó de modificació. Modifica les
+     * dades de la referència seleccionada amb els valors dels camps de text.
+     */
     @FXML
     private void onbtnModificar_Clicked() {
         Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
@@ -170,24 +205,29 @@ public class ConsultaReferenciaController {
                 tbReferencia.refresh(); // Refresca la tabla
                 limpiarCampos(); // Limpia los campos
             } catch (NumberFormatException e) {
-                Error.mostrarError("Error en el formato de número", "Por favor, ingresa un número válido en los campos de Proveedor, Cantidad, Precio o Familia.");
+                Error.mostrarError("Error en el format de número", "Si us plau, ingressa un número vàlid en els camps de Proveïdor, Quantitat, Preu o Família.");
             } catch (DateTimeParseException e) {
-                Error.mostrarError("Error en el formato de la fecha", "La fecha debe tener el formato dd/MM/yyyy. Por favor, revisa el campo de la fecha.");
+                Error.mostrarError("Error en el format de la data", "La data ha de tenir el format dd/MM/yyyy. Si us plau, revisa el camp de la data.");
             } catch (IllegalArgumentException e) {
-                Error.mostrarError("Error en el campo UoM", "El valor ingresado en el campo UoM no es válido. Asegúrate de que sea una unidad de medida válida.");
+                Error.mostrarError("Error en el camp UoM", "El valor ingressat en el camp UoM no és vàlid. Assegura't que sigui una unitat de mesura vàlida.");
             } catch (SQLException e) {
-                Error.mostrarError("Error en la base de datos", "Ha ocurrido un error inesperado. Por favor, asegurate de que los datos son correctos y que el proveedor es existente.");
-            }catch (Exception e) {
-                Error.mostrarError("Error inesperado", "Ha ocurrido un error inesperado. Por favor, revisa que los datos sean validos.");
+                Error.mostrarError("Error en la base de dades", "Ha ocorregut un error inesperat. Si us plau, assegura't que les dades són correctes i que el proveïdor és existent.");
+            } catch (Exception e) {
+                Error.mostrarError("Error inesperat", "Ha ocorregut un error inesperat. Si us plau, revisa que les dades siguin vàlides.");
             }
         } else {
-            Error.mostrarError("Referencia no seleccionada", "Referencia no seleccionada. Selecciona una referencia para poder modificarla.");
+            Error.mostrarError("Referència no seleccionada", "Referència no seleccionada. Selecciona una referència per a poder modificar-la.");
             System.out.println("Por favor, selecciona una referencia para modificar.");
         }
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic del botó de nova referència. Crea una
+     * nova referència i l'afegeix a la llista de referències.
+     */
     @FXML
     private void onbtnNova_Clicked() {
+
         Referencia nuevaReferencia = new Referencia();
         nuevaReferencia.setDataAlta(LocalDate.now()); // Establece la fecha de alta con la fecha actual
         if (idFamilia == 0) {
@@ -198,32 +238,54 @@ public class ConsultaReferenciaController {
 
         referenciaLogica.afegirReferencia(nuevaReferencia);
         llistarReferencias(idFamilia);
+        tbReferencia.getSelectionModel().selectLast();
+        Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
+        tbReferencia.scrollTo(referenciaSeleccionada);
+        tbReferencia.requestFocus();
+        tbReferencia.getSelectionModel().focus(tbReferencia.getSelectionModel().getSelectedIndex());
+        seleccionarReferencia(referenciaSeleccionada);
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic en la taula de referències. Selecciona la
+     * referència que ha estat clicada i omple els camps de text.
+     *
+     * @param event L'esdeveniment de clic del ratolí.
+     */
     @FXML
     private void ontbReferenciaMouseClicked(MouseEvent event) {
         Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
+        seleccionarReferencia(referenciaSeleccionada);
+    }
+
+    /**
+     * Omple els camps de text amb les dades de la referència seleccionada.
+     *
+     * @param referenciaSeleccionada La referència seleccionada per omplir els
+     * camps.
+     */
+    private void seleccionarReferencia(Referencia referenciaSeleccionada) {
         if (referenciaSeleccionada != null) {
-            // Setear los valores en los campos de texto
+            // Setejar els valors en els camps de text
             tfId.setText(String.valueOf(referenciaSeleccionada.getId()));
             tfNom.setText(referenciaSeleccionada.getNom());
 
-            // Formatear la fecha de alta
+            // Formatar la data d'alta
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             tfDataAlta.setText(referenciaSeleccionada.getDataAlta().format(format));
 
-            // Setear el resto de valores
+            // Setejar la resta de valors
             tfProveidor.setText(String.valueOf(referenciaSeleccionada.getProveidor()));
             tfQuantitat.setText(String.valueOf(referenciaSeleccionada.getQuantitat()));
 
-            // Verificar si la fecha de alarma es nula antes de formatearla
+            // Verificar si la data d'alarma és nul·la abans de formatar-la
             if (referenciaSeleccionada.getUltimaDataAlarma() != null) {
                 tfDataAlarma.setText(referenciaSeleccionada.getUltimaDataAlarma().format(format));
             } else {
-                tfDataAlarma.setText(""); // Dejar el campo vacío si es nulo
+                tfDataAlarma.setText(""); // Deixar el camp buit si és nul
             }
 
-            // Setear el resto de valores en los campos correspondientes
+            // Setejar la resta de valors en els camps corresponents
             tfIdFamilia.setText(String.valueOf(referenciaSeleccionada.getFamiliaID()));
             tfVegadesAlarma.setText(String.valueOf(referenciaSeleccionada.getVegadesAlarma()));
             tfPreu.setText(String.valueOf(referenciaSeleccionada.getPreuCompra()));
@@ -232,6 +294,9 @@ public class ConsultaReferenciaController {
         }
     }
 
+    /**
+     * Neteja tots els camps de text de la interfície d'usuari.
+     */
     private void limpiarCampos() {
         taObservacions.clear();
         tfVegadesAlarma.clear();

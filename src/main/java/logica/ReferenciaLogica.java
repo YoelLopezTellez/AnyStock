@@ -7,9 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Clase que gestiona la lógica de negocio relacionada con la entidad
- * Referencia. Proporciona métodos para realizar operaciones sobre las
- * referencias del almacen
+ * Classe que gestiona la lògica de negoci relacionada amb l'entitat Referència.
+ * Proporciona mètodes per a realitzar operacions sobre les referències de
+ * l'almacen.
  *
  * @author mario
  */
@@ -17,15 +17,29 @@ public class ReferenciaLogica {
 
     private final ReferenciaDAOImpl referenciaDAO;
 
+    /**
+     * Constructor de la classe ReferenciaLogica. Inicialitza el DAO per a
+     * gestionar les operacions de referència.
+     */
     public ReferenciaLogica() {
         this.referenciaDAO = new ReferenciaDAOImpl();
     }
 
     /**
-     * Agrega una nueva referencia después de realizar las validaciones
-     * necesarias.
+     * Constructor de la classe ReferenciaLogica. Inicialitza el DAO per a
+     * gestionar les operacions de referència.
+     * Este Constructor se utiliza para los test.
+     */
+    public ReferenciaLogica(ReferenciaDAOImpl referenciaDAO) {
+        this.referenciaDAO = referenciaDAO;
+    }
+
+    /**
+     * Afegeix una nova referència després de realitzar les validacions
+     * necessàries.
      *
-     * @param referencia La referencia a agregar.
+     * @param referencia La referència a afegir.
+     * @throws IllegalArgumentException Si la referència és null.
      */
     public void afegirReferencia(Referencia referencia) {
         if (referencia == null) {
@@ -36,32 +50,35 @@ public class ReferenciaLogica {
     }
 
     /**
-     * Modifica una referencia existente después de realizar las validaciones
-     * necesarias.
+     * Modifica una referència existent després de realitzar les validacions
+     * necessàries.
      *
-     * @param referencia La referencia con datos actualizados.
+     * @param referencia La referència amb dades actualitzades.
+     * @throws IllegalArgumentException Si la referència és null o el seu ID no
+     * és positiu.
+     * @throws Exception Si ocorre un error en la modificació.
      */
-    public void modificarReferencia(Referencia referencia) throws Exception{
+    public void modificarReferencia(Referencia referencia) throws Exception {
         if (referencia == null) {
             throw new IllegalArgumentException("La referencia no puede ser nula.");
         } else if (referencia.getId() <= 0) {
             throw new IllegalArgumentException("El ID de la referencia debe ser positivo.");
-
         } else {
-            try{
-            referenciaDAO.modificar(referencia);
-            System.out.println("Referencia modificada correctamente.");
-            }catch(Exception e){
+            try {
+                referenciaDAO.modificar(referencia);
+                System.out.println("Referencia modificada correctamente.");
+            } catch (Exception e) {
                 throw e;
             }
         }
     }
 
     /**
-     * Elimina una referencia dado su ID después de realizar las validaciones
-     * necesarias.
+     * Elimina una referència donat el seu ID després de realitzar les
+     * validacions necessàries.
      *
-     * @param id El ID de la referencia a eliminar.
+     * @param id L'ID de la referència a eliminar.
+     * @throws IllegalArgumentException Si l'ID no és positiu.
      */
     public void eliminarReferencia(int id) {
         if (id <= 0) {
@@ -71,10 +88,11 @@ public class ReferenciaLogica {
     }
 
     /**
-     * Obtiene una referencia por su ID.
+     * Obtén una referència pel seu ID.
      *
-     * @param id El ID de la referencia a obtener.
-     * @return La referencia correspondiente o null si no se encuentra.
+     * @param id L'ID de la referència a obtenir.
+     * @return La referència corresponent o null si no es troba.
+     * @throws IllegalArgumentException Si l'ID no és positiu.
      */
     public Referencia obtenirReferencia(int id) {
         if (id <= 0) {
@@ -84,12 +102,11 @@ public class ReferenciaLogica {
     }
 
     /**
-     * Lista todas las referencia. Por defecto mostraremos todas las referencias
-     * del almacen.
+     * Llista totes les referències. Per defecte mostrarem totes les referències
+     * de l'almacen.
      *
-     * @param idFamilia El ID de la familia de la que mostraremos las
-     * referencias
-     * @return Una lista de todas las referencia.
+     * @param idFamilia L'ID de la família de la qual mostrarem les referències.
+     * @return Una llista de totes les referències.
      */
     public List<Referencia> llistarReferencias(int idFamilia) {
         return referenciaDAO.LlistarTot(idFamilia);
