@@ -5,8 +5,9 @@
 package exceptions;
 
 /**
- *
+ * Classe d'excepció per cridar-lo quan hi ha un format invàlid
  * @author reyes
+ * @version 0.1
  */
 public class FormatInvalidException extends Exception{
 

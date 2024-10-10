@@ -7,8 +7,9 @@ package dades;
 import java.util.List;
 
 /**
- *
+ * Interficie amb diferents mètodes per poder implementar en cada clase DAO
  * @author reyes
+ * @version 0.2
  */
 public interface DAOInterface<T> {
     //Métodes per accedir a la base de dades

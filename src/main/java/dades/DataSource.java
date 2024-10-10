@@ -10,8 +10,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- *
+ * Classe singleton per pder fer la connexió a la base de dades fent un pool de connexions, en aquest cas tan sols por haver-hi
+ * una única connexió
  * @author reyes
+ * @version 0.1
  */
 public class DataSource {
     //té dues referències privades i estàtiques perquè només hi puguem accedir des de dins d'aquesta classe.

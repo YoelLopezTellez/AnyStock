@@ -5,8 +5,9 @@
 package exceptions;
 
 /**
- *
+ * Classe d'excepció per cridar-lo quan hi ha una data invàlida
  * @author reyes
+ * @version 0.1
  */
 public class DataInvalidaException extends Exception{
 
