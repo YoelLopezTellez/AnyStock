@@ -36,7 +36,6 @@ public class Proveidor {
     /**
      * Constructor de la clase Proveidor.
      *
-     * 
      * @param CIF Código de identificación fiscal del proveedor.
      * @param dataAlta Fecha de alta del proveedor.
      * @param actiu Estado activo del proveedor.
@@ -59,7 +58,19 @@ public class Proveidor {
         this.especialitat = especialitat;
         this.id = id;
     }
-
+    
+    /**
+     * Constructor de la clase Proveidor.
+     *
+     * @param CIF Código de identificación fiscal del proveedor.
+     * @param dataAlta Fecha de alta del proveedor.
+     * @param actiu Estado activo del proveedor.
+     * @param motiuInactivitat Motivo de inactividad (si no está activo).
+     * @param nom Nombre del proveedor.
+     * @param valoracio Valoración del proveedor.
+     * @param minimUnitats Número mínimo de unidades.
+     * @param especialitat Especialidad del proveedor.
+     */
     public Proveidor(String CIF, LocalDate dataAlta, boolean actiu, String motiuInactivitat, String nom, float valoracio, int minimUnitats, String especialitat) {
         this.CIF = CIF;
         this.dataAlta = dataAlta;

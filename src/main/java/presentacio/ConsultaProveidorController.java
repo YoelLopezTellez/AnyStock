@@ -1,6 +1,10 @@
 package presentacio;
 
 import aplicacio.model.Proveidor;
+import exceptions.BuitException;
+import exceptions.CifRepetitException;
+import exceptions.DataInvalidaException;
+import exceptions.FormatInvalidException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -99,7 +103,9 @@ public class ConsultaProveidorController implements Initializable {
 
     @FXML
     private Button btnSortir;
-    private ObservableList<Proveidor> Llistaproveidors = FXCollections.observableArrayList();;
+    private ObservableList<Proveidor> Llistaproveidors = FXCollections.observableArrayList();
+    
+    private Error error;
     /**
      * Initializes the controller class.
      */
@@ -133,28 +139,24 @@ public class ConsultaProveidorController implements Initializable {
 
     @FXML
     private void onBtnNova_Clicked() {
-        String CIF = tfCif.getText();
-        String Nom = tfNom.getText();
-        LocalDate DataAlta = dpDataAlta.getValue();
-        boolean Actiu = cbActiu.isSelected();
-        String MotiuIncativitat = tfMotiuInactivitat.getText();
-        float Valoracio = Float.parseFloat(tfValoracio.getText());
-        String Especialitat = tfEspecialitat.getText();
-        int MinimUnitats = Integer.parseInt(tfMinimUnitats.getText());
-        
+
         Proveidor p = new Proveidor();
-        p.setCIF(CIF);
-        p.setNom(Nom);
-        p.setDataAlta(DataAlta);
-        p.setActiu(Actiu);
-        p.setMotiuInactivitat(MotiuIncativitat);
-        p.setValoracio(Valoracio);
-        p.setEspecialitat(Especialitat);
-        p.setMinimUnitats(MinimUnitats);
+        p.setCIF("");
+        p.setNom("");
+        p.setDataAlta(LocalDate.now());
+        p.setActiu(false);
+        p.setMotiuInactivitat("");
+        p.setValoracio(0.0f);
+        p.setEspecialitat("");
+        p.setMinimUnitats(0);
         
-        
-        provLogic.afegirProveidor(p);
-        
+        try{
+            provLogic.afegirProveidor(p);
+        }catch(CifRepetitException e){
+                error.mostrarError("Error repetit", e.getMessage());
+            }catch(BuitException e){
+                error.mostrarError("Error buit", e.getMessage());
+            }
         Llistaproveidors.add(p);
         listarProveidors();
         limpiarCampos();
@@ -166,11 +168,12 @@ public class ConsultaProveidorController implements Initializable {
         if (provSeleccionat != null) {
             try {
             provLogic.EliminarProveidor(provSeleccionat.getId());
+            
+            }catch(Exception e) {
+                error.mostrarError("Error al eliminar el proveidor:", e.getMessage());
+            }
             Llistaproveidors.remove(provSeleccionat);
             limpiarCampos();
-            }catch(Exception e) {
-                System.out.println("Error al eliminar el proveidor: " + e.getMessage());
-            }
         } else {
             System.out.println("Por favor, selecciona un proveidor para eliminar.");
         }
@@ -190,8 +193,8 @@ public class ConsultaProveidorController implements Initializable {
             provSeleccionat.setEspecialitat(tfEspecialitat.getText());
             provSeleccionat.setMinimUnitats(Integer.parseInt(tfMinimUnitats.getText()));
             provLogic.ModificarProveidor(provSeleccionat);
-            } catch (Exception ex) {
-                
+            } catch (Exception ex){
+                error.mostrarError("Error al modificar", ex.getMessage());
             }
             listarProveidors();
             limpiarCampos();

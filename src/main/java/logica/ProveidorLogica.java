@@ -43,15 +43,17 @@ public class ProveidorLogica {
     }
     
     /**
-     * Afegeizx un proveidor validant i trucant als metodes corresponents.
+     * Afegeix un proveidor validant i trucant als metodes corresponents.
      * 
      * @param proveidor 
      */
-    public void afegirProveidor(Proveidor proveidor){
+    public void afegirProveidor(Proveidor proveidor) throws CifRepetitException,BuitException {
         if(proveidor == null){
             throw new IllegalArgumentException("El proveidor no pot ser nul.");
         }
-        validarProveidor(proveidor);
+        if(proveidorDAO.existeixCIF(proveidor.getCIF())){
+            throw new CifRepetitException("CIF ja existeix " + proveidor.getCIF());
+        }
         proveidorDAO.afegir(proveidor);
         System.out.println("Proveïdor agregat correctament.");
         
@@ -61,17 +63,15 @@ public class ProveidorLogica {
      * 
      * @param proveidor 
      */
-    public void ModificarProveidor(Proveidor proveidor) throws Exception{
+    public void ModificarProveidor(Proveidor proveidor) throws Exception,BuitException {
         if(proveidor == null){
             throw new IllegalArgumentException("El proveidor no pot ser nul.");
         }
         validarProveidor(proveidor);
-        try{
+        
         proveidorDAO.modificar(proveidor);
         System.out.println("Proveïdor Modificat correctament.");
-        }catch(Exception e){
-            throw e;
-        }
+        
         
 
         
@@ -83,29 +83,28 @@ public class ProveidorLogica {
      */
     public void EliminarProveidor(int id){
         if(id <0){
-            throw new IllegalArgumentException("El CIF del proveidor no pot ser nul.");
+            throw new IllegalArgumentException("El Id del proveidor no pot ser nul.");
         }
-        try{
-        proveidorDAO.delete(id); //Aixo aconsegeix el cif del proveidor donat, i busca el id a la bbdd per pasar-li la id al metode eliminar.
-        }catch(Exception e){
-               System.out.println("Proveïdor NO Eliminat correctament.");
-        }
-     
-        
+       
+        proveidorDAO.delete(id); //Aixo passa id al metode eliminar.
     }
     /**
      * Obte el proveidor per el seu CIF.
      * 
      * @param CIF El cif del proveidor a obtenir.
+     * @return Proveidor
      */
-    public void ObtenirProveidor(String CIF){
-        if(CIF == null){
-            throw new IllegalArgumentException("El CIF del proveidor no pot ser nul.");
+    public Proveidor ObtenirProveidor(String CIF){
+        Proveidor p = proveidorDAO.obtenirProvPerCIF(CIF); //Aixo obte el proveidor per el seu cif.
+        
+        
+        try{
+            validarProveidor(p);
+        }catch(BuitException e){
+            BuitException("Proveidor no obtingut correctament");
         }
-        
-        proveidorDAO.obtenirProvPerCIF(CIF); //Aixo obte el proveidor per el seu cif.
-        System.out.println("Proveïdor Modificat correctament.");
-        
+        System.out.println("Proveïdor Obtingut correctament.");
+        return p;
     }
     
     /**
@@ -122,36 +121,14 @@ public class ProveidorLogica {
      * 
      * @param proveidor 
      */
-     private void validarProveidor(Proveidor proveidor) {
-        if (proveidor.getNom() == null || proveidor.getNom().trim().isEmpty()) {
-            throw new IllegalArgumentException("El nom del proveïdor no pot estar buit.");
-        }
-        if (proveidor.getCIF()== null || proveidor.getCIF().trim().isEmpty()) {
-            throw new IllegalArgumentException("El CIF del proveïdor no pot estar buit.");
-        } 
-        if (!(ValidadorCIF(proveidor.getCIF()))) {
-            throw new IllegalArgumentException("El CIF del proveïdor es incorrecte.");
+     private void validarProveidor(Proveidor proveidor) throws BuitException {
+        if(proveidor.getCIF() == null || proveidor.getCIF().trim().isEmpty() || proveidor.getNom() == null || proveidor.getNom().trim().isEmpty()){
+            throw new BuitException("CIF i nom no poden ser camps buit.");
         }
         if (proveidor.getDataAlta() == null) {
             throw new IllegalArgumentException("La data d'alta no pot ser nula.");
         }
     }
-     
-     /**
-      * Aquest metode verifica si un CIF es correcte
-      * 
-      * @param CIF El cif del proveidor
-      * @return Un boolean true si es correcte false si no ho es.
-      */
-     private boolean ValidadorCIF(String CIF){
-         
-        // Expresio regex per a validar el CIF
-        String regexCIF = "^[A-HJ-NP-SUVW][0-9]{7}[0-9A-J]$";
-        Pattern pattern = Pattern.compile(regexCIF);
-        pattern.matcher(CIF).matches();
-    
-         return pattern.matcher(CIF).matches();
-     }
      
      public void ExportarCSV(File fitxer){
         //Llista de proveidors a exportar en array de strings per a csv
@@ -308,4 +285,8 @@ public class ProveidorLogica {
              throw new FormatInvalidException("Valor enter invàlid: " + valor);
          }
      }
+
+    private void BuitException(String proveidor_No_sa_obtingut_correctament) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
