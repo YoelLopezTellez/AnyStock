@@ -112,7 +112,8 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
             try (ResultSet rsProveidor = pstmVerificarProveidor.executeQuery()) {
                 if (!rsProveidor.next()) {
                     System.out.println("Error: El proveidor con ID " + id + " no existe.");
-                    return;
+                    throw new IllegalArgumentException("Error: El proveidor con ID " + id + " no existe.");
+                    
                 }
             }
             //Verificar si hi ha referencies asociades
@@ -120,7 +121,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
             try (ResultSet rsReferencias = pstmVerificarReferencia.executeQuery()) {
                  if (rsReferencias.next() && rsReferencias.getInt(1) > 0) {
                     System.out.println("Error: No es pot eliminar el proveidor perque te referencies asociades a productes.");
-                    return;
+                    throw new IllegalArgumentException("Error: No es pot eliminar el proveidor perque te referencies asociades a productes.");
                 }
             }
             // Verificar si hay familias asociadas y poner null en proveidor_id si las hay antes de eliminarla
@@ -131,7 +132,7 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
                     pstmquitarProveidorFamilia.setInt(1, rsFamilias.getInt(1));
                     pstmquitarProveidorFamilia.executeUpdate();
                     System.out.println("Eliminado proveidor con referencias asociadas a familias.");
-                    
+                    throw new IllegalArgumentException("Eliminado proveidor con referencias asociadas a familias.");
                 }
             }
             // Eliminar la familia
