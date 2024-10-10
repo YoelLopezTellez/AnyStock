@@ -185,7 +185,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="57.0" prefWidth="680.0" style="-fx-background-color: skyblue;" HBox.hgrow="ALWAYS">
                <children>
-                  <Button fx:id="btnSortir" mnemonicParsing="false" onAction="#onbtnSortir_Clicked" text="&lt;&lt;&lt; Sortir" />
+                  <Button fx:id="btnFamilia" mnemonicParsing="false" onAction="#onbtnFamilia_Clicked" text="&lt;&lt; Familia" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
                   <Button fx:id="btnNova" mnemonicParsing="false" onAction="#onbtnNova_Clicked" text="Nova" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
@@ -193,7 +193,7 @@
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
                   <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#onbtnModificar_Clicked" text="Modificar" />
                   <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="70.0" visible="false" />
-                  <Button fx:id="btnFamilia" mnemonicParsing="false" onAction="#onbtnFamilia_Clicked" text="&lt;&lt; Familia" />
+                  <Button fx:id="btnSortir" mnemonicParsing="false" onAction="#onbtnSortir_Clicked" text="&lt;&lt;&lt; Sortir" />
                </children>
             </HBox>
          </children>

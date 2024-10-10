@@ -16,17 +16,17 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 /**
- * Implementación de la interfaz DAO para gestionar las operaciones CRUD de la
- * entidad Referencia en la base de datos.
+ * Implementació de la interfície DAO per a gestionar les operacions CRUD de la
+ * entitat Referència en la base de dades.
  *
  * @author Mario
  */
 public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
 
     /**
-     * Inserta una nueva referencia en la base de datos.
+     * Inserida una nova referència en la base de dades.
      *
-     * @param entitat La entidad Referencia a agregar.
+     * @param entitat L'entitat Referència a agregar.
      */
     @Override
     public void afegir(Referencia entitat) {
@@ -42,9 +42,9 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
     }
 
     /**
-     * Modifica una referencia existente en la base de datos.
+     * Modifica una referència existent en la base de dades.
      *
-     * @param entitat La entidad referencia con los datos actualizados.
+     * @param entitat L'entitat referencia amb les dades actualitzades.
      */
     @Override
     public void modificar(Referencia entitat) throws Exception {
@@ -62,7 +62,7 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
             stmt.setInt(8, entitat.getProveidor());
             stmt.setInt(9, entitat.getFamiliaID());
 
-            // Establecer el id al final, ya que es el parámetro de la cláusula WHERE
+            // Establir el id al final, ja que és el paràmetre de la clàusula WHERE
             stmt.setInt(10, entitat.getId());
 
             stmt.executeUpdate();
@@ -72,9 +72,9 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
     }
 
     /**
-     * Elimina una referencia de la base de datos dado su ID.
+     * Elimina una referència de la base de dades donat el seu ID.
      *
-     * @param id El ID de la referencia a eliminar.
+     * @param id El id de la referència a eliminar.
      */
     @Override
     public void delete(int id) {
@@ -88,24 +88,23 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
     }
 
     /**
-     * Lista todas las referencias de la familia seleccionada previamente.
+     * Llista totes les referències de la família seleccionada prèviament.
      *
-     * @return Una lista de objetos Familia.
+     * @return Una llista d'objectes Família.
      */
     public List<Referencia> LlistarTot(int idFamilia) {
         List<Referencia> referencias = new ArrayList<>();
         String sql = "SELECT * FROM referencia";
-        if(idFamilia != 0){
+        if (idFamilia != 0) {
             sql = "SELECT * FROM referencia where FAMILIA_ID = " + idFamilia;
         }
-        
+
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 UOM uom;
-                if(rs.getString("UoM") != null){
-                uom = UOM.valueOf(rs.getString("UoM").toUpperCase());
-                }
-                else{
+                if (rs.getString("UoM") != null) {
+                    uom = UOM.valueOf(rs.getString("UoM").toUpperCase());
+                } else {
                     uom = UOM.ALTRES;
                 }
                 Date dataAlarmaSql = rs.getDate("ultimaDataAlarma");
@@ -119,8 +118,8 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
                         rs.getInt("quantitat"),
                         rs.getString("nom"),
                         uom,
-                        rs.getDate("dataAlta").toLocalDate(), // Supongo que dataAlta no es nulo
-                        dataAlarma, // Usamos la variable que contiene null si la fecha es nula
+                        rs.getDate("dataAlta").toLocalDate(),
+                        dataAlarma, // Usem la variable que conté null si la data és nul·la
                         rs.getInt("PROVEIDOR_ID"),
                         rs.getInt("FAMILIA_ID")
                 );
@@ -133,10 +132,10 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
     }
 
     /**
-     * Obtiene una referencia de la base de datos dado su ID.
+     * Obté una referència de la base de dades donat el seu ID.
      *
-     * @param id El ID de la referencia a obtener.
-     * @return El objeto Referencia si se encuentra, de lo contrario null.
+     * @param id El ID de la referència a obtenir.
+     * @return L'objecte Referència si es troba, en cas contrari null.
      */
     @Override
     public Referencia obtenir(int id) {

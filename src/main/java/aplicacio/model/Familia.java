@@ -7,9 +7,8 @@ package aplicacio.model;
 import java.time.LocalDate;
 
 /**
- * Clase que representa una familia de productos. Contiene información básica
- * como nombre, descripción, fecha de alta, proveedor por defecto, observaciones
- * e ID.
+ * Classe que representa una família de productes. Conté informació bàsica com
+ * nom, descripció, data d'alta, proveïdor per defecte, observacions i ID.
  *
  * @author Yoel
  */
