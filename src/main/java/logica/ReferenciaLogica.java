@@ -48,7 +48,6 @@ public class ReferenciaLogica {
             throw new IllegalArgumentException("El ID de la referencia debe ser positivo.");
 
         } else {
-            validarReferencia(referencia);
             try{
             referenciaDAO.modificar(referencia);
             System.out.println("Referencia modificada correctamente.");
@@ -94,14 +93,5 @@ public class ReferenciaLogica {
      */
     public List<Referencia> llistarReferencias(int idFamilia) {
         return referenciaDAO.LlistarTot(idFamilia);
-    }
-
-    /**
-     * Valida los campos de la referencia para evitar errores comunes.
-     *
-     * @param referencia La referencia a validar.
-     */
-    private void validarReferencia(Referencia referencia) {
-        
     }
 }
