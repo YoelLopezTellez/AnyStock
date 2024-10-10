@@ -145,7 +145,7 @@ public class ConsultaFamiliaController {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     familiaSeleccionada.setDataAlta(LocalDate.parse(tf_DataAlta.getText(), formatter));
                 } catch (Exception e) {
-                    System.out.println("Format de data incorrecte: " + e.getMessage());
+                    Error.mostrarError("Error de format", "Format de data incorrecte: " + e.getMessage()); // Añadir título y mensaje
                     return; // No continuar si la data és invàlida
                 }
             }
@@ -155,7 +155,7 @@ public class ConsultaFamiliaController {
                 int idProveidor = Integer.parseInt(tf_Proveidor.getText());
                 familiaSeleccionada.setProveidorPerDefecte(idProveidor);
             } catch (NumberFormatException e) {
-                System.out.println("ID del proveïdor no vàlid. Assegura't que sigui un número.");
+                Error.mostrarError("Error d'ID", "ID del proveïdor no vàlid. Assegura't que sigui un número."); // Añadir título y mensaje
                 return; // Sortir si l'ID del proveïdor és invàlid
             }
 
@@ -165,11 +165,11 @@ public class ConsultaFamiliaController {
                 tb_Familia.refresh(); // Refresca la taula
                 limpiarCampos(); // Neteja els camps
             } catch (Exception e) {
-                System.out.println("Error al modificar la família: " + e.getMessage());
+                Error.mostrarError("Error en modificació", "Error al modificar la família: " + e.getMessage()); // Añadir título y mensaje
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Per favor, selecciona una família per modificar.");
+            Error.mostrarError("Error de selecció", "Si us plau, selecciona una família per modificar."); // Añadir título y mensaje
         }
     }
 

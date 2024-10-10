@@ -12,14 +12,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.ConsultaFamiliaController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.ConsultaFamiliaController">
     <children>
         <HBox alignment="CENTER" prefHeight="67.0" prefWidth="680.0" style="-fx-background-color: skyblue; -fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
             <children>
-                <Label prefHeight="54.0" prefWidth="74.0" text="FAMILIA" HBox.hgrow="ALWAYS">
+                <Label prefHeight="27.0" prefWidth="81.0" text="FAMILIES" HBox.hgrow="ALWAYS">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
                 </Label>
             </children>
             <padding>
@@ -150,33 +153,30 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="57.0" prefWidth="680.0" style="-fx-background-color: skyblue; -fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS">
                     <children>
-                        <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="75.0" visible="false" />
                         <Button fx:id="Btn_Sortir" mnemonicParsing="false" onAction="#onBtn_Sortir_Clicked" prefHeight="26.0" prefWidth="85.0" text="&lt;&lt;&lt; Sortir">
                             <HBox.margin>
-                                <Insets />
+                                <Insets right="30.0" />
                             </HBox.margin>
                         </Button>
-                        <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="70.0" visible="false" />
                         <Button fx:id="Btn_Nova" mnemonicParsing="false" onAction="#onBtn_Nova_Clicked" prefHeight="26.0" prefWidth="56.0" text="Nova">
                             <HBox.margin>
-                                <Insets />
+                                <Insets right="15.0" />
                             </HBox.margin>
                         </Button>
-                        <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="70.0" visible="false" />
-                        <Button fx:id="Btn_Eliminar" mnemonicParsing="false" onAction="#onBtn_Eliminar_Clicked" prefHeight="26.0" prefWidth="70.0" text="Eliminar" textAlignment="CENTER">
+                        <Button fx:id="Btn_Eliminar" mnemonicParsing="false" onAction="#onBtn_Eliminar_Clicked" prefHeight="26.0" prefWidth="58.0" text="Eliminar" textAlignment="CENTER">
+                            <HBox.margin>
+                                <Insets left="35.0" right="25.0" />
+                            </HBox.margin>
+                        </Button>
+                        <Button fx:id="Btn_Modificar" mnemonicParsing="false" onAction="#onBtn_Modificar_Clicked" prefHeight="26.0" prefWidth="66.0" text="Modificar">
+                     <HBox.margin>
+                        <Insets left="20.0" right="30.0" />
+                     </HBox.margin></Button>
+                        <Button fx:id="Btn_Productes" mnemonicParsing="false" onAction="#onBtn_Productes_Clicked" prefHeight="26.0" prefWidth="97.0" text="Productes &gt;&gt;&gt;">
                             <HBox.margin>
                                 <Insets />
                             </HBox.margin>
                         </Button>
-                        <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="60.0" visible="false" />
-                        <Button fx:id="Btn_Modificar" mnemonicParsing="false" onAction="#onBtn_Modificar_Clicked" prefHeight="26.0" prefWidth="78.0" text="Modificar" />
-                        <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="60.0" visible="false" />
-                        <Button fx:id="Btn_Productes" mnemonicParsing="false" onAction="#onBtn_Productes_Clicked" prefHeight="26.0" prefWidth="113.0" text="Productes &gt;&gt;&gt;">
-                            <HBox.margin>
-                                <Insets />
-                            </HBox.margin>
-                        </Button>
-                        <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="50.0" visible="false" />
                     </children>
                 </HBox>
             </children>

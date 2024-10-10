@@ -21,6 +21,7 @@ public class FamiliaLogica {
     public FamiliaLogica() {
         this.familiaDAO = new FamiliaDAOImpl();
     }
+    
 
     /**
      * Afegeix una nova família després de realitzar les validacions
