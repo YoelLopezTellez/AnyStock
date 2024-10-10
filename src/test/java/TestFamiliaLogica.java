@@ -11,12 +11,11 @@ import java.util.List;
 public class TestFamiliaLogica {
 
     private FamiliaLogica familiaLogica;
-    private FamiliaDAOImpl familiaDAO;
 
     @BeforeEach
     public void setUp() {
         familiaLogica = new FamiliaLogica();
-        familiaDAO = new FamiliaDAOImpl();
+        new FamiliaDAOImpl();
         // Aquí puedes inicializar tu mock o datos de prueba
     }
 
