@@ -14,6 +14,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,19 +78,20 @@ public class ConsultaReferenciaController {
     }
 
     private ObservableList<Referencia> referenciasObservableList = FXCollections.observableArrayList();
-       
+
     private Usuari usuari;
+
     /**
      * Initializes the controller class.
      */
     @FXML
     public void initialize() {
-                usuari = Sessio.getInstancia().getUsuari();
-        
-        if(usuari.getTipusRol() == TIPUSROL.VENDEDOR){
+        usuari = Sessio.getInstancia().getUsuari();
+
+        if (usuari.getTipusRol() == TIPUSROL.VENDEDOR) {
             btnModificar.setVisible(false);
             btnEliminar.setVisible(false);
-            btnNova.setVisible(false);        
+            btnNova.setVisible(false);
         }
         // Asociar las columnas de la tabla con los atributos de los items usando métodos tradicionales
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -107,7 +109,6 @@ public class ConsultaReferenciaController {
 
     @FXML
     private void onbtnFiltro_Clicked() {
-        System.out.println("Hola");
         setIdFamilia(Integer.parseInt(tfFiltro.getText()));
         limpiarCampos();
         llistarReferencias(idFamilia);
@@ -137,6 +138,7 @@ public class ConsultaReferenciaController {
             referenciasObservableList.remove(referenciaSeleccionada);
             limpiarCampos();
         } else {
+            Error.mostrarError("Referencia no seleccionada", "Referencia no seleccionada. Selecciona una referencia para poder eliminarla.");
             System.out.println("Por favor, selecciona una referencia para eliminar.");
         }
     }
@@ -167,16 +169,19 @@ public class ConsultaReferenciaController {
                 llistarReferencias(idFamilia); // Actualiza la lista después de modificar
                 tbReferencia.refresh(); // Refresca la tabla
                 limpiarCampos(); // Limpia los campos
-            } catch (Exception e) {
-                // Crear una alerta de error 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Datos Incorrectos");
-                alert.setHeaderText(null);
-                alert.setContentText("Los datos introducidos son incorrectos, referencia no modificada.");
-                alert.showAndWait(); // Mostrar el diálogo y esperar que el usuario lo cierre
-
+            } catch (NumberFormatException e) {
+                Error.mostrarError("Error en el formato de número", "Por favor, ingresa un número válido en los campos de Proveedor, Cantidad, Precio o Familia.");
+            } catch (DateTimeParseException e) {
+                Error.mostrarError("Error en el formato de la fecha", "La fecha debe tener el formato dd/MM/yyyy. Por favor, revisa el campo de la fecha.");
+            } catch (IllegalArgumentException e) {
+                Error.mostrarError("Error en el campo UoM", "El valor ingresado en el campo UoM no es válido. Asegúrate de que sea una unidad de medida válida.");
+            } catch (SQLException e) {
+                Error.mostrarError("Error en la base de datos", "Ha ocurrido un error inesperado. Por favor, asegurate de que los datos son correctos y que el proveedor es existente.");
+            }catch (Exception e) {
+                Error.mostrarError("Error inesperado", "Ha ocurrido un error inesperado. Por favor, revisa que los datos sean validos.");
             }
         } else {
+            Error.mostrarError("Referencia no seleccionada", "Referencia no seleccionada. Selecciona una referencia para poder modificarla.");
             System.out.println("Por favor, selecciona una referencia para modificar.");
         }
     }

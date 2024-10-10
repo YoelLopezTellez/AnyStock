@@ -99,12 +99,48 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
      */
     @Override
     public void delete(int id) {
+        String quitarProveidorFamiliaSql ="UPDATE familia SET PROVEIDOR_id = null WHERE id = ?";
         String sql = "DELETE FROM proveidor WHERE id= ?";
-
-        try (Connection conn = DataSource.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql);) {
-            pstm.setInt(1, id); //posa el id donat a la posicio 1.
+        String verificarProveidorSql ="SELECT * FROM proveidor WHERE id = ?";
+        String verificarFamiliasSql = "SELECT * FROM familia WHERE PROVEIDOR_id = ?";
+        String verificarReferenciaSql ="SELECT COUNT(*) FROM referencia WHERE PROVEIDOR_id = ?";
+        
+        try (Connection conn = DataSource.getConnection();PreparedStatement pstmquitarProveidorFamilia = conn.prepareStatement(quitarProveidorFamiliaSql);PreparedStatement pstmVerificarReferencia = conn.prepareStatement(verificarReferenciaSql); PreparedStatement pstm = conn.prepareStatement(sql);PreparedStatement pstmVerificarFamilia = conn.prepareStatement(verificarFamiliasSql);PreparedStatement pstmVerificarProveidor = conn.prepareStatement(verificarProveidorSql);) {
+            
+            // Verificar si el proveidor existeix
+            pstmVerificarProveidor.setInt(1, id);
+            try (ResultSet rsProveidor = pstmVerificarProveidor.executeQuery()) {
+                if (!rsProveidor.next()) {
+                    System.out.println("Error: El proveidor con ID " + id + " no existe.");
+                    return;
+                }
+            }
+            //Verificar si hi ha referencies asociades
+            pstmVerificarReferencia.setInt(1, id);
+            try (ResultSet rsReferencias = pstmVerificarReferencia.executeQuery()) {
+                 if (rsReferencias.next() && rsReferencias.getInt(1) > 0) {
+                    System.out.println("Error: No es pot eliminar el proveidor perque te referencies asociades a productes.");
+                    return;
+                }
+            }
+            // Verificar si hay familias asociadas y poner null en proveidor_id si las hay antes de eliminarla
+            pstmVerificarFamilia.setInt(1, id);
+            try (ResultSet rsFamilias = pstmVerificarFamilia.executeQuery()) {
+                
+                if (rsFamilias.next()) {
+                    pstmquitarProveidorFamilia.setInt(1, rsFamilias.getInt(1));
+                    pstmquitarProveidorFamilia.executeUpdate();
+                    System.out.println("Eliminado proveidor con referencias asociadas a familias.");
+                    
+                }
+            }
+            // Eliminar la familia
+            pstm.setInt(1, id);
             pstm.executeUpdate();
+            System.out.println("Proveidor eliminat correctament.");
+
         } catch (SQLException e) {
+            System.out.println("message:"+e.getMessage());
         }
     }
 

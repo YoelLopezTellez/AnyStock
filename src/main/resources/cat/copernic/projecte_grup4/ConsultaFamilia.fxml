@@ -150,29 +150,33 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="57.0" prefWidth="680.0" style="-fx-background-color: skyblue; -fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS">
                     <children>
-                  <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="75.0" visible="false" />
+                        <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="75.0" visible="false" />
                         <Button fx:id="Btn_Sortir" mnemonicParsing="false" onAction="#onBtn_Sortir_Clicked" prefHeight="26.0" prefWidth="85.0" text="&lt;&lt;&lt; Sortir">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin></Button>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </Button>
                         <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="70.0" visible="false" />
                         <Button fx:id="Btn_Nova" mnemonicParsing="false" onAction="#onBtn_Nova_Clicked" prefHeight="26.0" prefWidth="56.0" text="Nova">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin></Button>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </Button>
                         <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="70.0" visible="false" />
                         <Button fx:id="Btn_Eliminar" mnemonicParsing="false" onAction="#onBtn_Eliminar_Clicked" prefHeight="26.0" prefWidth="70.0" text="Eliminar" textAlignment="CENTER">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin></Button>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </Button>
                         <Separator orientation="VERTICAL" prefHeight="54.0" prefWidth="60.0" visible="false" />
                         <Button fx:id="Btn_Modificar" mnemonicParsing="false" onAction="#onBtn_Modificar_Clicked" prefHeight="26.0" prefWidth="78.0" text="Modificar" />
                         <Separator orientation="VERTICAL" prefHeight="58.0" prefWidth="60.0" visible="false" />
                         <Button fx:id="Btn_Productes" mnemonicParsing="false" onAction="#onBtn_Productes_Clicked" prefHeight="26.0" prefWidth="113.0" text="Productes &gt;&gt;&gt;">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin></Button>
-                  <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="50.0" visible="false" />
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </Button>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="50.0" visible="false" />
                     </children>
                 </HBox>
             </children>
