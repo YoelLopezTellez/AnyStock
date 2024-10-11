@@ -338,8 +338,7 @@ public class ProveidorLogica {
         
         if(cif == null || cif.isEmpty() || nom == null || nom.isEmpty()){
             throw new BuitException("CIF i nom no poden ser camps buits en la linia " + linia);
-        }
-        if(proveidorDAO.existeixCIF(cif)){
+        }if(proveidorDAO.existeixCIF(cif)){
             return false;
         }
         return true;
