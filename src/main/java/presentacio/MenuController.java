@@ -26,7 +26,8 @@ import logica.Sessio;
 
 /**
  * FXML Controller class
- *
+ * Controlador de la pantalla menu principal on hi han 4 botons, segons el rol
+ * de l'usuari mostrará el botó importar o no
  * @author Reyes
  */
 public class MenuController implements Initializable {
@@ -49,26 +50,49 @@ public class MenuController implements Initializable {
     private Usuari usuari;
     private Error error;
     
-    
+    /**
+     * Inicialitza el controlador i la vista, se executa automàticament, carrega
+     * l'usuari que actualment hi ha en la sessio i mostra els botons segons
+     * el seu rol.
+     * @param url
+     * @param rb 
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //carguem l'usuari que tenim guardat en sessio
         usuari = Sessio.getInstancia().getUsuari();
-        
+        //si l'usuari es del rol vendedor, oculta el botó importar
         if(usuari.getTipusRol() == TIPUSROL.VENDEDOR)
             Btn_Imp.setVisible(false);
     }    
     
+    /**
+     * Gestiona el clic al botó que el que fa es canviar de escena a consultar familia
+     * @param event un event d'acció quan l'usuari prem el botó
+     * @throws IOException 
+     */
     @FXML
     private void onBtn_Fam_Action(ActionEvent event) throws IOException{
         CanviPantalla.canviarPantalla(Btn_Fam.getScene(), "/cat/copernic/projecte_grup4/ConsultaFamilia.fxml");
     }
     
+    /**
+     * Gestiona el clic al botó que el que fa es canviar de escena a consultar proveidor
+     * @param event un event d'acció quan l'usuari prem el botó
+     * @throws IOException 
+     */
     @FXML
     private void onBtn_Prov_Action(ActionEvent event) throws IOException{
         CanviPantalla.canviarPantalla(Btn_Fam.getScene(), "/cat/copernic/projecte_grup4/ConsultaProveidor.fxml");
     }
     
+    /**
+     * Gestiona el clic al botó d'importar. S'obre una nova finestra de diàleg
+     * per poder seleccionar un fitxer csv, apart filtra perque tan sols es pugui
+     * veure fitxers csv. També crida a la lógica per poder importar amb el métode
+     * importarCSV i si hi ha algún error, saltarà un pop-up informant de l'error
+     * @param event un event d'acció quan l'usuari prem el botó
+     */
     @FXML
     private void onBtn_Imp_Action (ActionEvent event){
         //creem la classe
@@ -88,6 +112,7 @@ public class MenuController implements Initializable {
         File fitxerSeleccionat = seleccionador.showOpenDialog(escenari);
         
         if(fitxerSeleccionat != null){
+            //creem la la lògica per poder cridar als seus mètodes d'importar
             ProveidorLogica logica = new ProveidorLogica();
             try{
                 logica.importarCSV(fitxerSeleccionat);
@@ -103,7 +128,11 @@ public class MenuController implements Initializable {
         }
     }
     
-    
+    /**
+     * Gestiona el clic al botó d'exportar. S'obre una nova finestra de diàleg
+     * per seleccionar on vols guardar el fitxer i amb quin nom
+     * @param event un event d'acció quan l'usuari prem el botó
+     */
     @FXML
     void onBtn_Exp_Action(ActionEvent event) {
         
@@ -128,6 +157,13 @@ public class MenuController implements Initializable {
             logica.ExportarCSV(fitxerExportar);
         }
     }
+    
+    /**
+     * Gestiona quan l'usuari dona clic al botó tancar sessio, crida al mètode
+     * tancarSessio que possa l'usuari en null i canvia de pantalla a la pantalla login
+     * @param event un event d'acció quan l'usuari prem el botó
+     * @throws IOException si hi ha un error en el canvi de escena
+     */
     @FXML
     private void onBtn_Tancar_Action(ActionEvent event) throws IOException{
         Sessio.getInstancia().tancarSessio();

@@ -15,6 +15,7 @@ import logica.Sessio;
  * si existeix canvia de pantalla al menu
  *
  * @author Reyes
+ * @version 0.4
  */
 
 public class LoginController {
@@ -33,7 +34,9 @@ public class LoginController {
 
     private Login login;
 
-    //al carregar la escena ja executa els usuaris que hi ha al fitxer
+    /**
+     * al carregar la escena ja executa els usuaris que hi ha al fitxer
+     */
     @FXML
     public void initialize() {
         try {
@@ -48,6 +51,13 @@ public class LoginController {
         btn_1.setDefaultButton(true);
     }
     
+    /**
+     * Gestiona el clic al botó 1, realitza la autentificació comprovant amb els
+     * camps introduits en el tf_nom i tf_pass si la autentificació es un éxit, 
+     * canvia de pantalla, sino informa a l'usuari de que algún dels dos camps es incorrecte
+     * @param event un event d'acció quan l'usuari prem el botó
+     * @throws IOException si hi ha un error en el canvi de pantalla
+     */
     @FXML
     private void onBtn1_action(ActionEvent event) throws IOException{
         String nom = tf_nom.getText();

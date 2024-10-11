@@ -5,8 +5,9 @@
 package exceptions;
 
 /**
- *
+ * Classe d'excepció per cridar-lo quan hi ha un cif repetit
  * @author reyes
+ * @version 0.1
  */
 public class CifRepetitException extends Exception {
 

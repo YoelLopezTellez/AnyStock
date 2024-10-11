@@ -2,6 +2,12 @@ package aplicacio.model;
 
 import java.util.Date;
 
+/**
+ * Classe de entitat per poder guardar un usuari, comparar les seves creedencials i el seu tipus de rol
+ * @author reyes
+ * @version 0.2
+ */
+
 public class Usuari {
 
     private String nomUsuari;
@@ -11,7 +17,15 @@ public class Usuari {
     private int anysAntiguitat;
     private TIPUSROL tipusRol;
 
-    // Constructor que recibe todos los atributos
+    /**
+     * constructor per iniciar una nova instància amb tots els camps
+     * @param nomUsuari nom de l'usuari que es crea
+     * @param password contrasenya de l'usuari que es crea
+     * @param dataAlta data de alta quan es crea l'usuari
+     * @param sueldoMensual el sou mensual que cobra aquest usuari
+     * @param anysAntiguitat els anys que porta en l'empresa
+     * @param tipusRol si es de rol responsable o vendedor
+     */
     public Usuari(String nomUsuari, String password, Date dataAlta, double sueldoMensual, int anysAntiguitat, TIPUSROL tipusRol) {
         this.nomUsuari = nomUsuari;
         this.password = password;
@@ -22,13 +36,19 @@ public class Usuari {
     }
 
     // Constructor que solo recibe nomUsuari y password
+    /**
+     * Constructor tan sols amb aquests tres camps per iniciar sessio
+     * @param nomUsuari nom de l'usuari que es crea
+     * @param password contrasenya de l'usuari que es crea
+     * @param tipusRol si es de rol responsable o vendedor
+     */
     public Usuari(String nomUsuari, String password, TIPUSROL tipusRol) {
         this.nomUsuari = nomUsuari;
         this.password = password;
         this.tipusRol = tipusRol;
     }
 
-    // Getters y Setters
+    // Getters i Setters
     public String getNomUsuari() {
         return nomUsuari;
     }

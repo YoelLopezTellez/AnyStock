@@ -18,17 +18,26 @@ import java.util.Map;
  * de resources
  *
  * @author reyes
- * @version 0.2
+ * @version 0.3
  */
 public class Login {
 
     private Map<String, Usuari> usuaris = new HashMap<>();
 
+    /**
+     * Per construir aquesta classe necessia que li passin la ruta i aquesta cridarà al mètode cargarUsuarios
+     * @param ruta la ruta del fitxer on es troba per cargar usuaris
+     * @throws IOException si hi ha un error al llegir o cargar el fitxer
+     */
     public Login(InputStream ruta) throws IOException {
         cargarUsuarios(ruta);
     }
 
-    //utilitzem inputStream perque l'arxiu estarà empaquetat en el JAR i necessitem llegir en binari, li pasarem la ruta empaquetada
+    /**
+     * utilitzem inputStream perque l'arxiu estarà empaquetat en el JAR i necessitem llegir en binari, li pasarem la ruta empaquetada
+     * @param ruta la ruta del fitxer on es troba per cargar usuaris
+     * @throws IOException si hi ha un error al llegir o cargar el fitxer
+     */
     private void cargarUsuarios(InputStream ruta) throws IOException {
         BufferedReader fitxer = new BufferedReader(new InputStreamReader(ruta));
         String linea;
@@ -50,17 +59,22 @@ public class Login {
                 } else {
                     continue;
                 }
-
+                //posem l'usuari a la llista usuaris
                 usuaris.put(nom, usuari);
             }
         }
     }
 
-    //retorna l'usuari si la autentificacio es correcte
+    /**
+     * retorna l'usuari si la autentificacio es correcte
+     * @param nom el nom que tindrà l'usuari i el sistema ha de comprovar
+     * @param pass la contrasenya que tindrà l'usuari i el sistema ha de comprovar
+     * @return retorna l'usuari de la llista usuaris o un null si no coincideix
+     */
     public Usuari autentificacio(String nom, String pass) {
 
         Usuari usuari = usuaris.get(nom);
-
+        //si l'usuari no es null i coincideix amb la contrasenya que li han passat retorna l'usuari de la llista usuaris
         if (usuari != null && usuari.getPassword().equals(pass)) {
             return usuari;
         }
