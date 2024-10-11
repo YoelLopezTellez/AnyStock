@@ -15,13 +15,5 @@ AnyStock es un prototipo de aplicación diseñada para gestionar un almacén de 
   Archivo con el script SQL necesario para crear la base de datos que utiliza la aplicación.
 
 ### Opcional
-- [Repositori de Codi a GitLab](enlace_al_repositori_GitLab)  
-  Enlace al repositorio donde se aloja el código fuente del proyecto (si se desea compartir).
-
-## Instrucciones para ejecutar el proyecto
-Si es necesario, aquí puedes agregar una sección que explique cómo instalar o ejecutar el proyecto en el entorno local.
-
-1. Descargar el ejecutable o clonar el repositorio.
-2. Ejecutar el script de la base de datos.
-3. Iniciar la aplicación siguiendo los pasos indicados.
-
+- [Repositori de Codi a GitLab](https://gitlab.com/anystockg4/anystock.git)  
+  Enlace al repositorio donde se aloja el código fuente del proyecto (el repositorio es privado).
