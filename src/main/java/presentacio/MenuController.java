@@ -4,21 +4,26 @@
  */
 package presentacio;
 
+import aplicacio.model.Proveidor;
 import aplicacio.model.TIPUSROL;
 import aplicacio.model.Usuari;
 import exceptions.BuitException;
-import exceptions.CifRepetitException;
 import exceptions.DataInvalidaException;
 import exceptions.FormatInvalidException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logica.ProveidorLogica;
@@ -115,10 +120,17 @@ public class MenuController implements Initializable {
             //creem la la lògica per poder cridar als seus mètodes d'importar
             ProveidorLogica logica = new ProveidorLogica();
             try{
-                logica.importarCSV(fitxerSeleccionat);
+                List<Proveidor> proveidors = logica.importarCSV(fitxerSeleccionat, (proveidorCSV,proveidorBD) -> {
+                    boolean actualitzar = preguntarUsuari(proveidorCSV.getCIF());
+                    if (actualitzar) {
+                        try {
+                            logica.ModificarProveidor(proveidorCSV);
+                        } catch (Exception e) {
+                            error.mostrarError("Error importar", e.getMessage());
+                        }
+                    }
+                });
             }catch(FormatInvalidException e){
-                error.mostrarError("Error importar", e.getMessage());
-            }catch(CifRepetitException e){
                 error.mostrarError("Error importar", e.getMessage());
             }catch(DataInvalidaException e){
                 error.mostrarError("Error importar", e.getMessage());
@@ -168,6 +180,27 @@ public class MenuController implements Initializable {
     private void onBtn_Tancar_Action(ActionEvent event) throws IOException{
         Sessio.getInstancia().tancarSessio();
         CanviPantalla.canviarPantalla(Btn_Fam.getScene(), "/cat/copernic/projecte_grup4/login.fxml");
+    }
+    
+    /**
+     * Obre una finestra informant a l'usuari que hi ha un cif repetit hi li dona dos opcions
+     * el botó modificar per modificar la dada o el botó omitir per no fer res i continuar
+     * @param cif el cif repetit per informar a l'usuari
+     * @return true si l'usuari prem el botó Actualitzar
+     */
+    private boolean preguntarUsuari(String cif){
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("CIF Repetit");
+        alerta.setHeaderText("El CIF " + cif + " ja existeix a la base de dades.");
+        alerta.setContentText("Vols actualitzar les dades del proveïdor o ometre aquesta entrada?");
+        
+        ButtonType btnActualizar = new ButtonType("Actualizar");
+        ButtonType btnOmitir = new ButtonType("Omitir", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alerta.getButtonTypes().setAll(btnActualizar, btnOmitir);
+
+        Optional<ButtonType> result = alerta.showAndWait();
+        return result.isPresent() && result.get() == btnActualizar;
     }
     
 }

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 
@@ -130,6 +131,13 @@ public class ProveidorLogica {
         }
     }
      
+     /**
+      * Exporta la lista de proveïdors a un fitxer CSV.
+      * Aquest mètode crea un fitxer CSV amb una capçalera i les dades de cada proveïdor.
+      * Si un proveïdor té el motiu d'inactivitat com a null o buit, s'escriurà com a null al CSV.
+      * Les dades es separen per comes (,) i s'escriuen línia per línia en el fitxer especificat.
+      * @param fitxer 
+      */
      public void ExportarCSV(File fitxer){
         //Llista de proveidors a exportar en array de strings per a csv
         List<String> provExpCsv =new ArrayList<String>();
@@ -163,48 +171,87 @@ public class ProveidorLogica {
         }
      }
      
-     public void importarCSV(File fitxer) throws FormatInvalidException, CifRepetitException, DataInvalidaException, BuitException{
-        try(BufferedReader br = new BufferedReader(new FileReader(fitxer))){
+     /**
+      * Importa proveïdors des d'un fitxer CSV.
+      * 
+      * Aquest mètode llegeix un fitxer CSV amb les dades dels proveïdors i crea una llista de
+      * proveïdors. Si un proveïdor amb el mateix CIF ja existeix a la base de dades, es crida a 
+      * la funció de consum de bi-consumer amb el nou proveidor i el
+      * proveidor existent.
+      * 
+      * @param fitxer El fitxer CSV que conté les dades dels proveïdors a importar.
+      * @param CIFRepetit Una funció que accepta dos proveïdors: el nou proveidor del fitxer
+ *                   i el proveidor existent amb el mateix CIF, per manejar el cas
+ *                   en què es detecta un CIF repetit.
+      * @return un llistat dels proveïdors
+      * @throws FormatInvalidException si el fitxer hi te algún format incorrecte
+      * @throws DataInvalidaException si el fitxer hi te una data incorrecte
+      * @throws BuitException si en el fitxer hi ha un cif buit
+      */
+     public List<Proveidor> importarCSV(File fitxer, BiConsumer<Proveidor,Proveidor> CIFRepetit) throws FormatInvalidException, DataInvalidaException, BuitException {
+        List<Proveidor> proveidors = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fitxer))) {
             String lineaCabecera = br.readLine(); //llegeix la primera linea on ha d'ahver-hi una capçelera
             String[] cabecera = lineaCabecera.split(","); // separem cada nom de la capçelera
             String linea;
-            
+
             int numLinia = 2; //comencem en 2 perque la linea 1 es la capçalera, utilitzem aixó per poder indicar desprès en quina linea ha saltat l'error
-            
-            while((linea = br.readLine()) != null){
+
+            while ((linea = br.readLine()) != null) {
                 String[] dades = linea.split(",");
 
                 Map<String, Object> proveidorData = procesarLineaCSV(cabecera, dades, numLinia);
-                
-                //si hi ha cif i nom el valida i llavors fará un objecte proveidor amb els camps ja siguin null o no, segons el procesarLinea
-                if(validarProveidor(proveidorData,numLinia)){
-                    Proveidor proveidor = new Proveidor(
-                        (String) proveidorData.get("CIF"),
-                        (LocalDate) proveidorData.get("dataAlta"),
-                        (Boolean) proveidorData.get("actiu"),
-                        (String) proveidorData.get("motiuInactivitat"),
-                        (String) proveidorData.get("nom"),
-                        (Float) proveidorData.get("valoracio"),
-                        (Integer) proveidorData.get("minimUnitats"),
-                        (String) proveidorData.get("especialitat"));
-                    
-                    proveidorDAO.afegir(proveidor);
+
+                //fem un try aquí amb els seus respectius catch perque així llegeixi cada linea i no interrompi tota la lectura del fitxer
+                try {
+                    //si hi ha cif i nom el valida i llavors fará un objecte proveidor amb els camps ja siguin null o no, segons el procesarLinea
+                    if (validarProveidor(proveidorData, numLinia)) {
+                        Proveidor proveidor = new Proveidor(
+                                (String) proveidorData.get("CIF"),
+                                (LocalDate) proveidorData.get("dataAlta"),
+                                (Boolean) proveidorData.get("actiu"),
+                                (String) proveidorData.get("motiuInactivitat"),
+                                (String) proveidorData.get("nom"),
+                                (Float) proveidorData.get("valoracio"),
+                                (Integer) proveidorData.get("minimUnitats"),
+                                (String) proveidorData.get("especialitat"));
+                        Proveidor proveidorRepetit = proveidorDAO.obtenirProvPerCIF(proveidor.getCIF());
+                        if(proveidorRepetit != null)
+                            CIFRepetit.accept(proveidor, proveidorRepetit);
+                        else{
+                        proveidors.add(proveidor); //afegeix a la llista per poder-li passar al controlador
+                        proveidorDAO.afegir(proveidor); //afegeix a la BBDD
+                        }
+                    }
+                } catch (BuitException e) {
+                    throw new BuitException(e.getMessage());
                 }
                 numLinia++;
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }catch(FormatInvalidException e){
-            throw new FormatInvalidException(e.getMessage());
-        }catch(CifRepetitException e){
-            throw new CifRepetitException(e.getMessage());
-        }catch(DataInvalidaException e){
+        } catch (DataInvalidaException e) {
             throw new DataInvalidaException(e.getMessage());
-        }catch(BuitException e){
-            throw new BuitException(e.getMessage());
+        } catch (FormatInvalidException e) {
+            throw new FormatInvalidException(e.getMessage());
         }
+        return proveidors;
     }
      
+     /**
+      * Procesa una línia del fitxer CSV per a extreure les dades del proveidor.
+      * 
+      * Aquest mètode pren una línia del fitxer CSV i la divideix en les dades corresponents
+      * a cada capçalera. Les dades es validen i es guarden en un mapa per a ser utilitzades
+      * més tard en la creació de l'objecte
+      * @param cabecera un array de Strings que conté els noms de les capçaleres del fitxer csv
+      * @param dades Un array de Strings que conté les dades corresponents a les capçaleres de la línia actual
+      * @param linia El número de línia actual del fitxer CSV, utilitzat per proporcionar 
+      *         informació d'error en cas que es detectin dades invàlides
+      * @return Un mapa que associa les capçaleres a les dades corresponents del proveidor
+      * @throws FormatInvalidException Si es detecta un error de format en alguna dada.
+      * @throws DataInvalidaException  Si la data proporcionada és invàlida.
+      */
      private Map<String, Object> procesarLineaCSV(String[] cabecera, String[] dades, int linia) throws FormatInvalidException, DataInvalidaException{
          Map<String, Object> proveidorDades = new HashMap();
          
@@ -248,7 +295,17 @@ public class ProveidorLogica {
          return proveidorDades;
      }
      
-     private boolean validarProveidor(Map<String, Object> proveedorData, int linia) throws CifRepetitException,BuitException {
+     /**
+      * Valida les dades del proveïdor abans de ser insertada a la BBDD
+      * 
+      * El metòde comprova que tant el cif com el nom no siguin nulls ni estiguin buits, sino llançarà una excepció
+      * @param proveedorData un mapa que conté les dades a verificar
+      * @param linia El número de línia actual del fitxer CSV, utilitzat per proporcionar 
+      *         informació d'error en cas que es detectin dades invàlides
+      * @return true si les dades son correctes
+      * @throws BuitException Si el camp del nom o CIF están buits
+      */
+     private boolean validarProveidor(Map<String, Object> proveedorData, int linia) throws BuitException {
         // Validar los datos del proveedor antes de insertar
         String cif = (String) proveedorData.get("CIF");
         String nom = (String) proveedorData.get("nom");
@@ -256,12 +313,15 @@ public class ProveidorLogica {
         if(cif == null || cif.isEmpty() || nom == null || nom.isEmpty()){
             throw new BuitException("CIF i nom no poden ser camps buits en la linia " + linia);
         }
-        if(proveidorDAO.existeixCIF(cif)){
-            throw new CifRepetitException("CIF ja existeix " + cif + " en la linia " + linia);
-        }
         return true;
     }
      
+     /**
+      * Valida i converteix un String a float, si la conversió falla llença una excepció
+      * @param valor el String a convertir
+      * @return el nombre float convertit
+      * @throws FormatInvalidException si no es pot convertir a float
+      */
      private Float validarFloat(String valor) throws FormatInvalidException{
          try{
              return Float.parseFloat(valor);
@@ -270,6 +330,12 @@ public class ProveidorLogica {
          }
      }
      
+     /**
+      * Valida i converteix un String a LocalDate, si la conversió falla llença una excepció
+      * @param valor el String a convertir
+      * @return la data convertida
+      * @throws DataInvalidaException si no es pot convertir a LocalDate
+      */
      private LocalDate validarData(String valor) throws DataInvalidaException{
          try{
              return LocalDate.parse(valor);
@@ -278,6 +344,12 @@ public class ProveidorLogica {
          }
      }
      
+     /**
+      * Valida i converteix un String a integer, si la conversió falla llença una excepció
+      * @param valor el String a convertir
+      * @return el nombre integer convertit
+      * @throws FormatInvalidException si no es pot convertir a integer
+      */
      private Integer validarInt(String valor) throws FormatInvalidException{
          try{
              return Integer.parseInt(valor);
