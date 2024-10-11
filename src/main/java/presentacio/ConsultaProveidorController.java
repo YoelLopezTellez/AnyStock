@@ -3,17 +3,12 @@ package presentacio;
 import aplicacio.model.Proveidor;
 import exceptions.BuitException;
 import exceptions.CifRepetitException;
-import exceptions.DataInvalidaException;
-import exceptions.FormatInvalidException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,7 +22,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import logica.ProveidorLogica;
 /**
- * FXML Controller class
+ * Controller que controla la pantalla de Consultar Proveidors, controla el poder modificar, mostrar el proveidors
+ * a la taula, eliminar, afaixir, retornar o sortir al menu principal, aixi com seleccionar proveidors de la taula i
+ * visualitzar les seves dades als camps corresponents amb l'opcio depen el cas de la seva edicio per a posterior modificacio o afeiximent.
  *
  * @author david
  */
@@ -107,7 +104,8 @@ public class ConsultaProveidorController implements Initializable {
     
     private Error error;
     /**
-     * Initializes the controller class.
+     * Inicialitza el controlador, carregant els proveidors a la taula i ajustant la
+     * interfície d'usuari.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -128,6 +126,10 @@ public class ConsultaProveidorController implements Initializable {
         tbView.setItems(Llistaproveidors);
         listarProveidors();
     }
+    
+    /**
+     * Gestiona l'accio de pulsar el boto de sortir al menu principal
+     */
        @FXML
     private void onBtnSortir_Clicked(){
          try {
@@ -136,7 +138,9 @@ public class ConsultaProveidorController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Gestiona l'accio de pulsar el boto de afeixir un nou proveidor buit per a poder rellenar-lo a continuacio
+     */
     @FXML
     private void onBtnNova_Clicked() {
 
@@ -161,7 +165,9 @@ public class ConsultaProveidorController implements Initializable {
         listarProveidors();
         limpiarCampos();
     }
-
+    /**
+     * Gestiona l'accio de pulsar el boto de eliminar un proveidor seleccionat a la taula de proveidors.
+     */
     @FXML
     private void onBtnEliminar_Clicked() {
         Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
@@ -178,7 +184,9 @@ public class ConsultaProveidorController implements Initializable {
             System.out.println("Por favor, selecciona un proveidor para eliminar.");
         }
     }
-
+    /**
+     * Gestiona l'accio de pulsar el boto de modificar un proveidor seleccionat a la taula de provaidors.
+     */
     @FXML
     private void onBtnModificar_Clicked(){
         Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
@@ -202,12 +210,17 @@ public class ConsultaProveidorController implements Initializable {
             System.out.println("Por favor, selecciona un proveidor para modificar.");
         }
     }
-
+    /**
+     * Llista els proveidors afeixintlos a una taula i refrescant o actualitsant aquesta
+     */
     private void listarProveidors() {
         Llistaproveidors.clear();
         Llistaproveidors.addAll(provLogic.llistarProveidors());
     }
-    
+    /**
+     * Gestiona l'accio de clicar en la taula el proveidor deseat per la seva seleccio, 
+     * posara les dades del proveidor als camps corresponents
+     */    
     @FXML
     void ontbView_mouseClicked(MouseEvent event) {
         Proveidor provSeleccionat = tbView.getSelectionModel().getSelectedItem();
@@ -224,7 +237,9 @@ public class ConsultaProveidorController implements Initializable {
         tfMinimUnitats.setText(""+provSeleccionat.getMinimUnitats());
         }
     }
-    
+    /**
+     * Neteja els camps de dades de la pantalla.
+     */  
     private void limpiarCampos() {
         tfId.clear();
         tfNom.clear();

@@ -55,7 +55,11 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
         } catch (SQLException e) {
         }
     }
-    
+    /**
+     * Comprova si existeix un Proveidor amb el mateis CIF  que l'especificat als parametres a la base de dades.
+     * @param cif
+     * @return 
+     */
     public boolean existeixCIF(String cif){
         String sql = "SELECT COUNT(*) FROM proveidor WHERE cif = ?";
         
@@ -111,8 +115,8 @@ public class ProveidorDAOImpl implements DAOInterface<Proveidor>, DAOInterfaceLl
             pstmVerificarProveidor.setInt(1, id);
             try (ResultSet rsProveidor = pstmVerificarProveidor.executeQuery()) {
                 if (!rsProveidor.next()) {
-                    System.out.println("Error: El proveidor con ID " + id + " no existe.");
-                    throw new IllegalArgumentException("Error: El proveidor con ID " + id + " no existe.");
+                    System.out.println("Error: El proveidor con ID " + id + " no existeix.");
+                    throw new IllegalArgumentException("Error: El proveidor con ID " + id + " no existeix.");
                     
                 }
             }

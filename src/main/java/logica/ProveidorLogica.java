@@ -95,7 +95,29 @@ public class ProveidorLogica {
      * @return Proveidor
      */
     public Proveidor ObtenirProveidor(String CIF){
-        Proveidor p = proveidorDAO.obtenirProvPerCIF(CIF); //Aixo obte el proveidor per el seu cif.
+        Proveidor p = new Proveidor();
+       
+        try{
+        p = proveidorDAO.obtenirProvPerCIF(CIF); //Aixo obte el proveidor per el seu cif.
+        }catch(Exception e){
+        }
+        
+        try{
+            validarProveidor(p);
+        }catch(BuitException e){
+            BuitException("Proveidor no obtingut correctament");
+        }
+        System.out.println("Proveïdor Obtingut correctament.");
+        return p;
+    }
+    
+    /**
+     * Obte el proveidor per la seva Id.
+     * @param id
+     * @return 
+     */
+    public Proveidor ObtenirProveidorPerId(int id){
+        Proveidor p = proveidorDAO.obtenir(id); //Aixo obte el proveidor per el seu cif.
         
         
         try{
@@ -122,15 +144,24 @@ public class ProveidorLogica {
      * @param proveidor 
      */
      private void validarProveidor(Proveidor proveidor) throws BuitException {
-        if(proveidor.getCIF() == null || proveidor.getCIF().trim().isEmpty() || proveidor.getNom() == null || proveidor.getNom().trim().isEmpty()){
-            throw new BuitException("CIF i nom no poden ser camps buit.");
-        }
-        if (proveidor.getDataAlta() == null) {
-            throw new IllegalArgumentException("La data d'alta no pot ser nula.");
+        if(proveidor != null){
+            if(proveidor.getCIF() == null || proveidor.getCIF().trim().isEmpty() || proveidor.getNom() == null || proveidor.getNom().trim().isEmpty()){
+                throw new BuitException("CIF i nom no poden ser camps buit.");
+            }
+            if (proveidor.getDataAlta() == null) {
+                throw new IllegalArgumentException("La data d'alta no pot ser nula.");
+            }
+        }else{
+            throw new IllegalArgumentException("proveidor proporcionat es nul");
         }
     }
      
-     public void ExportarCSV(File fitxer){
+    /**
+     * Exporta els Proveidors a la BBDD a un fitxer CSV.
+     * 
+     * @param fitxer 
+     */
+    public void ExportarCSV(File fitxer){
         //Llista de proveidors a exportar en array de strings per a csv
         List<String> provExpCsv =new ArrayList<String>();
         String cabecera ="cif,dataalta,actiu,motiuinactivitat,nom,valoracio,minimunitats,especialitat";
@@ -161,9 +192,18 @@ public class ProveidorLogica {
             e.printStackTrace();
             System.out.println("Error al exportar el arxiu CSV.");
         }
-     }
+    }
      
-     public void importarCSV(File fitxer) throws FormatInvalidException, CifRepetitException, DataInvalidaException, BuitException{
+    /**
+     * Importa a partir d'un fitxer CSV amb Proveidors, tots aquestos a la base de dades
+     * 
+     * @param fitxer
+     * @throws FormatInvalidException
+     * @throws CifRepetitException
+     * @throws DataInvalidaException
+     * @throws BuitException 
+     */
+    public void importarCSV(File fitxer) throws FormatInvalidException, CifRepetitException, DataInvalidaException, BuitException{
         try(BufferedReader br = new BufferedReader(new FileReader(fitxer))){
             String lineaCabecera = br.readLine(); //llegeix la primera linea on ha d'ahver-hi una capçelera
             String[] cabecera = lineaCabecera.split(","); // separem cada nom de la capçelera
@@ -205,7 +245,18 @@ public class ProveidorLogica {
         }
     }
      
-     private Map<String, Object> procesarLineaCSV(String[] cabecera, String[] dades, int linia) throws FormatInvalidException, DataInvalidaException{
+    
+    /**
+     * Procesa la linea del fitxer CSV per crear un HasMap.
+     * 
+     * @param cabecera
+     * @param dades
+     * @param linia
+     * @return Un HashMap de el nom del atribut de la capçalera i l'atribut del proveidor al fitxer csv.
+     * @throws FormatInvalidException
+     * @throws DataInvalidaException 
+     */
+    private Map<String, Object> procesarLineaCSV(String[] cabecera, String[] dades, int linia) throws FormatInvalidException, DataInvalidaException{
          Map<String, Object> proveidorDades = new HashMap();
          
          for(int i = 0; i < dades.length; i++){
@@ -246,9 +297,18 @@ public class ProveidorLogica {
         }
          
          return proveidorDades;
-     }
-     
-     private boolean validarProveidor(Map<String, Object> proveedorData, int linia) throws CifRepetitException,BuitException {
+    }
+    
+    /**
+     * Valida si un proveidor donat en un HashMap es valid.
+     * 
+     * @param proveedorData
+     * @param linia
+     * @return Boolean si es valid o no el proveidor.
+     * @throws CifRepetitException
+     * @throws BuitException 
+     */
+    private boolean validarProveidor(Map<String, Object> proveedorData, int linia) throws CifRepetitException,BuitException {
         // Validar los datos del proveedor antes de insertar
         String cif = (String) proveedorData.get("CIF");
         String nom = (String) proveedorData.get("nom");
@@ -257,35 +317,61 @@ public class ProveidorLogica {
             throw new BuitException("CIF i nom no poden ser camps buits en la linia " + linia);
         }
         if(proveidorDAO.existeixCIF(cif)){
-            throw new CifRepetitException("CIF ja existeix " + cif + " en la linia " + linia);
+            return false;
         }
         return true;
     }
-     
-     private Float validarFloat(String valor) throws FormatInvalidException{
+    
+    /**
+     * valida si un string pot ser convertit a float i ho fa.
+     * 
+     * @param valor
+     * @return un float
+     * @throws FormatInvalidException 
+     */
+    private Float validarFloat(String valor) throws FormatInvalidException{
          try{
              return Float.parseFloat(valor);
          }catch(NumberFormatException e){
              throw new FormatInvalidException("Valor float invàlid: " + valor);
          }
-     }
-     
-     private LocalDate validarData(String valor) throws DataInvalidaException{
+    }
+    
+    /**
+     * Valida si una Data en String pot ser convertida a LocalDate i ho fa.
+     * 
+     * @param valor
+     * @return un LocalDate
+     * @throws DataInvalidaException 
+     */
+    private LocalDate validarData(String valor) throws DataInvalidaException{
          try{
              return LocalDate.parse(valor);
          }catch(NumberFormatException e){
              throw new DataInvalidaException("Data invàlida: " + valor + " es possarà la data d'avui");
          }
-     }
-     
-     private Integer validarInt(String valor) throws FormatInvalidException{
+    }
+    
+    /**
+     * Valida si un Int en forma de String pot ser convertit en Int i ho fa.
+     * 
+     * @param valor
+     * @return un Integer
+     * @throws FormatInvalidException 
+     */
+    private Integer validarInt(String valor) throws FormatInvalidException{
          try{
              return Integer.parseInt(valor);
          }catch(NumberFormatException e){
              throw new FormatInvalidException("Valor enter invàlid: " + valor);
          }
-     }
-
+    }
+    
+    /**
+     * Es un metode que llença una excepcio tipus UnsupportedOperationException
+     * 
+     * @param proveidor_No_sa_obtingut_correctament 
+     */
     private void BuitException(String proveidor_No_sa_obtingut_correctament) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
