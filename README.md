@@ -11,7 +11,7 @@ AnyStock es un prototipo de aplicación diseñada para gestionar un almacén de 
 - [Executable](enlace_al_executable)  
   Enlace al archivo ejecutable del proyecto para probar la aplicación.
 
-- [Script de Creació de la BBDD](enlace_al_script_BBDD)  
+- [Script de Creació de la BBDD](https://drive.google.com/file/d/11Lp1PiieScmnaCwGGCCt5FpUhexKjSEF/view?usp=sharing)  
   Archivo con el script SQL necesario para crear la base de datos que utiliza la aplicación.
 
 ### Opcional
