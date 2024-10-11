@@ -2,6 +2,7 @@ package logica;
 
 import dades.ReferenciaDAOImpl;
 import aplicacio.model.Referencia;
+import java.time.LocalDate;
 
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,10 @@ public class ReferenciaLogica {
         if (referencia == null) {
             throw new IllegalArgumentException("La referencia no puede ser nula.");
         }
+        if(referencia.getQuantitat()<=10){
+            referencia.setUltimaDataAlarma(LocalDate.now());
+            vegadesAlarma(referencia);
+        }
         referenciaDAO.afegir(referencia);
         System.out.println("Referencia agregada correctamente.");
     }
@@ -64,6 +69,10 @@ public class ReferenciaLogica {
         } else if (referencia.getId() <= 0) {
             throw new IllegalArgumentException("El ID de la referencia debe ser positivo.");
         } else {
+            if(referencia.getQuantitat()<=10){
+                referencia.setUltimaDataAlarma(LocalDate.now());
+                vegadesAlarma(referencia);
+            }
             try {
                 referenciaDAO.modificar(referencia);
                 System.out.println("Referencia modificada correctamente.");
@@ -110,5 +119,22 @@ public class ReferenciaLogica {
      */
     public List<Referencia> llistarReferencias(int idFamilia) {
         return referenciaDAO.LlistarTot(idFamilia);
+    }
+    
+    /**
+     * Modifica incrementant en 1 les vegades que ha saltat l'alarma d'estoc i la data de la ultima vegada que va saltar.
+     * 
+     * @param ref es la referencia de la qual es vol modificar les vegades alarma.
+     */
+    public void vegadesAlarma(Referencia ref){
+        
+        Referencia referenciaModificada = ref;
+        referenciaModificada.setVegadesAlarma(ref.getVegadesAlarma()+1);
+        referenciaModificada.setUltimaDataAlarma(LocalDate.now());
+        try{
+            referenciaDAO.modificar(referenciaModificada);
+        }catch(Exception e){
+           
+        }
     }
 }

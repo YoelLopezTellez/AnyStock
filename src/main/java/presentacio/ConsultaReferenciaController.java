@@ -21,12 +21,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import logica.ReferenciaLogica;
 import logica.Sessio;
 
@@ -108,7 +112,7 @@ public class ConsultaReferenciaController {
         setIdFamilia(0);
         // Assignar la llista observable a la taula
         llistarReferencias(idFamilia);
-        tbReferencia.setItems(referenciasObservableList);
+        tbReferencia.setItems(referenciasObservableList);   
     }
 
     /**
@@ -152,11 +156,45 @@ public class ConsultaReferenciaController {
      * referències.
      */
     private void llistarReferencias(int idFamilia) {
+        // verifica si salta o no la alarma.
+        AlarmaStock(); 
         // Limpiamos la lista observable antes de añadir los datos actualizados
         referenciasObservableList.clear();
         referenciasObservableList.addAll(referenciaLogica.llistarReferencias(idFamilia));
     }
-
+    
+    /**
+     * Controla si hi han 10 o menys unitats d'un producte per posarlo en vermell
+     */
+    public void AlarmaStock(){
+        // setRowFactory per a definir un RowFactory personalitzat i aixi modificar l'estil per a l'alarma d'estoc.
+        tbReferencia.setRowFactory(new Callback<TableView<Referencia>, TableRow<Referencia>>(){
+            @Override
+            public TableRow<Referencia> call(TableView<Referencia> tableView){
+                return new TableRow<Referencia>(){
+                    @Override
+                    protected void updateItem(Referencia referencia, boolean empty){
+                        super.updateItem(referencia, empty);
+                        
+                        // Si la fila no está buida i la referencia no es null
+                        if(referencia != null && !empty) {
+                            // Comproba si la quantitat es menor o igual a 10
+                            if(referencia.getQuantitat() <= 10){
+                                // Cambiar el color del texto de toda la fila
+                                setStyle("-fx-background-color: rgba(255, 0, 0, 0.3);");
+                            }else{        
+                                // Restaura l'estil per defecte si no cumpleix la condició.
+                                setStyle("");
+                            }
+                        }else{
+                            setStyle(""); // Restaura l'estil per defecte si está buit.
+                        }
+                    }
+                };
+            }
+        });
+    }
+    
     /**
      * Gestiona l'esdeveniment de clic del botó d'eliminació. Elimina la
      * referència seleccionada de la taula i actualitza la llista.
@@ -256,6 +294,7 @@ public class ConsultaReferenciaController {
     private void ontbReferenciaMouseClicked(MouseEvent event) {
         Referencia referenciaSeleccionada = tbReferencia.getSelectionModel().getSelectedItem();
         seleccionarReferencia(referenciaSeleccionada);
+        System.out.println(referenciaSeleccionada.getUltimaDataAlarma());
     }
 
     /**

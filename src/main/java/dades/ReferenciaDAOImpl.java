@@ -48,7 +48,7 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
      */
     @Override
     public void modificar(Referencia entitat) throws Exception {
-        String sql = "UPDATE referencia SET vegadesAlarma = ?, preuCompra = ?, observacions = ?, quantitat = ?, nom = ?, UoM = ?, dataAlta = ?, PROVEIDOR_ID = ?, FAMILIA_ID = ? WHERE id = ?";
+        String sql = "UPDATE referencia SET vegadesAlarma = ?, preuCompra = ?, observacions = ?, quantitat = ?, nom = ?, UoM = ?, dataAlta = ?, ultimaDataAlarma = ?, PROVEIDOR_ID = ?, FAMILIA_ID = ? WHERE id = ?";
 
         try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -59,11 +59,17 @@ public class ReferenciaDAOImpl implements DAOInterface<Referencia> {
             stmt.setString(5, entitat.getNom());
             stmt.setString(6, entitat.getUom().toString());
             stmt.setDate(7, java.sql.Date.valueOf(entitat.getDataAlta()));
-            stmt.setInt(8, entitat.getProveidor());
-            stmt.setInt(9, entitat.getFamiliaID());
+            //Comprovar que ultima data alarma no sigui null i insertar null si ho es. 
+            if(entitat.getUltimaDataAlarma() != null){
+                stmt.setDate(8, java.sql.Date.valueOf(entitat.getUltimaDataAlarma()));
+            }else{
+                stmt.setDate(8,null);
+            }
+            stmt.setInt(9, entitat.getProveidor());
+            stmt.setInt(10, entitat.getFamiliaID());
 
             // Establir el id al final, ja que és el paràmetre de la clàusula WHERE
-            stmt.setInt(10, entitat.getId());
+            stmt.setInt(11, entitat.getId());
 
             stmt.executeUpdate();
         } catch (Exception e) {
